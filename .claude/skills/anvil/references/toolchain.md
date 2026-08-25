@@ -34,7 +34,10 @@ prints the export line to add when found off-PATH.
 
 ## doctor.sh contract
 
-`bash scripts/doctor.sh [--require-build]`
+`bash scripts/doctor.sh [--require-build]` — from Git Bash or a Claude Code session.
+From Windows PowerShell/cmd use `scripts\doctor.cmd` instead: bare `bash` there resolves to the
+WSL relay stub in System32 and fails with `execvpe(/bin/bash) failed` when no distro is
+installed; the shim locates Git for Windows' bash and never falls back to the stub.
 - Prints one `FOUND <tool> <version|path>` / `MISSING <tool> <install hint>` line per tool.
 - Last line: `DOCTOR: READY` (exit 0) or `DOCTOR: BLOCKED <n> missing` (exit 1).
 - `--require-build` adds the BUILD set to the required list; without it only CORE blocks.

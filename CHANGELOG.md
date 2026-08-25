@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.1 — 2026-08-26
+
+Windows entry-point fix (found by the first fresh-clone user).
+
+- **`scripts\doctor.cmd`** — from PowerShell/cmd, bare `bash` resolves to the WSL relay stub in
+  System32 and dies with `execvpe(/bin/bash) failed` when no distro is installed. The shim
+  locates Git for Windows' bash (ANVIL_BASH override → `where git` → standard install paths) and
+  never falls back to the stub.
+- `.gitattributes`: `*.cmd eol=crlf` (batch files need CRLF); README quick start + toolchain.md
+  document the PowerShell path.
+
 ## 0.2.0 — 2026-08-26
 
 Claude Code plugin packaging — installable in any repo.

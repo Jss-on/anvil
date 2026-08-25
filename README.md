@@ -114,7 +114,8 @@ Roadmap: `bringup` (physical board bring-up via measured evidence), `feature` (b
 
 ```bash
 # 1. Check the toolchain (KiCad 9 CLI, ngspice, python, node, git)
-bash scripts/doctor.sh
+bash scripts/doctor.sh          # from Git Bash / a Claude Code session
+scripts\doctor.cmd              # from Windows PowerShell or cmd
 
 # 2. Elicit requirements → HRS
 /anvil:requirements Goal: "USB-C powered 3.3V/1A buck regulator board, JLCPCB 2-layer, under $8 BOM @ qty 10"
