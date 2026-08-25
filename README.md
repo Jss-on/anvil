@@ -8,7 +8,7 @@ Anvil is the product; `anvil` is its command namespace — every command is `/an
 
 Based on the same principles as [AutoForge](https://github.com/Jss-on/autoforge) and [Karpathy's autoresearch](https://github.com/karpathy/autoresearch): constraint + **mechanical metric** + autonomous iteration = compounding gains. Software forges on green tests; hardware forges on **clean ERC/DRC, passing simulation assertions, closed power budgets, and a BOM that costs what the spec says**.
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)
 ![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)
 
 *"Set the SPEC → The agent runs the LOOP → You wake up to a fab package."*
@@ -81,10 +81,28 @@ The `electrical` gate is the hardware analog of AutoForge's `logic` gate: a boar
 
 **Ordering parts and submitting fab/assembly jobs is always human-gated.** The loop produces the package; you spend the money.
 
-## Commands (v0.1)
+## Installation
+
+**As a Claude Code plugin (recommended — works in any repo):**
+
+```
+/plugin marketplace add Jss-on/anvil
+```
+
+then install `anvil` from the plugin picker. Commands surface as `/anvil` and `/anvil:*`; the gate
+scripts ship inside the plugin (`skills/anvil/scripts/`), so nothing else needs copying. Private
+repo — the account adding the marketplace needs access to `Jss-on/anvil`.
+
+**Project-local:** copy the `claude-plugin/` payload into the target repo's `.claude/`
+(`commands/` and `skills/` merge in as-is). `claude-plugin/` is generated from the canonical
+`.claude/` tree by `bash scripts/sync-plugin.sh` — pure byte copies, parity-gated in CI
+(`sync-plugin.sh --check`); edit canonical, never the mirror.
+
+## Commands
 
 | Command | Does | Default iterations |
 |---|---|---|
+| `/anvil` | Bare metric loop over an existing design (`Metric:`/`Verify:`) with the hardware ratchet — or routes `Spec:`/`Goal:` to `build`, or setup wizard | 25 |
 | `/anvil:build` | Full pipeline: charter → feasibility → HRS → architecture + parts → schematic → simulation → layout → fab package, every phase gated | 40 |
 | `/anvil:requirements` | Hardware requirements elicitation → validated HRS (HR-n IDs, every spec measurable) + a ready `build` spec | N/A |
 | `/anvil:improve` | Optimization loop on an existing design: minimize BOM cost / board area / part count or maximize worst-case margin, under a hard non-regression ratchet | 20 |

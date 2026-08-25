@@ -57,7 +57,11 @@ assert_eq "area bbox" "AREA_MM2: 2000.0" \
 assert_eq "verdict blocked" "FAB_BLOCKED" \
   "$(bash "$SCORE" verdict "$FIX/sample-results.tsv" 2>/dev/null)"
 
-# 9. handoff validation
+# 9. plugin tree is a byte-exact mirror of the canonical .claude tree
+assert_eq "plugin parity" "PLUGIN_PARITY: OK" \
+  "$(bash "$ROOT/scripts/sync-plugin.sh" --check 2>/dev/null)"
+
+# 10. handoff validation
 assert_eq "handoff valid" "HANDOFF: VALID" \
   "$(bash "$HANDOFF" "$FIX/handoff-good.json" 2>/dev/null)"
 out="$(bash "$HANDOFF" "$FIX/handoff-bad.json" 2>/dev/null || true)"
