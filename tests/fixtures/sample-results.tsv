@@ -1,0 +1,8 @@
+n	dimension	assertion	status	weight	evidence	traces
+1	electrical	ERC violations == 0	pass	1.0	evidence:sch/erc.json	HR-1
+2	electrical	decoupling per power pin	pass	1.0	evidence:sch/netlist.net	HR-2
+3	simulation	ripple <= 30mV at corners	pass	1.0	evidence:sim/A-1.log	HR-3
+4	simulation	efficiency >= 85%	fail	1.0	evidence:sim/A-2.log	HR-4
+5	layout	DRC violations == 0	pass	1.0	evidence:pcb/drc.json	HR-5
+6	manufacturing	BOM <= $8 @ qty10	skip	0	-	HR-6
+7	documentation	test plan complete	fail	1.0	-	HR-7

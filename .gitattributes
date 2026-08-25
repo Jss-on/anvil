@@ -1,0 +1,15 @@
+# Repo is authored on Windows but scripts/fixtures must stay LF everywhere:
+# CRLF in bash scripts breaks them, CRLF in TSV/spice fixtures pollutes parsing.
+* text=auto
+*.sh text eol=lf
+*.tsv text eol=lf
+*.csv text eol=lf
+*.cir text eol=lf
+*.log text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.kicad_pcb text eol=lf
+*.kicad_sch text eol=lf
+*.kicad_dru text eol=lf

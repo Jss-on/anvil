@@ -1,0 +1,49 @@
+# anvil eval — the harness's reference hardware build.
+# A deliberately boring board: every gate exercisable, no exotic parts.
+name: buck-3v3
+summary: USB-powered 5V→3.3V/1A synchronous buck regulator board, JLCPCB 2-layer
+fab: jlcpcb
+layers: 2
+
+targets:
+  bom_cost: { limit: 8.00, currency: USD, qty: 10 }
+  board_area: { limit: 2000, units: mm2 }   # Edge.Cuts bbox
+
+specs:
+  - { id: HR-1, text: "3V3 rail: 3.3 V ± 3 %, Iload 0–1 A, Vin 4.5–5.5 V, Ta −10…60 °C",
+      dimension: simulation, verify: simulation }
+  - { id: HR-2, text: "Output ripple ≤ 30 mV p-p at Iload 1 A, worst-case line",
+      dimension: simulation, verify: simulation }
+  - { id: HR-3, text: "Efficiency ≥ 85 % at Vin 5.0 V, Iload 0.5 A",
+      dimension: simulation, verify: simulation }
+  - { id: HR-4, text: "Survives reverse input polarity indefinitely",
+      dimension: electrical, verify: simulation }
+  - { id: HR-5, text: "Input inrush compatible with USB host (≤ 10 µF hard-start at VBUS)",
+      dimension: electrical, verify: analysis }
+  - { id: HR-6, text: "Board ≤ 50 × 40 mm, M3 mounting holes at 4 corners",
+      dimension: layout, verify: inspection }
+  - { id: HR-7, text: "BOM ≤ $8.00 @ qty 10 against the pinned catalog snapshot",
+      dimension: manufacturing, verify: analysis }
+  - { id: HR-8, text: "JLCPCB 2-layer rule deck clean; fab package complete (gerbers, drill, BOM, CPL)",
+      dimension: manufacturing, verify: inspection }
+  - { id: HR-9, text: "Test points on VBUS, 3V3, GND ×2, FB; pin-1 and polarity silkscreen marks",
+      dimension: testability, verify: inspection }
+  - { id: HR-10, text: "Bring-up plan with expected values ± tolerance per test point",
+      dimension: documentation, verify: inspection }
+
+golden_connectivity:
+  - "VBUS reaches the regulator VIN through the reverse-polarity element and input filter"
+  - "every regulator power pin has 100 nF decoupling declared in its block"
+  - "regulator EN deliberately strapped or driven — never floating"
+  - "FB divider connected at the output sense point, not the switch node"
+  - "USB connector shell tied to GND per the connector's datasheet strategy"
+
+sim_assertions:
+  - { id: A-HR-1, measure: vout_avg, op: within, limit: "3.3±3%", units: V,
+      corners: "vin=4.5,5.5;iload=0.001,1", traces: HR-1 }
+  - { id: A-HR-2, measure: vripple, op: le, limit: "0.030", units: V,
+      corners: "vin=4.5,5.5;iload=1", traces: HR-2 }
+  - { id: A-HR-3, measure: eff, op: ge, limit: "0.85", units: "-",
+      corners: "vin=5.0;iload=0.5", traces: HR-3 }
+  - { id: A-HR-4, measure: irev_max, op: le, limit: "0.001", units: A,
+      corners: "vin=-5.5", traces: HR-4 }

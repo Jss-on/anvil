@@ -1,0 +1,4 @@
+Reference,Value,Footprint,MPN,Qty
+"R1,R2",10k,R_0603,RC0603-10K,2
+U1,TPS562200,SOT-23-6,TPS562200,1
+TP1,TestPoint,TP_D1.5mm,DNP,1

@@ -1,0 +1,4 @@
+id	measure	op	limit	units	corners	traces
+A-1	vout_avg	within	3.3±3%	V	nominal	HR-1
+A-2	vripple	le	0.030	V	nominal	HR-2
+A-3	eff	ge	0.85	-	nominal	HR-3

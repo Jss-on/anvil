@@ -1,0 +1,30 @@
+# KiCad
+*-backups/
+_autosave-*
+*.kicad_prl
+*.lck
+fp-info-cache
+~*.lck
+
+# Simulation artifacts
+*.raw
+sim.log
+*.log
+!**/evidence/**/*.log
+!tests/fixtures/**/*.log
+
+# Node / Python
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Run output (builds live in their own repos; harness repo stays clean).
+# Anchored to repo root — .claude/commands/anvil/ etc. must stay tracked.
+/anvil/
+/build-output/
+/boards/

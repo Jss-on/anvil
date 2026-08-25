@@ -1,0 +1,4 @@
+id	measure	op	limit	units	corners	traces
+A-HR-1	vout_avg	within	3.3±3%	V	vin=4.5,5.5;iload=0.001,1	HR-1
+A-HR-2	vripple	le	0.030	V	vin=4.5,5.5;iload=1	HR-2
+A-HR-3	eff	ge	0.85	-	vin=5.0;iload=0.5	HR-3

@@ -1,0 +1,5 @@
+Note: fixture ngspice batch log (parse-only test — SKIP_NGSPICE=1)
+
+vout_avg = 3.2800e+00 from= 4.000000e-03 to= 5.000000e-03
+vripple = 1.2000e-02 from= 4.000000e-03 to= 5.000000e-03
+eff = 8.2000e-01

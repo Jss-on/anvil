@@ -1,0 +1,11 @@
+{
+  "command": "build",
+  "verdict": "FAB_READY",
+  "pass_rate": 1.0,
+  "erc_violations": 0,
+  "drc_violations": 0,
+  "bom_cost": 6.42,
+  "board_area": 1800,
+  "results_tsv": "anvil-results.tsv",
+  "repo": "https://github.com/Jss-on/buck-3v3"
+}

@@ -1,0 +1,3 @@
+mpn,description,qty,unit_price,currency,stock,lifecycle,distributor,accessed
+RC0603-10K,resistor 10k 0603 1%,10,0.01,USD,50000,active,lcsc,2026-08-26
+TPS562200,buck converter 2A SOT-23-6,10,0.85,USD,1200,active,lcsc,2026-08-26
