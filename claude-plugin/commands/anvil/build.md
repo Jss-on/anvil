@@ -1,6 +1,6 @@
 ---
 name: anvil:build
-description: "Build greenfield electronics via the standard hardware V-model — charter → feasibility → HRS → architecture + part selection → schematic (ERC=0) → simulation (spec assertions at worst-case corners) → layout (DRC=0) → fab package + docs — every phase gated with its named deliverable — to passing weighted acceptance"
+description: "Build greenfield electronics — or a full end-to-end product (boards + enclosure + COTS modules + wiring + assembly package) — via the standard hardware V-model, every phase gated with its named deliverable, to passing weighted acceptance"
 argument-hint: "[Spec: <file|glob>] [Goal: <text>] [Scope: <dir>] [Fab: jlcpcb|pcbway|generic] [Iterations: N] [--evals] [--dry-run] [--chain <targets>]"
 ---
 
@@ -32,9 +32,19 @@ holes, test points on every power rail and key signal, ESD on user-facing connec
 reverse-polarity or inrush protection where the spec implies field use, and a bring-up plan a
 technician could follow cold.
 
+**Product mode:** when the spec carries a `product:` block — or the Goal describes an assembled
+unit (a drone, an instrument, a device in a case), not a bare board — the build additionally runs
+the **product track** (after Phase 8 below): system decomposition + ICD, COTS module selection,
+mechanical CAD track, wiring harness, product BOM, system budgets, assembly package. Product
+ledgers add three must-pass dimensions — **mechanical 0.20 · integration 0.15 · system 0.15**
+(renormalized; see `references/metrics.md`). The deliverable is then **everything needed to
+assemble the final unit**, not just the fab package.
+
 Companion contracts: `references/hardware-requirements-protocol.md`, `references/schematic-protocol.md`,
 `references/simulation-protocol.md`, `references/layout-protocol.md`, `references/fab-protocol.md`,
-`references/metrics.md`, `references/toolchain.md`.
+`references/metrics.md`, `references/toolchain.md` — and for product mode:
+`references/system-protocol.md`, `references/cots-protocol.md`, `references/mechanical-protocol.md`,
+`references/harness-protocol.md`, `references/assembly-protocol.md`.
 
 ## Seam & reference resolution (read once)
 
@@ -203,6 +213,58 @@ until `Target-rate` or iterations exhausted.
 **Verdict:** `scripts/score-anvil.sh verdict` → `FAB_READY` (all must-pass green, pass-rate ≥
 target, coverage 1.00, HV register satisfied) | `FAB_BLOCKED` with the blocking rows. Ordering is
 the user's move.
+
+---
+
+# Product track (end-to-end builds)
+
+Runs when product mode is active. The electronics pipeline above executes unchanged **per custom
+board** (multi-board products: one `boards/<n>/` tree each, aggregated into the product ledger);
+these phases run alongside it and converge at the same weighted acceptance. Phase 0 runs
+`doctor.sh --require-product` (CAD-as-code kernel checked up front). Scope grows to
+`system/ cots/ mech/ harness/ assembly/ product-bom.csv` next to `boards/`.
+
+## Phase P1 — System architecture (extends Phase 4)
+Per `references/system-protocol.md` + `references/cots-protocol.md`: product decomposition +
+subsystem registry (every physical thing owned by exactly one subsystem); **ICD**
+(`system/icd.tsv`) — every subsystem interface exactly once, worst-case V/I on every
+power/signal edge; COTS module selection with 2–3 candidate trade studies, pinned into
+`cots/modules.csv` with datasheet-anchored `key_specs` (thrust tables, Wh, C-ratings — numbers
+the budgets consume); `system/budgets.tsv` seeded (mass/power/endurance/cost) with formulas
+shown in `system/budgets.md`. Seed system golden rows red: no decomposition orphans, every ICD
+edge realized, module voltage/protocol compatibility.
+**Gate:** decomposition + ICD committed · module catalog pinned · budgets seeded (red is honest).
+
+## Phase P2 — Mechanical capture (parallel to Phases 5–7)
+Per `references/mechanical-protocol.md`: CAD-as-code (`mech/cad/*.py`, params block first),
+headless build → STL/STEP + kernel-emitted `measures.json`; `mech/assertions.tsv` seeded from
+the HRS mechanical/environment specs (fit/mass/dfm classes, IP/vibration/drop-derived rules).
+Red → green: `mesh` → 0 defects (watertight, manifold) on every build STL; `fit` green — board
+envelope + component heights vs cavity (placeholder envelope until layout exists, **refreshed
+against the DRC-clean board before the gate lifts**); `mech-dfm` green (process floors; slicer
+seam when `PRUSA_SLICER` is set); section + exploded renders exported and **VIEWED**.
+**Gate:** MESH_DEFECTS 0 · FIT_PASS full vs final board · DFM_PASS full · renders viewed.
+
+## Phase P3 — Interconnect (parallel to Phases 7–8)
+Per `references/harness-protocol.md`: `harness/harness.tsv` + `harness/mates.tsv` realizing
+every power/signal ICD edge — the wiring harness is a table, not a diagram in someone's head.
+Wire lengths from the mechanical model's routed paths; RF/loom/strain-relief rules applied.
+**Gate:** `pinout` → PINOUT_VIOLATIONS 0 (ampacity floor, endpoint grammar, mate coverage,
+no unrealized ICD edge).
+
+## Phase P4 — Product roll-up & assembly package (extends Phase 8)
+`product-bom.csv` — every physical thing in the unit (pcb, cots, mech, fastener, wire,
+consumable, spare) priced, massed, sourced → `product-bom` costs out; `sys-budget` re-run on
+rolled-up numbers (AUW from the product BOM is the mass budget's demand — the **system budgets**
+close on measured rollups, not estimates). Assembly package per
+`references/assembly-protocol.md`: `assembly/ASSEMBLY.md` (every step references product-BOM
+ids — both-direction orphan check), `INTEGRATION.md` bring-up ladder with numbers,
+`config/` artifacts committed (FC dump, VTX table, radio model), `QC.md`, exploded render
+**VIEWED**. Region-gated rows (VTX power/band legality, drone-class rules) are human sign-off,
+never loop-passed.
+**Gate:** PRODUCT_COST ≤ target · SYS_BUDGET all close · assembly rows green · config committed.
+**Verdict:** same `scripts/score-anvil.sh verdict` — `mechanical`/`integration`/`system` rows
+are must-pass; a closing mass budget cannot ride over an interfering enclosure.
 
 ---
 
