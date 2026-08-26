@@ -2,7 +2,7 @@
 
 # Anvil
 
-**AutoForge's hardware sibling — turn Claude Code into a relentless electronics-design engine, from requirements to fab-ready PCB.**
+**AutoForge's hardware sibling — turn Claude Code into a relentless hardware-design engine: from requirements to a fab-ready PCB, or to a full end-to-end product — boards, enclosure, COTS modules, wiring harness, and the assembly kit to build the final unit.**
 
 Anvil is the product; `anvil` is its command namespace — every command is `/anvil:*`.
 
@@ -49,6 +49,11 @@ AutoForge proved the loop generalizes: one metric, constrained scope, fast mecha
 | What does it cost? | BOM joined against a **pinned parts-catalog snapshot** | `score-anvil.sh bom-cost` |
 | How big is it? | Edge.Cuts bounding box, mm² | `score-anvil.sh area` |
 | Are parts stressed? | Derating table — no part above 80 % of rating | schematic protocol |
+| Is the enclosure printable and sound? | STL watertight/manifold defects → **0**; walls/overhangs vs process floors | `score-anvil.sh mesh` / `mech-dfm` |
+| Does the board fit the enclosure? | interference mm³ = 0, clearances ≥ spec, bosses coaxial | `score-anvil.sh fit` |
+| Is the wiring legal? | harness ↔ ICD consistency + AWG ampacity floor → **0** violations | `score-anvil.sh pinout` |
+| Does the product close? | mass/power/endurance/cost budgets: demand ≤ capability × derate | `score-anvil.sh sys-budget` |
+| What does the UNIT cost/weigh? | full rollup: PCBs + COTS + printed parts + fasteners + wire + spares | `score-anvil.sh product-bom` |
 
 None of these are vibes. All of them are numbers a loop can ratchet.
 
@@ -79,6 +84,8 @@ LOOP (N iterations or until FAB_READY):
 
 The `electrical` gate is the hardware analog of AutoForge's `logic` gate: a board can never ride a pretty layout or a cheap BOM to "done" while the electricity is wrong.
 
+**Product mode** (a spec with a `product:` block — e.g. `evals/product/fpv-drone.spec.yaml`, a rugged FPV quad) adds three must-pass dimensions — `mechanical` 0.20 (mesh/fit/mass/dfm on the CAD-as-code enclosure and frame furniture) · `integration` 0.15 (wiring harness realizes every ICD edge; assembly package a cold technician can follow) · `system` 0.15 (decomposition, closing budgets, product BOM) — renormalized alongside the six above. The deliverable becomes **everything needed to assemble the final unit**: fab packages per board, STL/STEP + measures for every printed/machined part, the pinned COTS module list, the cut-and-crimp harness table, the costed-and-massed product BOM, and the assembly/integration/QC docs.
+
 **Ordering parts and submitting fab/assembly jobs is always human-gated.** The loop produces the package; you spend the money.
 
 ## Installation
@@ -103,7 +110,7 @@ repo — the account adding the marketplace needs access to `Jss-on/anvil`.
 | Command | Does | Default iterations |
 |---|---|---|
 | `/anvil` | Bare metric loop over an existing design (`Metric:`/`Verify:`) with the hardware ratchet — or routes `Spec:`/`Goal:` to `build`, or setup wizard | 25 |
-| `/anvil:build` | Full pipeline: charter → feasibility → HRS → architecture + parts → schematic → simulation → layout → fab package, every phase gated | 40 |
+| `/anvil:build` | Full pipeline: charter → feasibility → HRS → architecture + parts → schematic → simulation → layout → fab package, every phase gated. Product mode adds: system architecture + ICD → COTS selection → mechanical CAD track → harness → product BOM + assembly package | 40 |
 | `/anvil:requirements` | Hardware requirements elicitation → validated HRS (HR-n IDs, every spec measurable) + a ready `build` spec | N/A |
 | `/anvil:improve` | Optimization loop on an existing design: minimize BOM cost / board area / part count or maximize worst-case margin, under a hard non-regression ratchet | 20 |
 | `/anvil:evals` | Analyze iteration results: trends, plateaus, regressions, margin + cost trajectories | N/A |
