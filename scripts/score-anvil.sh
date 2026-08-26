@@ -8,6 +8,7 @@
 #   sim       [sim-dir]                  → run ngspice harnesses, assert      "SIM_PASS: x/y"
 #   bom-cost  <bom.csv> <catalog.csv>    → pinned-catalog BOM roll-up         "BOM_COST: X.XX CUR"
 #   area      <pcb>                      → Edge.Cuts bounding-box area        "AREA_MM2: N.N"
+#   mesh      <file.stl>                 → STL watertight/manifold defects    "MESH_DEFECTS: N"
 #   verdict   [results.tsv] [hrs.md]     → FAB_READY | FAB_BLOCKED
 #
 # pass-rate (higher_is_better):
@@ -196,6 +197,56 @@ console.log('AREA_MM2: ' + ((maxx - minx) * (maxy - miny)).toFixed(1));
 EOF
 )
 
+NODE_MESH=$(cat <<'EOF'
+const fs = require('fs');
+const buf = fs.readFileSync(process.argv[1]);
+let tris = [];
+const head = buf.slice(0, Math.min(512, buf.length)).toString('latin1');
+if (/^\s*solid/.test(head) && head.includes('facet')) {
+  const txt = buf.toString('latin1');
+  const re = /outer\s+loop([\s\S]*?)endloop/gi; let m;
+  while ((m = re.exec(txt))) {
+    const vs = [...m[1].matchAll(/vertex\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)/g)]
+      .map(v => [+v[1], +v[2], +v[3]]);
+    if (vs.length === 3) tris.push(vs);
+  }
+} else {
+  if (buf.length < 84) { console.error('not an STL (too small)'); process.exit(2); }
+  const n = buf.readUInt32LE(80);
+  if (84 + n * 50 > buf.length) { console.error('binary STL truncated'); process.exit(2); }
+  for (let i = 0; i < n; i++) {
+    const o = 84 + i * 50 + 12, t = [];
+    for (let v = 0; v < 3; v++)
+      t.push([buf.readFloatLE(o + v * 12), buf.readFloatLE(o + v * 12 + 4), buf.readFloatLE(o + v * 12 + 8)]);
+    tris.push(t);
+  }
+}
+if (!tris.length) { console.error('no triangles parsed'); process.exit(2); }
+const K = p => p.join(',');
+let degenerate = 0;
+const edges = new Map(); // undirected key -> {fwd,rev} counts relative to canonical vertex order
+for (const t of tris) {
+  const k = t.map(K);
+  if (k[0] === k[1] || k[1] === k[2] || k[0] === k[2]) { degenerate++; continue; }
+  for (let i = 0; i < 3; i++) {
+    const a = k[i], b = k[(i + 1) % 3];
+    const und = a < b ? a + '|' + b : b + '|' + a;
+    const e = edges.get(und) || { fwd: 0, rev: 0 };
+    e[a < b ? 'fwd' : 'rev']++; edges.set(und, e);
+  }
+}
+let open = 0, nonman = 0, winding = 0;
+for (const e of edges.values()) {
+  const c = e.fwd + e.rev;
+  if (c === 1) open++;
+  else if (c > 2) nonman++;
+  else if (e.fwd !== 1 || e.rev !== 1) winding++; // two uses, same direction = flipped facet
+}
+console.error(`tris=${tris.length} open=${open} nonmanifold=${nonman} winding=${winding} degenerate=${degenerate}`);
+console.log('MESH_DEFECTS: ' + (open + nonman + winding + degenerate));
+EOF
+)
+
 # ---------------------------------------------------------------------------
 pass_rate() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}"
@@ -302,6 +353,12 @@ area() {
   node -e "$NODE_AREA" "$pcb"
 }
 
+mesh() {
+  local stl="${1:?usage: score-anvil.sh mesh <file.stl>}"
+  [[ -f "$stl" ]] || die "no STL: $stl"
+  node -e "$NODE_MESH" "$stl"
+}
+
 verdict() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}" hrs="${2:-}"
   [[ -f "$tsv" ]] || die "no results TSV: $tsv"
@@ -330,6 +387,7 @@ case "$cmd" in
   sim)       sim "$@" ;;
   bom-cost)  bom_cost "$@" ;;
   area)      area "$@" ;;
+  mesh)      mesh "$@" ;;
   verdict)   verdict "$@" ;;
-  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|verdict} [args]" >&2; exit 2 ;;
+  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|verdict} [args]" >&2; exit 2 ;;
 esac
