@@ -14,6 +14,7 @@
 #   mech-dfm  <mech-dir>                 → dfm-class assertions (+slicer)     "DFM_PASS: x/y"
 #   pinout    <harness.tsv> <icd.tsv> [mates.tsv] → wiring consistency        "PINOUT_VIOLATIONS: N"
 #   product-bom <product-bom.csv>        → full-unit rollup (cost+mass)       "PRODUCT_COST: X.XX CUR"
+#   sys-budget  <budgets.tsv>            → system budgets close w/ derate     "SYS_BUDGET: x/y"
 #   verdict   [results.tsv] [hrs.md]     → FAB_READY | FAB_BLOCKED
 #
 # fit/mass/mech-dfm evaluate <mech-dir>/assertions.tsv rows (cols: id class measure op limit
@@ -387,6 +388,32 @@ console.log(`PRODUCT_COST: ${cost.toFixed(2)} ${currency}`);
 EOF
 )
 
+NODE_SYSBUDGET=$(cat <<'EOF'
+const fs = require('fs');
+const rows = fs.readFileSync(process.argv[1], 'utf8').split(/\r?\n/)
+  .filter(l => l.trim() && !l.startsWith('#')).map(l => l.split('\t'));
+const h = rows[0];
+const idx = n => h.indexOf(n);
+const cId = idx('budget_id'), cQ = idx('quantity'), cD = idx('worst_demand'),
+      cC = idx('capability'), cK = idx('derate'), cU = idx('units');
+if ([cId, cQ, cD, cC, cK].some(c => c < 0)) {
+  console.error('budgets.tsv missing columns (budget_id quantity worst_demand capability derate)'); process.exit(2);
+}
+let pass = 0, total = 0;
+for (const r of rows.slice(1)) {
+  const id = r[cId]; if (!id) continue;
+  total++;
+  const d = parseFloat(r[cD]), c = parseFloat(r[cC]), k = parseFloat(r[cK]);
+  const u = cU >= 0 ? (r[cU] || '') : '';
+  if (![d, c, k].every(isFinite)) { console.error(`${id} FAIL non-numeric demand/capability/derate — budgets are numbers pulled from pinned sources, not prose`); continue; }
+  const eff = c * k;
+  if (d <= eff) { pass++; console.error(`${id} (${r[cQ]}) PASS demand=${d} ≤ ${eff} (=${c}×${k}) margin=${(eff - d).toPrecision(4)} ${u}`); }
+  else console.error(`${id} (${r[cQ]}) FAIL demand=${d} > ${eff} (=${c}×${k}) ${u} — budget does not close`);
+}
+console.log(`SYS_BUDGET: ${pass}/${total}`);
+EOF
+)
+
 # ---------------------------------------------------------------------------
 pass_rate() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}"
@@ -552,6 +579,12 @@ product_bom() {
   node -e "$NODE_PRODBOM" "$pb"
 }
 
+sys_budget() {
+  local b="${1:?usage: score-anvil.sh sys-budget <budgets.tsv>}"
+  [[ -f "$b" ]] || die "no budgets table: $b"
+  node -e "$NODE_SYSBUDGET" "$b"
+}
+
 verdict() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}" hrs="${2:-}"
   [[ -f "$tsv" ]] || die "no results TSV: $tsv"
@@ -586,6 +619,7 @@ case "$cmd" in
   mech-dfm)  mech_dfm "$@" ;;
   pinout)    pinout "$@" ;;
   product-bom) product_bom "$@" ;;
+  sys-budget)  sys_budget "$@" ;;
   verdict)   verdict "$@" ;;
-  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|mass|mech-dfm|pinout|product-bom|verdict} [args]" >&2; exit 2 ;;
+  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|mass|mech-dfm|pinout|product-bom|sys-budget|verdict} [args]" >&2; exit 2 ;;
 esac

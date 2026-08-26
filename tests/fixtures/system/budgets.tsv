@@ -1,0 +1,5 @@
+budget_id	quantity	worst_demand	capability	derate	units	traces
+B-1	mass	610	6600	0.5	g	HR-2
+B-2	power	62	156	0.8	A	HR-3
+B-3	endurance	5.5	8.2	1.0	min	HR-4
+B-4	cost	342	300	1.0	USD	HR-8

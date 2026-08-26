@@ -39,6 +39,12 @@ if want product-bom; then
     "$(bash "$SCORE" product-bom "$FIX/product-bom-bad.csv" 2>/dev/null || true)"
 fi
 
+# --- sys-budget: mass/power/endurance close, cost over = red -----------------
+if want sys-budget; then
+  assert_eq "sys-budget: 342 over 300 cost budget caught" "SYS_BUDGET: 3/4" \
+    "$(bash "$SCORE" sys-budget "$FIX/budgets.tsv" 2>/dev/null)"
+fi
+
 echo
 if [[ $n -eq 0 ]]; then
   echo "NO SYSTEM CASES matched filter '${only}'"
