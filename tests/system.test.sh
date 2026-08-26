@@ -31,6 +31,14 @@ if want pinout; then
     "$(bash "$SCORE" pinout "$FIX/harness-bad.tsv" "$FIX/icd.tsv" 2>/dev/null)"
 fi
 
+# --- product-bom: full-unit rollup, incomplete lines are hard errors ---------
+if want product-bom; then
+  assert_eq "product-bom: 5-category rollup costs out" "PRODUCT_COST: 94.26 USD" \
+    "$(bash "$SCORE" product-bom "$FIX/product-bom-good.csv" 2>/dev/null)"
+  assert_eq "product-bom: missing mass/source = hard error" "" \
+    "$(bash "$SCORE" product-bom "$FIX/product-bom-bad.csv" 2>/dev/null || true)"
+fi
+
 echo
 if [[ $n -eq 0 ]]; then
   echo "NO SYSTEM CASES matched filter '${only}'"

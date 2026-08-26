@@ -1,0 +1,3 @@
+item_id,category,description,qty,unit_price,currency,mass_g,mpn,source
+PB-1,pcb,FC board fab+assembly,1,12.40,USD,,fc-pcba,JLCPCB
+PB-2,cots,Motor 2207 1750KV,4,18.99,USD,32.1,2207-1750KV,

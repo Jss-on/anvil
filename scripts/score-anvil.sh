@@ -13,6 +13,7 @@
 #   mass      <mech-dir>                 → mass-class assertions (budget)     "MASS_PASS: x/y"
 #   mech-dfm  <mech-dir>                 → dfm-class assertions (+slicer)     "DFM_PASS: x/y"
 #   pinout    <harness.tsv> <icd.tsv> [mates.tsv] → wiring consistency        "PINOUT_VIOLATIONS: N"
+#   product-bom <product-bom.csv>        → full-unit rollup (cost+mass)       "PRODUCT_COST: X.XX CUR"
 #   verdict   [results.tsv] [hrs.md]     → FAB_READY | FAB_BLOCKED
 #
 # fit/mass/mech-dfm evaluate <mech-dir>/assertions.tsv rows (cols: id class measure op limit
@@ -341,6 +342,51 @@ console.log('PINOUT_VIOLATIONS: ' + v);
 EOF
 )
 
+NODE_PRODBOM=$(cat <<'EOF'
+const fs = require('fs');
+function csv(text) {
+  const rows = []; let row = [], cur = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(cur); cur = ''; }
+    else if (ch === '\n') { row.push(cur.replace(/\r$/, '')); rows.push(row); row = []; cur = ''; }
+    else cur += ch;
+  }
+  if (cur !== '' || row.length) { row.push(cur.replace(/\r$/, '')); rows.push(row); }
+  return rows.filter(r => r.length > 1 || (r[0] && r[0].trim()));
+}
+const bom = csv(fs.readFileSync(process.argv[1], 'utf8'));
+const h = bom[0].map(x => x.toLowerCase());
+const col = n => h.findIndex(x => x === n || x.includes(n));
+const cId = col('item_id'), cCat = col('category'), cQty = col('qty'),
+      cPrice = col('unit_price'), cCur = col('currency'), cMass = col('mass_g'), cSrc = col('source');
+if ([cId, cCat, cQty, cPrice, cMass, cSrc].some(c => c < 0)) {
+  console.error('product BOM missing columns (item_id,category,qty,unit_price,mass_g,source)'); process.exit(2);
+}
+const CATS = new Set(['pcb', 'cots', 'mech', 'fastener', 'wire', 'consumable', 'spare']);
+let cost = 0, mass = 0, currency = 'USD';
+const bad = [];
+for (const r of bom.slice(1)) {
+  const id = r[cId]; if (!id) continue;
+  const qty = parseFloat(r[cQty]), price = parseFloat(r[cPrice]), m = parseFloat(r[cMass]);
+  if (!CATS.has((r[cCat] || '').trim())) bad.push(`${id}: bad category "${r[cCat]}"`);
+  if (!(qty > 0)) bad.push(`${id}: qty missing/zero`);
+  if (!isFinite(price)) bad.push(`${id}: unit_price missing`);
+  if (!isFinite(m)) bad.push(`${id}: mass_g missing (a blank mass is not a zero)`);
+  if (!(r[cSrc] || '').trim()) bad.push(`${id}: source missing`);
+  if (bad.length) continue;
+  if (cCur >= 0 && r[cCur]) currency = r[cCur];
+  cost += qty * price; mass += qty * m;
+  console.error(`${id} [${r[cCat]}] x${qty} @ ${price} = ${(qty * price).toFixed(2)}  (${(qty * m).toFixed(1)} g)`);
+}
+if (bad.length) { console.error('INCOMPLETE PRODUCT BOM:\n  ' + bad.join('\n  ')); process.exit(2); }
+console.error(`PRODUCT_MASS_G: ${mass.toFixed(1)}`);
+console.log(`PRODUCT_COST: ${cost.toFixed(2)} ${currency}`);
+EOF
+)
+
 # ---------------------------------------------------------------------------
 pass_rate() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}"
@@ -500,6 +546,12 @@ pinout() {
   node -e "$NODE_PINOUT" "$h" "$i" "${3:-}"
 }
 
+product_bom() {
+  local pb="${1:?usage: score-anvil.sh product-bom <product-bom.csv>}"
+  [[ -f "$pb" ]] || die "no product BOM: $pb"
+  node -e "$NODE_PRODBOM" "$pb"
+}
+
 verdict() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}" hrs="${2:-}"
   [[ -f "$tsv" ]] || die "no results TSV: $tsv"
@@ -533,6 +585,7 @@ case "$cmd" in
   mass)      mass "$@" ;;
   mech-dfm)  mech_dfm "$@" ;;
   pinout)    pinout "$@" ;;
+  product-bom) product_bom "$@" ;;
   verdict)   verdict "$@" ;;
-  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|mass|mech-dfm|pinout|verdict} [args]" >&2; exit 2 ;;
+  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|mass|mech-dfm|pinout|product-bom|verdict} [args]" >&2; exit 2 ;;
 esac
