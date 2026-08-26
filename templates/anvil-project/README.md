@@ -1,4 +1,24 @@
-# <board> — anvil project layout
+# <board|product> — anvil project layout
+
+Board build: the tree below at repo root. **Product build** (end-to-end unit): each custom PCB
+lives in `boards/<name>/` with this same tree, plus the product tracks beside them:
+
+```
+boards/<name>/             one full board tree (below) per custom PCB
+system/decomposition.md    P-P1 — subsystem registry (every part owned exactly once)
+system/icd.tsv             P-P1 — interface control: icd_id from to kind connector pins v_nom i_max_a protocol traces
+system/budgets.tsv         P-P1 — budget_id quantity worst_demand capability derate units traces (+ budgets.md formulas)
+cots/modules.csv           P-P1 — pinned module catalog (datasheet-anchored key_specs, mass_g, price, stock)
+mech/cad/*.py              P-P2 — CAD-as-code sources; mech/build/ STL+STEP; mech/measures.json
+mech/assertions.tsv        P-P2 — id class(fit|mass|dfm) measure op limit units traces
+mech/renders/              P-P2 — section + exploded renders (VIEWED evidence)
+harness/harness.tsv        P-P3 — wire_id icd_id from to signal awg length_mm current_a color notes
+harness/mates.tsv          P-P3 — connector mate table
+product-bom.csv            P-P4 — item_id category qty unit_price currency mass_g mpn source (full unit + spares)
+assembly/                  P-P4 — ASSEMBLY.md, INTEGRATION.md, config/, QC.md, exploded.png
+```
+
+Board tree:
 
 ```
 charter.md                 P1 — objectives, in/out scope, iteration budget, risk register (+ GO/NO-GO)
@@ -25,4 +45,16 @@ bash scripts/score-anvil.sh area pcb/<board>.kicad_pcb     # AREA_MM2 vs target
 bash scripts/score-anvil.sh bom-cost fab/bom.csv catalog/parts-catalog.csv
 bash scripts/score-anvil.sh pass-rate anvil-results.tsv
 bash scripts/score-anvil.sh verdict anvil-results.tsv hrs/requirements.md
+```
+
+Product gates (from the product root):
+
+```bash
+bash scripts/score-anvil.sh mesh mech/build/<part>.stl          # MESH_DEFECTS: 0
+bash scripts/score-anvil.sh fit  mech/                          # FIT_PASS: y/y
+bash scripts/score-anvil.sh mass mech/                          # MASS_PASS: y/y
+bash scripts/score-anvil.sh mech-dfm mech/                      # DFM_PASS: y/y (PRUSA_SLICER arms slicer seam)
+bash scripts/score-anvil.sh pinout harness/harness.tsv system/icd.tsv harness/mates.tsv
+bash scripts/score-anvil.sh product-bom product-bom.csv         # PRODUCT_COST vs target
+bash scripts/score-anvil.sh sys-budget system/budgets.tsv       # SYS_BUDGET: y/y — budgets CLOSE
 ```
