@@ -22,9 +22,11 @@
 #   <mech-dir>/measures.json — see references/mechanical-protocol.md.
 #
 # pass-rate (higher_is_better):
-#   - six dimensions, weights renormalized over the dims that actually ran:
+#   - weights renormalized over the dims that actually ran:
 #       electrical 0.30 · simulation 0.25 · layout 0.20 · manufacturing 0.15
 #       · testability 0.10 · documentation 0.10
+#     product builds add: mechanical 0.20 · integration 0.15 · system 0.15
+#     (absent from board-only ledgers, they renormalize away)
 #   - ELECTRICAL GATE: while ANY `electrical` row is red, the headline rate is capped at
 #     ELECTRICAL_GATE_CAP (default 0.50) — wrong electricity can't be polished over.
 #   - per-dimension score = sum(weight of pass) / sum(weight of pass|fail); skip excluded.
@@ -40,7 +42,8 @@
 #
 # Overridable env: ANVIL_RESULTS, HRS_MD, ELECTRICAL_GATE_CAP, TARGET_RATE, KICAD_CLI,
 #   ANVIL_W_ELECTRICAL, ANVIL_W_SIMULATION, ANVIL_W_LAYOUT, ANVIL_W_MANUFACTURING,
-#   ANVIL_W_TESTABILITY, ANVIL_W_DOCUMENTATION
+#   ANVIL_W_TESTABILITY, ANVIL_W_DOCUMENTATION, ANVIL_W_MECHANICAL, ANVIL_W_INTEGRATION,
+#   ANVIL_W_SYSTEM, PRUSA_SLICER
 set -uo pipefail
 export LC_ALL=C
 
@@ -50,6 +53,10 @@ ANVIL_W_LAYOUT="${ANVIL_W_LAYOUT:-0.20}"
 ANVIL_W_MANUFACTURING="${ANVIL_W_MANUFACTURING:-0.15}"
 ANVIL_W_TESTABILITY="${ANVIL_W_TESTABILITY:-0.10}"
 ANVIL_W_DOCUMENTATION="${ANVIL_W_DOCUMENTATION:-0.10}"
+# product-build dimensions (renormalize away on board-only ledgers)
+ANVIL_W_MECHANICAL="${ANVIL_W_MECHANICAL:-0.20}"
+ANVIL_W_INTEGRATION="${ANVIL_W_INTEGRATION:-0.15}"
+ANVIL_W_SYSTEM="${ANVIL_W_SYSTEM:-0.15}"
 ELECTRICAL_GATE_CAP="${ELECTRICAL_GATE_CAP:-0.50}"
 
 die() { echo "score-anvil: $*" >&2; exit 2; }
@@ -421,7 +428,8 @@ pass_rate() {
   awk -F'\t' \
     -v cap="$ELECTRICAL_GATE_CAP" \
     -v wE="$ANVIL_W_ELECTRICAL" -v wS="$ANVIL_W_SIMULATION" -v wL="$ANVIL_W_LAYOUT" \
-    -v wM="$ANVIL_W_MANUFACTURING" -v wT="$ANVIL_W_TESTABILITY" -v wD="$ANVIL_W_DOCUMENTATION" '
+    -v wM="$ANVIL_W_MANUFACTURING" -v wT="$ANVIL_W_TESTABILITY" -v wD="$ANVIL_W_DOCUMENTATION" \
+    -v wMe="$ANVIL_W_MECHANICAL" -v wI="$ANVIL_W_INTEGRATION" -v wSy="$ANVIL_W_SYSTEM" '
     /^#/ { next } $1 == "n" { next } NF < 5 { next }
     {
       dim = $2; st = $4; w = $5 + 0
@@ -435,6 +443,7 @@ pass_rate() {
       if (rows == 0) { print "PASS_RATE: 0.00"; exit 0 }
       W["electrical"] = wE; W["simulation"] = wS; W["layout"] = wL
       W["manufacturing"] = wM; W["testability"] = wT; W["documentation"] = wD
+      W["mechanical"] = wMe; W["integration"] = wI; W["system"] = wSy
       D = 0; N = 0
       for (d in den) {
         dw = (d in W) ? W[d] : 0.10
@@ -591,13 +600,13 @@ verdict() {
   local rate efail mustfail cov="1.00" target="${TARGET_RATE:-1.00}"
   rate=$(pass_rate "$tsv" 2>/dev/null | awk '{print $2}')
   efail=$(awk -F'\t' '$1 != "n" && !/^#/ && $2 == "electrical" && $4 == "fail" { c++ } END { print c + 0 }' "$tsv")
-  mustfail=$(awk -F'\t' '$1 != "n" && !/^#/ && ($2 == "simulation" || $2 == "layout") && $4 == "fail" { c++ } END { print c + 0 }' "$tsv")
+  mustfail=$(awk -F'\t' '$1 != "n" && !/^#/ && ($2 == "simulation" || $2 == "layout" || $2 == "mechanical" || $2 == "integration" || $2 == "system") && $4 == "fail" { c++ } END { print c + 0 }' "$tsv")
   [[ -n "$hrs" ]] && cov=$(coverage "$tsv" "$hrs" 2>/dev/null | awk '{print $2}')
   if awk -v r="$rate" -v t="$target" 'BEGIN { exit !(r + 0 >= t + 0) }' \
     && [[ "$efail" == 0 && "$mustfail" == 0 && "$cov" == "1.00" ]]; then
     echo "FAB_READY"
   else
-    echo "blocking: rate=$rate target=$target electrical_fails=$efail sim/layout_fails=$mustfail coverage=$cov" >&2
+    echo "blocking: rate=$rate target=$target electrical_fails=$efail must-pass_fails=$mustfail coverage=$cov" >&2
     echo "FAB_BLOCKED"
   fi
 }

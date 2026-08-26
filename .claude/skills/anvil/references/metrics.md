@@ -25,8 +25,21 @@ without evidence is `fail` by definition. `traces` = comma-joined HR-n (the RTM)
 | `testability` | 0.10 | test points as footprints · bring-up plan · safe power-up defaults |
 | `documentation` | 0.10 | schematic PDF viewed · renders viewed · model provenance · README · RTM |
 
+Product builds (end-to-end units, not bare boards) add three dimensions — absent from a
+board-only ledger, they renormalize away:
+
+| Dimension | Weight | Owns |
+|---|---|---|
+| `mechanical` | 0.20 | mesh defects = 0 · fit assertions (interference/clearance/boss) · mech-dfm · CAD renders viewed |
+| `integration` | 0.15 | pinout violations = 0 · every power/signal ICD edge realized · mates covered · assembly package rows |
+| `system` | 0.15 | decomposition complete (no orphans) · budgets close (`sys-budget`) · product BOM rolls up · config artifacts committed |
+
 **ELECTRICAL GATE:** while ANY `electrical` row is red, headline pass-rate is capped at
 `ELECTRICAL_GATE_CAP` (default 0.50). Wrong electricity cannot be polished over.
+
+**Product must-pass:** `mechanical`, `integration`, and `system` fails block the verdict the same
+way `simulation`/`layout` fails do — a drone with a closing mass budget but an interfering
+enclosure is not `FAB_READY`.
 
 ## score-anvil.sh surface
 
@@ -39,6 +52,13 @@ without evidence is `fail` by definition. `traces` = comma-joined HR-n (the RTM)
 | `sim <dir>` | `SIM_PASS: x/y` | per-row PASS/FAIL + margin → stderr |
 | `bom-cost <bom> <catalog>` | `BOM_COST: X.XX CUR` | pinned-catalog join; missing MPN = hard error |
 | `area <pcb>` | `AREA_MM2: N` | Edge.Cuts bbox |
+| `mesh <stl>` | `MESH_DEFECTS: N` | open + non-manifold + flipped + degenerate |
+| `fit <mech-dir>` | `FIT_PASS: x/y` | fit-class assertions vs kernel measures.json |
+| `mass <mech-dir>` | `MASS_PASS: x/y` | mass-class assertions vs measures.json |
+| `mech-dfm <mech-dir>` | `DFM_PASS: x/y` | dfm-class assertions; slicer seam via `PRUSA_SLICER` |
+| `pinout <harness> <icd> [mates]` | `PINOUT_VIOLATIONS: N` | ampacity floor, unrealized ICD edges, endpoint grammar |
+| `product-bom <csv>` | `PRODUCT_COST: X.XX CUR` | full-unit rollup; incomplete line = hard error; mass → stderr |
+| `sys-budget <budgets.tsv>` | `SYS_BUDGET: x/y` | demand ≤ capability × derate, margins logged |
 | `verdict [tsv]` | `FAB_READY` \| `FAB_BLOCKED` | all must-pass green ∧ rate ≥ target ∧ coverage 1.00 |
 
 All: exit 0 on well-formed input (a red baseline is valid data); exit 2 on hard error only.
@@ -51,6 +71,9 @@ All: exit 0 on well-formed input (a red baseline is valid data); exit 2 on hard 
 | `board_area` | minimize | `area` | HRS-pinned mechanics immutable |
 | `part_count` | minimize | distinct BOM lines | redundancy proven by sim, not intuition |
 | `worst_case_margin` | maximize | min margin across `sim` rows | **maximin** — never the average |
+| `product_cost` | minimize | `product-bom` | pinned COTS catalog + component catalog joins |
+| `auw_mass` | minimize | `product-bom` mass rollup | mass budget rows stay green (`sys-budget`) |
+| `worst_budget_margin` | maximize | min margin across `sys-budget` rows | **maximin**, same as sim margins |
 
 Hard ratchet under every metric: ERC=0 ∧ DRC=0 ∧ all sim assertions pass ∧ no margin below
 `Floor × baseline` ∧ derating green. Gates are never tradeable for metric.

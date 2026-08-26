@@ -36,6 +36,13 @@ assert_eq "electrical gate cap" "PASS_RATE: 0.50" \
 assert_eq "gate cap env override" "PASS_RATE: 0.25" \
   "$(ELECTRICAL_GATE_CAP=0.25 bash "$SCORE" pass-rate "$FIX/gate-results.tsv" 2>/dev/null)"
 
+# 3b. product dims renormalize: E=1(.30) Me=1(.20) I=1(.15) Sy=0(.15)
+#     → (.30+.20+.15+0)/.80 = 0.8125 → 0.81; system fail also blocks verdict
+assert_eq "product dims weighted" "PASS_RATE: 0.81" \
+  "$(bash "$SCORE" pass-rate "$FIX/product-results.tsv" 2>/dev/null)"
+assert_eq "product must-pass blocks verdict" "FAB_BLOCKED" \
+  "$(bash "$SCORE" verdict "$FIX/product-results.tsv" 2>/dev/null)"
+
 # 4. coverage: HRS has HR-1..HR-3, rows trace HR-1,HR-2 → 0.67
 assert_eq "coverage RTM" "REQ_COVERAGE: 0.67" \
   "$(bash "$SCORE" coverage "$FIX/cov-results.tsv" "$FIX/cov-hrs.md" 2>/dev/null)"

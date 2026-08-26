@@ -1,0 +1,5 @@
+n	dimension	assertion	status	weight	evidence	traces
+1	electrical	ERC violations == 0	pass	1.0	evidence:sch/erc.json	HR-1
+2	mechanical	MESH_DEFECTS == 0 on enclosure	pass	1.0	evidence:mech/build/encl.stl	HR-12
+3	integration	PINOUT_VIOLATIONS == 0	pass	1.0	evidence:harness/harness.tsv	HR-5
+4	system	B-4 cost budget closes	fail	1.0	evidence:system/budgets.tsv	HR-8

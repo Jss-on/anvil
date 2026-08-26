@@ -47,7 +47,7 @@ Print a banner on every invocation: `[anvil] mode: classic | build | wizard`.
 | `/anvil:improve` | Optimization loop on an existing design: minimize `bom_cost` \| `board_area` \| `part_count` or maximize `worst_case_margin`, under a hard non-regression ratchet (ERC=0 ∧ DRC=0 ∧ sim assertions hold) | 20 |
 | `/anvil:evals` | Analyze iteration results: trends, plateaus, regressions, margin + cost trajectories | N/A |
 
-## The Six Dimensions (scoring contract)
+## The Dimensions (scoring contract)
 
 Measured by `scripts/score-anvil.sh pass-rate` over `anvil-results.tsv`
 (7 tab-separated cols: `n dimension assertion status weight evidence traces`):
@@ -61,8 +61,19 @@ Measured by `scripts/score-anvil.sh pass-rate` over `anvil-results.tsv`
 | `testability` | 0.10 | |
 | `documentation` | 0.10 | |
 
+End-to-end **product** builds (enclosure + COTS modules + wiring + assembly, not a bare board)
+add three must-pass dimensions — absent from board-only ledgers, they renormalize away:
+
+| Dimension | Weight | Gate |
+|---|---|---|
+| `mechanical` | 0.20 | mesh/fit/mass/mech-dfm rows must-pass |
+| `integration` | 0.15 | pinout + assembly-package rows must-pass |
+| `system` | 0.15 | decomposition, budgets close, product BOM — must-pass |
+
 Weights renormalize over the dimensions that actually ran. Full contract:
-`references/metrics.md`.
+`references/metrics.md`; product tracks: `references/system-protocol.md`,
+`references/mechanical-protocol.md`, `references/cots-protocol.md`,
+`references/harness-protocol.md`, `references/assembly-protocol.md`.
 
 ## Universal Flags
 
