@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.3.0 — 2026-08-26
+
+End-to-end product capability — anvil builds assemblable units, not just boards. A rugged FPV
+drone's frame, COTS modules, wiring, budgets, and assembly kit are now first-class, gated
+deliverables (E2E capability 7/30 → 30/30 by `scripts/score-e2e-capability.sh`).
+
+- **Five new protocol contracts** (`skills/anvil/references/`): `system-protocol.md`
+  (product decomposition, ICD, system goldens, budgets), `cots-protocol.md` (pinned module
+  catalog, datasheet-anchored selection), `mechanical-protocol.md` (CAD-as-code —
+  build123d/CadQuery, kernel-emitted `measures.json`, process floors, rugged rules),
+  `harness-protocol.md` (wire table, ampacity floor, mates), `assembly-protocol.md`
+  (technician-followable steps, integration ladder, QC).
+- **Seven new mechanical-truth gates** in `score-anvil.sh`, all fixture-tested
+  (`tests/mech.test.sh`, `tests/system.test.sh`): `mesh` (STL watertight/manifold defect
+  count), `fit` / `mass` / `mech-dfm` (kernel measures vs assertion classes; optional
+  `PRUSA_SLICER` slice-clean seam), `pinout` (harness ↔ ICD + AWG ampacity), `product-bom`
+  (full-unit cost+mass rollup, incomplete line = hard error), `sys-budget`
+  (demand ≤ capability × derate).
+- **Scoring contract**: product dims `mechanical` 0.20 · `integration` 0.15 · `system` 0.15,
+  renormalized, must-pass in `verdict`; product optimization metrics `product_cost`,
+  `auw_mass`, `worst_budget_margin`.
+- **`build` product track**: P1 system architecture (extends P4) → P2 mechanical capture →
+  P3 interconnect → P4 product roll-up + assembly package; `doctor.sh --require-product`
+  (build123d/cadquery kernel tier, trimesh/prusa-slicer/openscad optional).
+- **Requirements protocol**: rugged/environment domains (IP class, vibration profile,
+  shock/drop) + product must-be rows + `product:` spec block.
+- **Reference product spec** `evals/product/fpv-drone.spec.yaml`; project template grows the
+  product tree (`system/ cots/ mech/ harness/ assembly/ product-bom.csv`).
+- New harness self-gate: `scripts/score-e2e-capability.sh` (frozen scorer, 30 rows).
+
 ## 0.2.1 — 2026-08-26
 
 Windows entry-point fix (found by the first fresh-clone user).

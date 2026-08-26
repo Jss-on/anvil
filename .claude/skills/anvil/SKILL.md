@@ -1,7 +1,7 @@
 ---
 name: anvil
 description: "Autonomous electronics-design iteration: modify, verify (ERC/sim/DRC), keep/discard against hardware-correct metrics — requirements to fab-ready PCB"
-version: 0.2.1
+version: 0.3.0
 ---
 
 # Anvil — Autonomous Goal-directed Hardware Iteration
@@ -42,7 +42,7 @@ Print a banner on every invocation: `[anvil] mode: classic | build | wizard`.
 | Command | Does | Default Iterations |
 |---|---|---|
 | `/anvil` | Bare metric loop over an existing design (`Metric:`/`Verify:`), route to `build` (`Spec:`/`Goal:`), or setup wizard | 25 |
-| `/anvil:build` | Full gated pipeline: charter → feasibility → HRS → architecture + part selection → schematic (ERC=0) → simulation (spec assertions at corners) → layout (DRC=0) → fab package + docs, to passing weighted acceptance | 40 |
+| `/anvil:build` | Full gated pipeline: charter → feasibility → HRS → architecture + part selection → schematic (ERC=0) → simulation (spec assertions at corners) → layout (DRC=0) → fab package + docs, to passing weighted acceptance. **Product mode** (spec with `product:` block / assembled-unit goal) adds: system decomposition + ICD → COTS selection → mechanical CAD track (mesh/fit/mass/dfm) → wiring harness (pinout) → product BOM + system budgets + assembly package | 40 |
 | `/anvil:requirements` | Hardware requirements elicitation → validated HRS (HR-n, every spec measurable: value + unit + tolerance + verification method) + a ready `build` spec | N/A |
 | `/anvil:improve` | Optimization loop on an existing design: minimize `bom_cost` \| `board_area` \| `part_count` or maximize `worst_case_margin`, under a hard non-regression ratchet (ERC=0 ∧ DRC=0 ∧ sim assertions hold) | 20 |
 | `/anvil:evals` | Analyze iteration results: trends, plateaus, regressions, margin + cost trajectories | N/A |

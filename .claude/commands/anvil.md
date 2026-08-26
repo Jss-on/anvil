@@ -1,7 +1,7 @@
 ---
 name: anvil
 description: "Iterate any hardware design against a mechanical metric — modify, verify (ERC/sim/DRC), keep/discard — or route a spec/goal to the right subcommand"
-argument-hint: "[Metric: bom_cost|board_area|part_count|worst_case_margin|<name>] [Verify: <shell cmd>] [Direction: minimize|maximize] [Scope: <dir>] [Spec: <file>] [Goal: <text>] [Iterations: N]"
+argument-hint: "[Metric: bom_cost|board_area|part_count|worst_case_margin|product_cost|auw_mass|worst_budget_margin|<name>] [Verify: <shell cmd>] [Direction: minimize|maximize] [Scope: <dir>] [Spec: <file>] [Goal: <text>] [Iterations: N]"
 ---
 
 EXECUTE IMMEDIATELY.
@@ -30,7 +30,9 @@ Resolve `ANVIL_ROOT` as in SKILL.md: first existing of `${CLAUDE_PLUGIN_ROOT}/sk
    - Named metric → `scripts/score-anvil.sh` subcommand: `bom_cost` → `bom-cost fab/bom.csv
      catalog/parts-catalog.csv` (minimize) · `board_area` → `area pcb/*.kicad_pcb` (minimize) ·
      `part_count` → distinct BOM lines (minimize) · `worst_case_margin` → min margin from
-     `sim sim/` (maximize).
+     `sim sim/` (maximize) · product scopes: `product_cost` → `product-bom product-bom.csv`
+     (minimize) · `auw_mass` → PRODUCT_MASS_G from the same (minimize) · `worst_budget_margin`
+     → min margin from `sys-budget system/budgets.tsv` (maximize).
    - `Verify:` → that exact shell command; it must print a number. `Direction:` sets the sign
      (default: maximize). Safety-screen the command before first run; refuse destructive ones.
 3. Baseline: run the metric on the untouched design. Record. A metric that won't run is a setup

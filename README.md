@@ -8,7 +8,7 @@ Anvil is the product; `anvil` is its command namespace — every command is `/an
 
 Based on the same principles as [AutoForge](https://github.com/Jss-on/autoforge) and [Karpathy's autoresearch](https://github.com/karpathy/autoresearch): constraint + **mechanical metric** + autonomous iteration = compounding gains. Software forges on green tests; hardware forges on **clean ERC/DRC, passing simulation assertions, closed power budgets, and a BOM that costs what the spec says**.
 
-![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)
+![Version](https://img.shields.io/badge/version-0.3.0-blue.svg)
 ![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)
 
 *"Set the SPEC → The agent runs the LOOP → You wake up to a fab package."*
