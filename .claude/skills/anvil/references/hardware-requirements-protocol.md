@@ -26,8 +26,15 @@ correct). A spec marked `simulation` satisfied only by prose analysis is NOT sat
    budget, efficiency/quiescent targets, sequencing.
 3. **Electrical environment** — line sags/surges, hot-plug, ESD exposure class, load dumps.
 4. **Mechanical** — max L×W×H, mounting pattern, connector types/positions/orientation, enclosure,
-   keep-outs.
-5. **Thermal/ambient** — Ta range, airflow (none/convection/forced), max component temp policy.
+   keep-outs. For products (not bare boards): enclosure/frame envelope + mass ceiling, **ingress
+   protection (IP rating — IP54 splash / IP65 washdown / IP67 immersion, or explicit "none")**,
+   materials + process (FDM/SLA/CNC), serviceability (tool-less vs fastened access, field-swap
+   items) — feeds `mechanical-protocol.md`.
+5. **Thermal/ambient/dynamic** — Ta range, airflow (none/convection/forced), max component temp
+   policy. **Vibration** (source + profile: motor-band sine for airborne, random g RMS for
+   vehicle-mount, or "benign desk") and **shock/drop** (drop height onto surface, expected crash
+   loads for airborne — drives isolator + sacrificial-part requirements). "Rugged" is not a spec
+   until it is an IP class, a vibration profile, and a drop height with numbers.
 6. **EMC & regulatory** — target class (FCC/CE class A/B, none-for-lab), isolation requirements.
 7. **Interfaces** — every external protocol with voltage levels + speed (USB FS/HS, UART baud,
    I²C addresses reserved, CAN termination policy…).
@@ -48,6 +55,10 @@ Candidate HR rows generated BEFORE elicitation so the client reacts, not recalls
 - Bench-readiness: test points on every rail + key signals, pin-1/polarity silkscreen, mounting
   holes, current-limited first-power values documented.
 - Boot/default state: outputs safe at power-up and during reset (motor drivers LOW, relays open).
+- Product builds add: strain relief at every wire exit; vibration-sensitive modules (IMU/camera)
+  isolated, never hard-mounted; enclosure ingress consistent with the declared IP class (seal or
+  declared "none"); crash/impact consumables replaceable without full teardown; every external
+  fastener captive or standard-driver accessible in the field.
 
 ## HRS template (`hrs/requirements.md`)
 
@@ -93,6 +104,27 @@ golden_connectivity: # electrical dimension must-pass rows
 sim_assertions:      # seeds sim/assertions.tsv
   - {id: A-HR-1, measure: vout_avg, op: within, limit: "3.3±3%", units: V,
      corners: "vin=4.5,5.5;iload=0,1", traces: HR-1}
+```
+
+### Product-mode extension (end-to-end builds)
+
+A spec whose deliverable is an assembled product (not a bare board) adds a `product:` block; each
+entry seeds the corresponding track's protocol and acceptance rows:
+
+```yaml
+product:
+  subsystems:        # seeds system/decomposition.md (system-protocol.md)
+    - {id: S-2, subsystem: propulsion, kind: cots, realization: "cots: MOT-*,ESC-1"}
+  cots:              # seeds cots/modules.csv — datasheet-anchored numbers required
+    - {module_id: BAT-1, role: power, key_specs: "6S 1300mAh 120C, 28.9Wh, 205g"}
+  mech:              # seeds mech/assertions.tsv (fit/mass/dfm classes)
+    - {id: HR-12, text: "FC stack fits cavity, ≥0.5mm z-clearance", verify: analysis}
+  budgets:           # seeds system/budgets.tsv — must CLOSE (sys-budget gate)
+    - {id: B-1, quantity: mass, demand: AUW, capability: "thrust@hover", derate: 0.5}
+  environment:       # rugged numbers — IP class, vibration profile, drop height
+    ip: IP54
+    vibration: "motor band 100–400 Hz, isolators required on FC"
+    drop: "1.5 m onto concrete, arms sacrificial"
 ```
 
 ## Anti-patterns (reject on sight)
