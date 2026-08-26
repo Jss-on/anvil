@@ -1,0 +1,8 @@
+id	class	measure	op	limit	units	traces
+F-1	fit	interference_mm3	le	0	mm3	HR-12
+F-2	fit	clearance_z_mm	ge	0.5	mm	HR-12
+F-3	fit	boss_misalign_mm	le	0.1	mm	HR-13
+M-1	mass	mass_g	le	38	g	HR-9
+M-2	mass	mass_g	ge	20	g	HR-9
+D-1	dfm	wall_min_mm	ge	1.6	mm	HR-14
+D-2	dfm	overhang_max_deg	le	55	deg	HR-14

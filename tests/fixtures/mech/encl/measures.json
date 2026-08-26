@@ -1,0 +1,8 @@
+{
+  "interference_mm3": 0,
+  "clearance_z_mm": 0.8,
+  "boss_misalign_mm": 0.05,
+  "mass_g": 36.2,
+  "wall_min_mm": 1.8,
+  "overhang_max_deg": 62
+}

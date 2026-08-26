@@ -9,7 +9,12 @@
 #   bom-cost  <bom.csv> <catalog.csv>    → pinned-catalog BOM roll-up         "BOM_COST: X.XX CUR"
 #   area      <pcb>                      → Edge.Cuts bounding-box area        "AREA_MM2: N.N"
 #   mesh      <file.stl>                 → STL watertight/manifold defects    "MESH_DEFECTS: N"
+#   fit       <mech-dir>                 → fit-class assertions (clearances)  "FIT_PASS: x/y"
 #   verdict   [results.tsv] [hrs.md]     → FAB_READY | FAB_BLOCKED
+#
+# fit/mass/mech-dfm evaluate <mech-dir>/assertions.tsv rows (cols: id class measure op limit
+#   units traces; class selects the gate; op grammar identical to sim) against kernel-emitted
+#   <mech-dir>/measures.json — see references/mechanical-protocol.md.
 #
 # pass-rate (higher_is_better):
 #   - six dimensions, weights renormalized over the dims that actually ran:
@@ -247,6 +252,42 @@ console.log('MESH_DEFECTS: ' + (open + nonman + winding + degenerate));
 EOF
 )
 
+NODE_MECHEVAL=$(cat <<'EOF'
+const fs = require('fs'), path = require('path');
+const dir = process.argv[1], cls = process.argv[2], label = process.argv[3];
+const af = path.join(dir, 'assertions.tsv'), mf = path.join(dir, 'measures.json');
+if (!fs.existsSync(af)) { console.error('missing ' + af); process.exit(2); }
+if (!fs.existsSync(mf)) { console.error('missing ' + mf + ' (kernel-emitted — run the CAD build)'); process.exit(2); }
+const meas = JSON.parse(fs.readFileSync(mf, 'utf8'));
+const rows = fs.readFileSync(af, 'utf8').split(/\r?\n/).filter(l => l.trim() && !l.startsWith('#'));
+let pass = 0, total = 0;
+for (const line of rows) {
+  const c = line.split('\t');
+  if (c[0] === 'id') continue;
+  const [id, klass, m, op, limit, units] = c;
+  if (!id || klass !== cls) continue;
+  total++;
+  if (!(m in meas)) { console.error(id + ' FAIL no measure "' + m + '" in measures.json'); continue; }
+  const v = +meas[m];
+  if (!isFinite(v)) { console.error(id + ' FAIL non-numeric measure "' + m + '"'); continue; }
+  let lo = -Infinity, hi = Infinity, mm;
+  const lim = (limit || '').replace(/\s/g, '');
+  if (op === 'le') hi = parseFloat(lim);
+  else if (op === 'ge') lo = parseFloat(lim);
+  else if (op === 'within') {
+    if ((mm = lim.match(/^([-+0-9.eE]+)(?:±|\+-|\+\/-)([-+0-9.eE]+)%$/))) { const ctr = +mm[1], p = +mm[2] / 100; lo = ctr * (1 - p); hi = ctr * (1 + p); }
+    else if ((mm = lim.match(/^([-+0-9.eE]+)(?:±|\+-|\+\/-)([-+0-9.eE]+)$/))) { lo = +mm[1] - +mm[2]; hi = +mm[1] + +mm[2]; }
+    else if ((mm = lim.match(/^([-+0-9.eE]+)\.\.([-+0-9.eE]+)$/))) { lo = +mm[1]; hi = +mm[2]; }
+    else { console.error(id + ' FAIL unparseable within-limit "' + limit + '"'); continue; }
+  } else { console.error(id + ' FAIL unknown op "' + op + '"'); continue; }
+  if (isNaN(lo) || isNaN(hi)) { console.error(id + ' FAIL unparseable limit "' + limit + '"'); continue; }
+  if (v < lo || v > hi) console.error(`${id} FAIL ${m}=${v} bounds=[${lo},${hi}] ${units || ''}`);
+  else { pass++; const margin = Math.min(v - lo, hi - v); console.error(`${id} PASS margin=${isFinite(margin) ? margin.toPrecision(4) : 'inf'} ${units || ''}`); }
+}
+console.log(`${label}: ${pass}/${total}`);
+EOF
+)
+
 # ---------------------------------------------------------------------------
 pass_rate() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}"
@@ -359,6 +400,12 @@ mesh() {
   node -e "$NODE_MESH" "$stl"
 }
 
+fit() {
+  local dir="${1:?usage: score-anvil.sh fit <mech-dir>}"
+  [[ -d "$dir" ]] || die "fit: no such dir $dir"
+  node -e "$NODE_MECHEVAL" "$dir" fit FIT_PASS
+}
+
 verdict() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}" hrs="${2:-}"
   [[ -f "$tsv" ]] || die "no results TSV: $tsv"
@@ -388,6 +435,7 @@ case "$cmd" in
   bom-cost)  bom_cost "$@" ;;
   area)      area "$@" ;;
   mesh)      mesh "$@" ;;
+  fit)       fit "$@" ;;
   verdict)   verdict "$@" ;;
-  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|verdict} [args]" >&2; exit 2 ;;
+  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|verdict} [args]" >&2; exit 2 ;;
 esac

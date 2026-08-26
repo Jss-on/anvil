@@ -31,6 +31,12 @@ if want mesh; then
     "$(bash "$SCORE" mesh "$FIX/cube-open.stl" 2>/dev/null)"
 fi
 
+# --- fit: measures.json vs fit-class assertions ------------------------------
+if want fit; then
+  assert_eq "fit: interference/clearance/boss all green" "FIT_PASS: 3/3" \
+    "$(bash "$SCORE" fit "$FIX/encl" 2>/dev/null)"
+fi
+
 echo
 if [[ $n -eq 0 ]]; then
   echo "NO MECH CASES matched filter '${only}'"
