@@ -37,6 +37,12 @@ if want fit; then
     "$(bash "$SCORE" fit "$FIX/encl" 2>/dev/null)"
 fi
 
+# --- mass: measures.json vs mass-class assertions ----------------------------
+if want mass; then
+  assert_eq "mass: 36.2g within 20..38 budget rows" "MASS_PASS: 2/2" \
+    "$(bash "$SCORE" mass "$FIX/encl" 2>/dev/null)"
+fi
+
 echo
 if [[ $n -eq 0 ]]; then
   echo "NO MECH CASES matched filter '${only}'"

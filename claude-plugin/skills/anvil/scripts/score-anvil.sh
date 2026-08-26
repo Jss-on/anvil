@@ -10,6 +10,7 @@
 #   area      <pcb>                      → Edge.Cuts bounding-box area        "AREA_MM2: N.N"
 #   mesh      <file.stl>                 → STL watertight/manifold defects    "MESH_DEFECTS: N"
 #   fit       <mech-dir>                 → fit-class assertions (clearances)  "FIT_PASS: x/y"
+#   mass      <mech-dir>                 → mass-class assertions (budget)     "MASS_PASS: x/y"
 #   verdict   [results.tsv] [hrs.md]     → FAB_READY | FAB_BLOCKED
 #
 # fit/mass/mech-dfm evaluate <mech-dir>/assertions.tsv rows (cols: id class measure op limit
@@ -406,6 +407,12 @@ fit() {
   node -e "$NODE_MECHEVAL" "$dir" fit FIT_PASS
 }
 
+mass() {
+  local dir="${1:?usage: score-anvil.sh mass <mech-dir>}"
+  [[ -d "$dir" ]] || die "mass: no such dir $dir"
+  node -e "$NODE_MECHEVAL" "$dir" mass MASS_PASS
+}
+
 verdict() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}" hrs="${2:-}"
   [[ -f "$tsv" ]] || die "no results TSV: $tsv"
@@ -436,6 +443,7 @@ case "$cmd" in
   area)      area "$@" ;;
   mesh)      mesh "$@" ;;
   fit)       fit "$@" ;;
+  mass)      mass "$@" ;;
   verdict)   verdict "$@" ;;
-  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|verdict} [args]" >&2; exit 2 ;;
+  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|mass|verdict} [args]" >&2; exit 2 ;;
 esac
