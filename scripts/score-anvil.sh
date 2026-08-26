@@ -12,6 +12,7 @@
 #   fit       <mech-dir>                 → fit-class assertions (clearances)  "FIT_PASS: x/y"
 #   mass      <mech-dir>                 → mass-class assertions (budget)     "MASS_PASS: x/y"
 #   mech-dfm  <mech-dir>                 → dfm-class assertions (+slicer)     "DFM_PASS: x/y"
+#   pinout    <harness.tsv> <icd.tsv> [mates.tsv] → wiring consistency        "PINOUT_VIOLATIONS: N"
 #   verdict   [results.tsv] [hrs.md]     → FAB_READY | FAB_BLOCKED
 #
 # fit/mass/mech-dfm evaluate <mech-dir>/assertions.tsv rows (cols: id class measure op limit
@@ -290,6 +291,56 @@ console.log(`${label}: ${pass}/${total}`);
 EOF
 )
 
+NODE_PINOUT=$(cat <<'EOF'
+const fs = require('fs');
+const tsv = f => fs.readFileSync(f, 'utf8').split(/\r?\n/)
+  .filter(l => l.trim() && !l.startsWith('#')).map(l => l.split('\t'));
+const H = tsv(process.argv[1]), I = tsv(process.argv[2]);
+const matesf = process.argv[3];
+const idx = (hdr, name) => hdr.indexOf(name);
+const hh = H[0], ih = I[0];
+const hW = idx(hh, 'wire_id'), hIcd = idx(hh, 'icd_id'), hFrom = idx(hh, 'from'),
+      hTo = idx(hh, 'to'), hAwg = idx(hh, 'awg'), hCur = idx(hh, 'current_a');
+const iId = idx(ih, 'icd_id'), iKind = idx(ih, 'kind');
+if ([hW, hIcd, hFrom, hTo, hAwg, hCur].some(c => c < 0)) { console.error('harness.tsv missing columns (wire_id icd_id from to awg current_a)'); process.exit(2); }
+if (iId < 0 || iKind < 0) { console.error('icd.tsv missing columns (icd_id kind)'); process.exit(2); }
+// bundled/chassis ampacity floor — mirrors references/harness-protocol.md
+const AMP = { 30: 0.5, 28: 0.8, 26: 1.3, 24: 2.0, 22: 3.0, 20: 5.0, 18: 7.0, 16: 10, 14: 15, 12: 25, 10: 35 };
+let v = 0;
+const bad = m => { console.error('VIOLATION: ' + m); v++; };
+const icd = new Map();
+for (const r of I.slice(1)) if (r[iId]) icd.set(r[iId], r[iKind]);
+const realized = new Set();
+const EP = /^[^.\s]+\.[^\s]+$/; // <endpoint>.<connector>[.<pin>]
+const prefixes = new Set();
+for (const r of H.slice(1)) {
+  const w = r[hW]; if (!w) continue;
+  if (!icd.has(r[hIcd])) bad(`${w}: unknown icd_id "${r[hIcd]}"`);
+  else realized.add(r[hIcd]);
+  const awg = parseInt(r[hAwg], 10), cur = parseFloat(r[hCur]);
+  if (!(awg in AMP)) bad(`${w}: awg ${r[hAwg]} not in ampacity table`);
+  else if (isFinite(cur) && cur > AMP[awg]) bad(`${w}: ${cur} A exceeds AWG${awg} floor ${AMP[awg]} A`);
+  for (const ep of [r[hFrom], r[hTo]]) {
+    if (!EP.test(ep || '')) { bad(`${w}: malformed endpoint "${ep}"`); continue; }
+    const seg = ep.split('.');
+    prefixes.add(seg.length >= 3 ? seg.slice(0, -1).join('.') : ep);
+  }
+}
+for (const [id, kind] of icd)
+  if ((kind === 'power' || kind === 'signal') && !realized.has(id))
+    bad(`${id} (${kind}) unrealized by any harness wire`);
+if (matesf && fs.existsSync(matesf)) {
+  const M = tsv(matesf), mh = M[0];
+  const mA = idx(mh, 'side_a'), mB = idx(mh, 'side_b');
+  if (mA < 0 || mB < 0) { console.error('mates.tsv missing columns (side_a side_b)'); process.exit(2); }
+  const sides = new Set();
+  for (const r of M.slice(1)) { if (r[mA]) sides.add(r[mA]); if (r[mB]) sides.add(r[mB]); }
+  for (const p of prefixes) if (!sides.has(p)) bad(`connector ${p} not covered by any mate row`);
+}
+console.log('PINOUT_VIOLATIONS: ' + v);
+EOF
+)
+
 # ---------------------------------------------------------------------------
 pass_rate() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}"
@@ -441,6 +492,14 @@ mech_dfm() {
   echo "DFM_PASS: $x/$y"
 }
 
+pinout() {
+  local h="${1:?usage: score-anvil.sh pinout <harness.tsv> <icd.tsv> [mates.tsv]}"
+  local i="${2:?icd.tsv required}"
+  [[ -f "$h" ]] || die "no harness table: $h"
+  [[ -f "$i" ]] || die "no ICD: $i"
+  node -e "$NODE_PINOUT" "$h" "$i" "${3:-}"
+}
+
 verdict() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}" hrs="${2:-}"
   [[ -f "$tsv" ]] || die "no results TSV: $tsv"
@@ -473,6 +532,7 @@ case "$cmd" in
   fit)       fit "$@" ;;
   mass)      mass "$@" ;;
   mech-dfm)  mech_dfm "$@" ;;
+  pinout)    pinout "$@" ;;
   verdict)   verdict "$@" ;;
-  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|mass|mech-dfm|verdict} [args]" >&2; exit 2 ;;
+  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|mass|mech-dfm|pinout|verdict} [args]" >&2; exit 2 ;;
 esac

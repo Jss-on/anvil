@@ -1,0 +1,5 @@
+icd_id	from	to	kind	connector	pins	v_nom	i_max_a	protocol	traces
+ICD-1	S-3	S-2	power	XT60	2	14.8	60	DC	HR-3
+ICD-2	S-1	S-2	signal	JST-SH8	8	3.3	0.1	DShot600	HR-5
+ICD-3	S-1	S-5	signal	JST-GH6	6	5.0	0.8	analog	HR-7
+ICD-4	S-4	S-1	mechanical	M3x4	-	-	-	TPU	HR-12

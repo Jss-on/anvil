@@ -1,0 +1,5 @@
+wire_id	icd_id	from	to	signal	awg	length_mm	current_a	color	notes
+W-1	ICD-1	BAT-1.XT60.1	PDB.J1.1	VBAT	12	60	22	red	strain relief at PDB
+W-2	ICD-1	BAT-1.XT60.2	PDB.J1.2	GND	12	60	22	black	-
+W-3	ICD-2	FC.J3.1	ESC-1.J1.1	DSHOT_M1	28	85	0.1	white	loom L-1
+W-4	ICD-3	FC.J4.5	VTX-1.J1.2	VIDEO	30	70	0.05	yellow	away from phase leads

@@ -1,0 +1,4 @@
+wire_id	icd_id	from	to	signal	awg	length_mm	current_a	color	notes
+W-1	ICD-9	BAT-1.XT60.1	PDB.J1.1	VBAT	12	60	22	red	unknown icd
+W-2	ICD-1	BAT-1.XT60.1	PDB.J1.1	VBAT	28	60	5.0	red	28awg at 5A
+W-3	ICD-3	FC	VTX-1.J1.2	VIDEO	30	70	0.05	yellow	malformed from
