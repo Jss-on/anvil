@@ -1,7 +1,7 @@
 ---
 name: anvil
 description: "Autonomous electronics-design iteration: modify, verify (ERC/sim/DRC), keep/discard against hardware-correct metrics — requirements to fab-ready PCB"
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Anvil — Autonomous Goal-directed Hardware Iteration

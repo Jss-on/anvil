@@ -12,6 +12,32 @@ The schematic's source of truth is a **text artifact** the loop can diff, revert
    surgery; never via untracked GUI-only state.
 Binary-only or un-diffable schematic state fails the phase gate.
 
+## Sheet & naming conventions (clarity over compactness)
+
+- **Hierarchy by function**, not location: power on one sheet/block, MCU on another, comms per
+  interface. Flat is acceptable ≤ 2 sheets; beyond that, hierarchical sheets are the reuse and
+  review unit. Signal flow left→right, top→bottom; inputs enter left, outputs exit right.
+- **Reference designators** per IEEE 315 / ASME Y14.44 class letters (R, C, L, U, D, Q, K, J,
+  TP…) — one letter class per component type, no local inventions.
+- **Net labels are scoped deliberately**: local for same-sheet, hierarchical/global for
+  cross-sheet. Never short generics (`EN`, `OUT`, `CLK`) that invite silent collisions — prefix
+  by block (`BUCK_EN`, `MCU_SWCLK`).
+- **Power ports** (+3V3/+5V/GND symbols), never power wires dragged across the sheet. Mixed-signal:
+  distinct AGND/DGND symbols with the single join point drawn explicitly (per the converter
+  datasheet — a DGND *pin name* does not mandate a separate system digital plane).
+- Decoupling caps drawn **adjacent to their IC** in the same block — visible, never "assumed";
+  intent must survive the trip to layout.
+
+## Footprints & land patterns (IPC-7351)
+
+- Land patterns to **IPC-7351 density Level B (Nominal)** by default; Level A for hand-soldered /
+  high-rel boards, Level C only with the assembler's written confirmation (see `standards.md`).
+- Every footprint verified against the **datasheet's recommended pattern** before first use;
+  project-local pinned libraries over global mutable ones. A wrong pattern is the
+  tombstone/bridge/open defect class — caught here or at bring-up, nowhere between.
+- Thermal-pad footprints carry their paste/via strategy (segmented stencil intent noted for
+  uncapped via farms — the fab protocol's stencil rule consumes it).
+
 ## Connectivity-TDD (goldens first)
 
 Golden connectivity cases derive from the block diagram (build Phase 4) and are `electrical`
@@ -51,6 +77,13 @@ corners, not typicals.
 - Lifecycle: active — never NRND/EOL without explicit user waiver.
 - Availability: in stock at ≥2 major distributors OR an approved drop-in second source captured
   in the catalog.
+- **Obsolescence is quiet**: > 50 % of recent discontinuations shipped with NO PCN
+  (`standards.md`) — lifecycle is re-checked at every explicit catalog refresh, never assumed
+  from silence. A PCN/LTB on a catalog part (~6-month buy window) is a drop-everything GitHub
+  issue; the substitution enters through the normal loop (derating + affected sims re-verified).
+- Multi-sourced, widely-used parts over exotic singles; note the drop-in FFF alternate for each
+  keystone part in `arch/architecture.md` — designing the alternate in NOW is what makes the
+  future substitution a catalog edit instead of a respin.
 - The **pinned catalog** (`catalog/parts-catalog.csv`) is written when a part is chosen:
   `mpn,description,qty,unit_price,currency,stock,lifecycle,distributor,accessed`. `bom-cost`
   joins ONLY against it. Refreshing prices/stock is an explicit logged event, never a mid-loop
@@ -67,6 +100,8 @@ corners, not typicals.
 - [ ] Connector ESD + labeled pinout table on the sheet.
 - [ ] Test points: every rail, GND ≥2, key signals (feedback, clocks, comms) — as real TP
       footprints.
+- [ ] Debug/DFT access: SWD/JTAG header or TC pads on every MCU/FPGA; boundary-scan
+      (IEEE 1149.1) parts preferred where BGAs hide joints, scan-chain order documented.
 - [ ] Unused gates/pins terminated per datasheet.
 - [ ] Net names: rails as `+3V3`/`+5V`/`GND`, signals functional (`UART_TX`), never `Net-(R5-Pad1)`
       on anything a human will probe.

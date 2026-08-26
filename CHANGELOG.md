@@ -1,6 +1,44 @@
 # Changelog
 
-## 0.3.0 — 2026-08-26
+## 0.4.0 — 2026-08-26
+
+Industry-process deepening — the protocols absorb the standard PCB design discipline (IPC
+standards hierarchy, class election, grounding/PDN doctrine, obsolescence reality) from a
+comprehensive process research pass.
+
+- **New reference `standards.md`** — the numbers annex all protocols cite: IPC registry with
+  current revisions (2221C, A-610J, 6012F, J-STD-020F…), **Class 1/2/3 gradient** (plating
+  20/25 µm, barrel fill 50/75 %, annular-ring tolerance), IPC-2152 ampacity anchors (+ internal
+  50–70 % derate), IPC-2221 Table 6-1 creepage/clearance anchors + >500 V formula + IEC
+  60664-1/62368-1 override rule, IPC-7351 density levels, full MSL floor-life ladder,
+  RoHS 3 / REACH-SVHC / UL 796 / 94V-0, and the obsolescence numbers (>50 % of EOLs ship
+  with no PCN; LTB ≈ 6 months). Provenance caveat: secondary-source transcriptions — verify
+  against the purchased standard for Class 3 / safety-critical.
+- **IPC class is now a first-class early decision**: elected in the HRS manufacturing domain,
+  fixed in the Phase 1 charter alongside requirements + stackup (the three early
+  irreversibles), carried as `ipc_class` in `build-spec.yaml`, echoed on the DFM report and
+  RFQs with the standard revision.
+- **Schematic protocol**: sheet/naming conventions (hierarchy by function, IEEE 315/ASME
+  Y14.44 refdes, scoped net labels, power ports, AGND/DGND single join drawn); IPC-7351
+  Level-B footprint discipline (datasheet-verified, project-local pinned libs); quiet-
+  obsolescence rules (active refresh checks, PCN/LTB = drop-everything issue, FFF alternate
+  noted per keystone part); SWD/JTAG + boundary-scan row in the design review.
+- **Layout protocol**: grounding doctrine section (one continuous plane, splits only with
+  simulated justification, no routing over plane gaps, loop-area discipline, converter
+  AGND/DGND per datasheet); stackup physics (thick 4-layer core carries no HF decoupling —
+  MLCCs do; 6-layer thin PWR–GND pair; fab's real dielectrics for impedance); decoupling as
+  loop inductance (≤ 2 mm, ~0.5–1 nH per via) + PDN target-Z formula; assembly-orientation +
+  fiducial placement rules; thermal-via farm spec (Ø 0.2–0.33 mm @ 1.0–1.2 mm, must land on
+  real copper); skew serpentines at the mismatch source; teardrops + mask-sliver rules.
+- **Fab protocol**: DFM report grows IPC-class statement, reasoned surface-finish selection
+  (HASL/ENIG/OSP/imm-Ag trade table, fine-pitch forces ENIG-class), symmetric-panel note,
+  segmented-stencil rule for uncapped via farms, MSL ≥ 3 disclosure, declared-market
+  compliance rows (RoHS/UL); IPC-2581 offered alongside RS-274X; PCN/LTB handling on the
+  catalog refresh event.
+- `build`: charter fixes the three early irreversibles; TEST-PLAN ordered up the DFT ladder
+  (structural → boundary-scan → functional); DFM-report scope widened. `requirements`:
+  class election in the manufacturing elicitation domain. Metrics: manufacturing/testability
+  "owns" lines updated. `buck-3v3` exemplar spec carries `ipc_class: 2`.
 
 End-to-end product capability — anvil builds assemblable units, not just boards. A rugged FPV
 drone's frame, COTS modules, wiring, budgets, and assembly kit are now first-class, gated

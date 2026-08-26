@@ -4,6 +4,7 @@ name: buck-3v3
 summary: USB-powered 5V→3.3V/1A synchronous buck regulator board, JLCPCB 2-layer
 fab: jlcpcb
 layers: 2
+ipc_class: 2
 
 targets:
   bom_cost: { limit: 8.00, currency: USD, qty: 10 }

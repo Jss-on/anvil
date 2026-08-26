@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "anvil",
-  "version": "0.2.1",
+  "version": "0.4.0",
   "description": "Anvil — autonomous hardware-design harness for Claude Code. AutoForge's hardware sibling: requirements → schematic → simulation → layout → fab-ready PCB, every gate mechanical (kicad-cli ERC/DRC, ngspice assertions, pinned-catalog BOM cost).",
   "owner": {
     "name": "Jss-on",
@@ -11,7 +11,7 @@
     {
       "name": "anvil",
       "description": "Autonomous electronics-design engine. 5 commands: anvil (metric loop), build (gated V-model pipeline), requirements (HRS), improve (cost/area/margin optimization under a non-regression ratchet), evals. Gating electrical dimension; parts ordering always human-gated.",
-      "version": "0.2.1",
+      "version": "0.4.0",
       "author": {
         "name": "Jss-on",
         "url": "https://github.com/Jss-on"

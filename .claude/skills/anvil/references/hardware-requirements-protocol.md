@@ -35,11 +35,16 @@ correct). A spec marked `simulation` satisfied only by prose analysis is NOT sat
    vehicle-mount, or "benign desk") and **shock/drop** (drop height onto surface, expected crash
    loads for airborne — drives isolator + sacrificial-part requirements). "Rugged" is not a spec
    until it is an IP class, a vibration profile, and a drop height with numbers.
-6. **EMC & regulatory** — target class (FCC/CE class A/B, none-for-lab), isolation requirements.
+6. **EMC & regulatory** — target class (FCC/CE class A/B, none-for-lab), isolation requirements,
+   and target markets' substance/material rules (RoHS/REACH scope, UL-recognized laminate — see
+   `standards.md`). Compliance discovered at the end is a redesign; declare or waive it here.
 7. **Interfaces** — every external protocol with voltage levels + speed (USB FS/HS, UART baud,
    I²C addresses reserved, CAN termination policy…).
 8. **Manufacturing** — fab preset, layer budget, qty, BOM cost target **@ that qty**, assembly
-   (hand / PCBA), one-sided placement preference, panelization needs.
+   (hand / PCBA), one-sided placement preference, panelization needs, and the **IPC class
+   election** (1/2/3 per `standards.md` — default Class 2; Class 3 for aerospace/medical/military).
+   Class drives annular rings, hole fill, plating, spacing, and inspection criteria everywhere
+   downstream — it is elected here, in writing, never inherited by accident.
 9. **Lifecycle & safety** — production years (drives lifecycle floor on parts), second-source
    policy, field service, voltage class (>30 V triggers the HV register; mains adds the human
    sign-off row).
@@ -76,6 +81,7 @@ HR-3 — Survives reverse input polarity indefinitely. verify: simulation
 HR-4 — Board ≤ 50 × 40 mm, M3 holes at 4 corners. verify: inspection
 ### Manufacturing
 HR-5 — BOM ≤ $8.00 @ qty 10 (catalog snapshot 2026-08-26). verify: analysis
+HR-6 — Built and inspected to IPC Class 2 (IPC-A-610J / IPC-6012F). verify: inspection
 ### … (all nine domains, omit domains with a stated "none")
 ## Out of scope
 ## Open questions (each with recommended default)
@@ -91,6 +97,7 @@ name: buck-3v3
 summary: one line
 fab: jlcpcb          # rule-deck preset
 layers: 2
+ipc_class: 2         # 1|2|3 per standards.md — elected here, echoed on the DFM report + RFQs
 targets:
   bom_cost: {limit: 8.00, currency: USD, qty: 10}
   board_area: {limit: 2000, units: mm2}

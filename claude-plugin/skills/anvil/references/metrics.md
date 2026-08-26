@@ -21,8 +21,8 @@ without evidence is `fail` by definition. `traces` = comma-joined HR-n (the RTM)
 | `electrical` | 0.30 | ERC=0 · connectivity goldens · derating table · power budget closes |
 | `simulation` | 0.25 | every simulable HRS spec at corners, margins recorded |
 | `layout` | 0.20 | DRC=0 incl. parity + fab deck · critical-net constraints · area target |
-| `manufacturing` | 0.15 | package complete · DFM report · catalog lifecycle/stock · BOM cost ≤ target |
-| `testability` | 0.10 | test points as footprints · bring-up plan · safe power-up defaults |
+| `manufacturing` | 0.15 | package complete · DFM report (IPC class + finish + MSL + stencil stated) · catalog lifecycle/stock · BOM cost ≤ target |
+| `testability` | 0.10 | test points as footprints · debug/DFT access (SWD/JTAG where MCU) · bring-up plan · safe power-up defaults |
 | `documentation` | 0.10 | schematic PDF viewed · renders viewed · model provenance · README · RTM |
 
 Product builds (end-to-end units, not bare boards) add three dimensions — absent from a

@@ -47,7 +47,8 @@ Interview (interactive: batched AskUserQuestion rounds, max 4 per round; non-int
 and log as explicit assumptions) across the protocol's domains: function & performance · power
 source/budget · electrical environment (line range, transients) · mechanical (size, mounting,
 connectors, enclosure) · thermal/ambient · EMC + regulatory class · interfaces & protocols ·
-manufacturing (fab preset, qty, budget, assembly) · lifecycle (field-serviceable? expected years,
+manufacturing (fab preset, qty, budget, assembly, **IPC class election** — default 2, per
+`references/standards.md`) · lifecycle (field-serviceable? expected years,
 second-source policy) · safety (voltage class — triggers the HV register above 30 V).
 **Day-in-the-life walkthrough:** narrate the board's first power-on, worst day (hot car, brownout,
 wrong charger), and end of life; every friction point becomes a requirement or an open question.

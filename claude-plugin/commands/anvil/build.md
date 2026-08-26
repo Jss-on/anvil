@@ -42,7 +42,8 @@ assemble the final unit**, not just the fab package.
 
 Companion contracts: `references/hardware-requirements-protocol.md`, `references/schematic-protocol.md`,
 `references/simulation-protocol.md`, `references/layout-protocol.md`, `references/fab-protocol.md`,
-`references/metrics.md`, `references/toolchain.md` — and for product mode:
+`references/metrics.md`, `references/standards.md` (IPC registry, class gradient, ampacity +
+spacing anchors, MSL, RoHS/REACH/UL), `references/toolchain.md` — and for product mode:
 `references/system-protocol.md`, `references/cots-protocol.md`, `references/mechanical-protocol.md`,
 `references/harness-protocol.md`, `references/assembly-protocol.md`.
 
@@ -120,7 +121,11 @@ Produce the **charter** (`charter.md`, ~1 page): board mission + elevator pitch,
 scope, stakeholders + deployment environment, iteration budget, constraints (size, cost @ qty,
 connectors, compliance domains), and a **risk register** (≥3, each with mitigation — always
 consider: single-source parts, long-lead parts, HV/EMC compliance, thermal, novel topology).
-`git init` + create the private output repo.
+The charter fixes **the three early irreversibles in writing: requirements source, IPC class
+(default 2 — `references/standards.md`), and stackup/layer intent** — the cheapest decisions to
+get right now and the most expensive to change after layout; any later change in environment,
+data rate, or reliability target re-opens them explicitly. `git init` + create the private
+output repo.
 **Gate:** charter committed; output repo wired (or local-only noted); Scope resolved.
 
 ## Phase 2 — Feasibility (GO/NO-GO spike)
@@ -203,8 +208,10 @@ critical nets first (feedback, switch nodes, diff pairs, clocks) under the proto
 Per `references/fab-protocol.md`: export gerbers + drill (`kicad-cli pcb export gerbers|drill`),
 BOM (`kicad-cli sch export bom` with MPN/qty fields → join catalog → `BOM_COST: $X @ qtyN` vs
 target), CPL (`kicad-cli pcb export pos --format csv --units mm`), `fab/DFM-REPORT.md` (deck
-version, violation zero-count, stackup, finish). Docs: `docs/TEST-PLAN.md` (per-HR bring-up
-measurements with expected values ± tolerance — a technician-followable script),
+version, violation zero-count, stackup, finish, IPC class, MSL/stencil notes — the fab
+protocol's full list). Docs: `docs/TEST-PLAN.md` (per-HR bring-up measurements with expected
+values ± tolerance — a technician-followable script, ordered up the DFT ladder: structural →
+boundary-scan where fitted → functional),
 `docs/BRINGUP.md` (power-on sequence, current-limit first-power values, smoke-test order),
 assembly notes, README. **Requirement-satisfaction audit:** re-read the HRS; every HR-n verified at
 its declared method or stronger, with evidence paths. Then the loop: pick lowest dimension →
