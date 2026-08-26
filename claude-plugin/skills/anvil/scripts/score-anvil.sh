@@ -11,6 +11,7 @@
 #   mesh      <file.stl>                 → STL watertight/manifold defects    "MESH_DEFECTS: N"
 #   fit       <mech-dir>                 → fit-class assertions (clearances)  "FIT_PASS: x/y"
 #   mass      <mech-dir>                 → mass-class assertions (budget)     "MASS_PASS: x/y"
+#   mech-dfm  <mech-dir>                 → dfm-class assertions (+slicer)     "DFM_PASS: x/y"
 #   verdict   [results.tsv] [hrs.md]     → FAB_READY | FAB_BLOCKED
 #
 # fit/mass/mech-dfm evaluate <mech-dir>/assertions.tsv rows (cols: id class measure op limit
@@ -413,6 +414,33 @@ mass() {
   node -e "$NODE_MECHEVAL" "$dir" mass MASS_PASS
 }
 
+mech_dfm() {
+  local dir="${1:?usage: score-anvil.sh mech-dfm <mech-dir>}"
+  [[ -d "$dir" ]] || die "mech-dfm: no such dir $dir"
+  local out x y
+  out=$(node -e "$NODE_MECHEVAL" "$dir" dfm DFM_PASS) || exit $?
+  x=${out#DFM_PASS: }; y=${x#*/}; x=${x%%/*}
+  if [[ -n "${PRUSA_SLICER:-}" ]]; then
+    # slicer seam: every build STL must slice clean when a slicer is configured
+    local stl ok=0 tot=0 g
+    for stl in "$dir"/build/*.stl; do
+      [[ -f "$stl" ]] || continue
+      tot=$((tot + 1))
+      g="$(mktemp -u).gcode"
+      if "$PRUSA_SLICER" --export-gcode --output "$g" "$stl" >/dev/null 2>&1; then
+        ok=$((ok + 1)); echo "slice PASS: $stl" >&2
+      else
+        echo "slice FAIL: $stl" >&2
+      fi
+      rm -f "$g"
+    done
+    x=$((x + ok)); y=$((y + tot))
+  else
+    echo "slicer seam disabled (PRUSA_SLICER unset) — dfm assertions only" >&2
+  fi
+  echo "DFM_PASS: $x/$y"
+}
+
 verdict() {
   local tsv="${1:-${ANVIL_RESULTS:-anvil-results.tsv}}" hrs="${2:-}"
   [[ -f "$tsv" ]] || die "no results TSV: $tsv"
@@ -444,6 +472,7 @@ case "$cmd" in
   mesh)      mesh "$@" ;;
   fit)       fit "$@" ;;
   mass)      mass "$@" ;;
+  mech-dfm)  mech_dfm "$@" ;;
   verdict)   verdict "$@" ;;
-  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|mass|verdict} [args]" >&2; exit 2 ;;
+  *) echo "usage: score-anvil.sh {pass-rate|coverage|erc|drc|sim|bom-cost|area|mesh|fit|mass|mech-dfm|verdict} [args]" >&2; exit 2 ;;
 esac

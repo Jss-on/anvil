@@ -43,6 +43,12 @@ if want mass; then
     "$(bash "$SCORE" mass "$FIX/encl" 2>/dev/null)"
 fi
 
+# --- mech-dfm: wall green, overhang 62° > 55° limit red ----------------------
+if want mech-dfm; then
+  assert_eq "mech-dfm: catches 62deg overhang over 55 limit" "DFM_PASS: 1/2" \
+    "$(bash "$SCORE" mech-dfm "$FIX/encl" 2>/dev/null)"
+fi
+
 echo
 if [[ $n -eq 0 ]]; then
   echo "NO MECH CASES matched filter '${only}'"
