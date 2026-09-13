@@ -1,7 +1,7 @@
 ---
 name: anvil:improve
-description: "Optimization loop on an existing design — minimize BOM cost, board area, or part count, or maximize worst-case margin — under a hard non-regression ratchet (ERC=0 ∧ DRC=0 ∧ every sim assertion still green at corners)"
-argument-hint: "Metric: bom_cost|board_area|part_count|worst_case_margin [Scope: <board dir>] [Floor: <margin floor>] [Iterations: N] [--evals]"
+description: "Optimize hardware cost, area, mass, part count, or worst-case margin while preserving requirements and release checks"
+argument-hint: "Metric: bom_cost|board_area|part_count|worst_case_margin|product_cost|auw_mass|worst_budget_margin [Scope: <project>] [Floor: <margin floor>] [Iterations: N]"
 ---
 
 EXECUTE IMMEDIATELY.
@@ -24,6 +24,9 @@ optimization without verification is vandalism.
   - `worst_case_margin` — maximize the MINIMUM margin across all sim assertions at corners
     (from `scripts/score-anvil.sh sim sim/` margin output). Maximin, not average — averaging lets
     one spec go to the cliff edge while another coasts.
+  - `product_cost` — minimize the source-joined product BOM total; keep the full commercial model current.
+  - `auw_mass` — minimize the product BOM mass rollup while preserving capability and mechanical requirements.
+  - `worst_budget_margin` — maximize the minimum normalized system-budget margin; keep units and source calculations explicit.
 - `Scope:` — the board directory. Default: the only board in the repo; ask if ambiguous.
 - `Floor:` — margin floor as a fraction of baseline (default 0.80): no change may cut ANY
   assertion's margin below `floor × baseline_margin`, even while optimizing cost/area. Prevents
@@ -34,9 +37,11 @@ optimization without verification is vandalism.
 1. `ERC_VIOLATIONS: 0` and `DRC_VIOLATIONS: 0` (incl. fab rule deck + schematic parity).
 2. Every `sim/assertions.tsv` row still PASSES at its declared corners.
 3. No assertion margin below the Floor.
-4. Derating table stays green (a cheaper part with a thinner rating that pushes stress past 80 %
-   is a REJECT, whatever it saves).
-5. HV-register rows (if any) untouched without human review.
+4. Derating stays within the project's approved, source-backed limits under its stated conditions.
+5. Safety/risk controls and compliance assumptions retain the required responsible review.
+6. Regenerate the release manifest after a retained change; run the applicable automatic checks
+   with `record` and renew affected review evidence. Earlier G3+ receipts are stale after an input
+   change. A metric gain never substitutes for the cumulative `gate` result.
 A change failing ANY gate is reverted, whatever the metric says.
 
 ## Run directory
@@ -68,11 +73,14 @@ are contracts, not fat.
 
 ## Phase 3 — The loop
 Review → pick from the menu (informed by what worked/failed in `improve-results.tsv`) → ONE change
-→ commit → **cheap gates first** (ERC → derating → affected sims → DRC), full suite before any
-keep → metric → keep if improved AND all gates green, else `git revert` → log. Plateau rule: 5
+→ **cheap checks first** (ERC → derating → affected sims → DRC), full suite before any
+keep → metric → keep if improved AND checks pass, else restore only the agent's change → log.
+Preserve unrelated user changes; commit according to session authorization and repository rules.
+Do not automatically create or push a remote repository. Plateau rule: 5
 consecutive no-improvement iterations → stop, report `PLATEAU` with the best kept state.
 
 ## Verdict & handoff
 `IMPROVED: <metric> <baseline> → <final> (<n> kept / <m> tried)` or `PLATEAU` or `NO_GAIN`.
-`handoff.json`: metric, baseline, final, floor compliance, gates snapshot. Chain commonly:
-`--chain evals`.
+Write the optimization details to the run report. Run `handoff <scope> --write improve`, then
+`validate-handoff.sh <scope>/handoff.json` before `--chain evals`. The handoff carries the actual
+current lifecycle verdict and blockers; `IMPROVED` is a metric result, not release authorization.

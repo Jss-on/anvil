@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="646" viewBox="0 0 1120 646" role="img" aria-labelledby="title desc">
+  <title id="title">Hardware product lifecycle</title>
+  <desc id="desc">Five phases from definition to support, with concurrent systems, electronics, mechanics, firmware, manufacturing and compliance work. Verification and field evidence feed back to earlier work.</desc>
+  <style>text{font-family:Arial,sans-serif;fill:#171717;font-size:18px}.phase{font-size:20px;font-weight:700}.gate{font-size:18px;fill:#555}.label{font-weight:700}.small{font-size:17px;fill:#555}</style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555" />
+    </marker>
+  </defs>
+  <rect width="1120" height="646" fill="white" />
+  <rect x="171" y="12" width="180" height="113" rx="3" fill="#ededed" stroke="#bdbdbd" />
+  <text x="181" y="67" class="gate">G0–G2</text>
+  <rect x="358" y="12" width="180" height="113" rx="3" fill="#ededed" stroke="#bdbdbd" />
+  <text x="368" y="67" class="gate">G3–G4</text>
+  <rect x="545" y="12" width="180" height="113" rx="3" fill="#ededed" stroke="#bdbdbd" />
+  <text x="555" y="67" class="gate">G5 · DVT</text>
+  <rect x="732" y="12" width="180" height="113" rx="3" fill="#ededed" stroke="#bdbdbd" />
+  <text x="742" y="67" class="gate">G6 · PVT</text>
+  <rect x="919" y="12" width="180" height="113" rx="3" fill="#ededed" stroke="#bdbdbd" />
+  <text x="929" y="88" class="gate">G7 + sustaining</text>
+  <rect x="8" y="140" width="1098" height="62" fill="#ffffff" />
+  <text x="14" y="171" class="label">Systems</text>
+  <line x1="167" y1="146" x2="167" y2="196" stroke="#d6d6d6" />
+  <line x1="354" y1="146" x2="354" y2="196" stroke="#d6d6d6" />
+  <line x1="541" y1="146" x2="541" y2="196" stroke="#d6d6d6" />
+  <line x1="728" y1="146" x2="728" y2="196" stroke="#d6d6d6" />
+  <line x1="915" y1="146" x2="915" y2="196" stroke="#d6d6d6" />
+  <rect x="8" y="206" width="1098" height="62" fill="#f5f5f5" />
+  <text x="14" y="237" class="label">Electronics</text>
+  <line x1="167" y1="212" x2="167" y2="262" stroke="#d6d6d6" />
+  <line x1="354" y1="212" x2="354" y2="262" stroke="#d6d6d6" />
+  <line x1="541" y1="212" x2="541" y2="262" stroke="#d6d6d6" />
+  <line x1="728" y1="212" x2="728" y2="262" stroke="#d6d6d6" />
+  <line x1="915" y1="212" x2="915" y2="262" stroke="#d6d6d6" />
+  <rect x="8" y="272" width="1098" height="62" fill="#ffffff" />
+  <text x="14" y="303" class="label">Mechanics</text>
+  <line x1="167" y1="278" x2="167" y2="328" stroke="#d6d6d6" />
+  <line x1="354" y1="278" x2="354" y2="328" stroke="#d6d6d6" />
+  <line x1="541" y1="278" x2="541" y2="328" stroke="#d6d6d6" />
+  <line x1="728" y1="278" x2="728" y2="328" stroke="#d6d6d6" />
+  <line x1="915" y1="278" x2="915" y2="328" stroke="#d6d6d6" />
+  <rect x="8" y="338" width="1098" height="62" fill="#f5f5f5" />
+  <text x="14" y="369" class="label">Firmware</text>
+  <line x1="167" y1="344" x2="167" y2="394" stroke="#d6d6d6" />
+  <line x1="354" y1="344" x2="354" y2="394" stroke="#d6d6d6" />
+  <line x1="541" y1="344" x2="541" y2="394" stroke="#d6d6d6" />
+  <line x1="728" y1="344" x2="728" y2="394" stroke="#d6d6d6" />
+  <line x1="915" y1="344" x2="915" y2="394" stroke="#d6d6d6" />
+  <rect x="8" y="404" width="1098" height="62" fill="#ffffff" />
+  <text x="14" y="435" class="label">Manufacturing</text>
+  <line x1="167" y1="410" x2="167" y2="460" stroke="#d6d6d6" />
+  <line x1="354" y1="410" x2="354" y2="460" stroke="#d6d6d6" />
+  <line x1="541" y1="410" x2="541" y2="460" stroke="#d6d6d6" />
+  <line x1="728" y1="410" x2="728" y2="460" stroke="#d6d6d6" />
+  <line x1="915" y1="410" x2="915" y2="460" stroke="#d6d6d6" />
+  <rect x="8" y="470" width="1098" height="62" fill="#f5f5f5" />
+  <text x="14" y="501" class="label">Compliance</text>
+  <line x1="167" y1="476" x2="167" y2="526" stroke="#d6d6d6" />
+  <line x1="354" y1="476" x2="354" y2="526" stroke="#d6d6d6" />
+  <line x1="541" y1="476" x2="541" y2="526" stroke="#d6d6d6" />
+  <line x1="728" y1="476" x2="728" y2="526" stroke="#d6d6d6" />
+  <line x1="915" y1="476" x2="915" y2="526" stroke="#d6d6d6" />
+  <path d="M 1055 563 V 584 H 233 V 559" fill="none" stroke="#555" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="7 5" />
+  <text x="559" y="617" text-anchor="middle" class="small">Evidence, defects, changes and field learning feed back into design and process decisions.</text>
+  <text x="179" y="163">Needs &amp; interfaces</text>
+  <text x="366" y="163">Integration &amp;</text>
+  <text x="366" y="185">budgets</text>
+  <text x="553" y="163">Claims &amp; user</text>
+  <text x="553" y="185">validation</text>
+  <text x="740" y="163">Configuration</text>
+  <text x="740" y="185">baseline</text>
+  <text x="927" y="163">Changes &amp; field</text>
+  <text x="927" y="185">learning</text>
+  <text x="179" y="229">Architecture &amp; parts</text>
+  <text x="366" y="229">Schematic, PCB,</text>
+  <text x="366" y="251">bring-up</text>
+  <text x="553" y="229">Margins &amp;</text>
+  <text x="553" y="251">qualification</text>
+  <text x="740" y="229">Controlled assembly</text>
+  <text x="927" y="229">Obsolescence &amp;</text>
+  <text x="927" y="251">redesign</text>
+  <text x="179" y="295">Use, loads &amp;</text>
+  <text x="179" y="317">process</text>
+  <text x="366" y="295">CAD, fit &amp; DFM</text>
+  <text x="553" y="295">Materials, tooling &amp;</text>
+  <text x="553" y="317">tests</text>
+  <text x="740" y="295">Assembly &amp;</text>
+  <text x="740" y="317">inspection</text>
+  <text x="927" y="295">Service &amp; spare</text>
+  <text x="927" y="317">parts</text>
+  <text x="179" y="361">Behavior, build &amp;</text>
+  <text x="179" y="383">boot</text>
+  <text x="366" y="361">Drivers &amp; core</text>
+  <text x="366" y="383">functions</text>
+  <text x="553" y="361">Regression &amp;</text>
+  <text x="553" y="383">recovery</text>
+  <text x="740" y="361">Program, calibrate,</text>
+  <text x="740" y="383">provision</text>
+  <text x="927" y="361">Updates &amp;</text>
+  <text x="927" y="383">vulnerability fixes</text>
+  <text x="179" y="427">Suppliers, cost &amp;</text>
+  <text x="179" y="449">test</text>
+  <text x="366" y="427">DFM &amp; fixture</text>
+  <text x="366" y="449">design</text>
+  <text x="553" y="427">Process/test</text>
+  <text x="553" y="449">preparation</text>
+  <text x="740" y="427">Yield, capacity &amp;</text>
+  <text x="740" y="449">traceability</text>
+  <text x="927" y="427">Quality &amp; supply</text>
+  <text x="927" y="449">continuity</text>
+  <text x="179" y="493">Scope, risk &amp; test</text>
+  <text x="179" y="515">plan</text>
+  <text x="366" y="493">Design review &amp;</text>
+  <text x="366" y="515">pre-tests</text>
+  <text x="553" y="493">Required</text>
+  <text x="553" y="515">assessments</text>
+  <text x="740" y="493">Production controls</text>
+  <text x="927" y="493">Market records &amp;</text>
+  <text x="927" y="515">monitoring</text>
+  <text class="phase" x="181" y="40">Define</text>
+  <text class="small" x="181" y="92">Requirements &amp;</text>
+  <text class="small" x="181" y="113">architecture</text>
+  <text class="phase" x="368" y="40">Prototype</text>
+  <text class="small" x="368" y="92">Build, bring-up &amp; EVT</text>
+  <text class="phase" x="555" y="40">Qualify</text>
+  <text class="small" x="555" y="92">Production-intent</text>
+  <text class="small" x="555" y="113">design</text>
+  <text class="phase" x="742" y="40">Produce</text>
+  <text class="small" x="742" y="92">Repeatable factory</text>
+  <text class="small" x="742" y="113">process</text>
+  <text class="phase" x="929" y="40">Release &amp;</text>
+  <text class="phase" x="929" y="64">support</text>
+</svg>

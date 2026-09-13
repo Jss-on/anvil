@@ -4,9 +4,18 @@ on:
   pull_request:
 
 jobs:
-  score-seam:
-    runs-on: ubuntu-latest
+  software-contracts:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - name: Score-script self-tests
-        run: bash tests/score.test.sh
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Regression and installed-payload checks
+        run: python -B tests/test_anvil.py
+      - name: Claude Code and Codex plugin byte parity
+        shell: bash
+        run: bash scripts/sync-plugin.sh --check

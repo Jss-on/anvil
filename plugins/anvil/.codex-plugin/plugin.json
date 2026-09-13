@@ -1,0 +1,26 @@
+{
+  "name": "anvil",
+  "version": "0.5.0",
+  "description": "Hardware product development with requirements, firmware, manufacturing and evidence-backed release gates.",
+  "author": {
+    "name": "Jss-on",
+    "url": "https://github.com/Jss-on"
+  },
+  "homepage": "https://github.com/Jss-on/anvil",
+  "repository": "https://github.com/Jss-on/anvil",
+  "license": "Proprietary",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Anvil",
+    "shortDescription": "Hardware development with evidence-backed release gates.",
+    "longDescription": "Develop hardware from requirements through PCB fabrication, firmware, mechanics, EVT/DVT/PVT, market release and sustaining. Run bundled Python checks and preserve missing evidence as gate blockers.",
+    "developerName": "Jss-on",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": [
+      "Use $anvil to build a hardware product through G3.",
+      "Use $anvil to review this product's lifecycle gate evidence.",
+      "Use $anvil to define measurable hardware requirements."
+    ]
+  }
+}

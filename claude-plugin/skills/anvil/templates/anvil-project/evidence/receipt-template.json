@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "check_id": "",
+  "status": "not_run",
+  "method": "inspection",
+  "producer": "review",
+  "created_at": "",
+  "profile_sha256": "",
+  "release_sha256": "",
+  "files": {},
+  "approval": {
+    "reviewer": "",
+    "role": "",
+    "decision": "",
+    "record": ""
+  },
+  "check_sha256": ""
+}

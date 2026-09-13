@@ -1,104 +1,91 @@
 ---
 name: anvil
-description: "Autonomous electronics-design iteration: modify, verify (ERC/sim/DRC), keep/discard against hardware-correct metrics — requirements to fab-ready PCB"
-version: 0.4.0
+description: "Design, verify, improve, and release electronic hardware products through requirements, architecture, PCB fabrication, firmware, mechanics, EVT, DVT, PVT, market access, support, and retirement. Use for Anvil builds, hardware requirements, design optimization, lifecycle gates, and evidence audits."
+metadata:
+  version: "0.5.0"
 ---
 
-# Anvil — Autonomous Goal-directed Hardware Iteration
+# Anvil
 
-AutoForge's hardware sibling. Same loop discipline — one metric, constrained scope, fast mechanical
-verification, automatic rollback, git as memory — with electronics-correct gates: ERC/DRC violation
-counts from `kicad-cli` JSON, ngspice `.measure` assertions against HRS limits at worst-case corners,
-derating tables, pinned-catalog BOM cost, Edge.Cuts board area.
+Develop hardware products through explicit lifecycle gates. Run electronics, firmware,
+mechanics, manufacturing, compliance, and commercial work concurrently from requirements.
+Read [lifecycle-protocol.md](references/lifecycle-protocol.md) before a new product or gate review.
 
-## Safety Invariants (all subcommands)
+## Resolve the installed tools once
 
-- **Never order parts, submit fabrication/assembly jobs, or spend money** without explicit user
-  approval. `FAB_READY` is a verdict, not a purchase order. Quoting APIs may be read; checkout is
-  human-gated, always.
-- **HV register:** any net above 30 V adds IPC-2221 creepage/clearance acceptance rows that require
-  human review before `FAB_READY`. Mains-connected designs additionally carry a human sign-off row
-  the loop can never mark `pass` on its own.
-- `build` pushes to the project's **own private output repo** as part of the standard loop (that is
-  how its CI runs); everything beyond that repo is human-gated. Repo visibility is never changed.
-- Bounded by default. Override with `Iterations: unlimited`.
-- All results logged to `anvil/{subcommand}-{YYMMDD}-{HHMM}/`. Chain handoff via `handoff.json`.
-  Evals reads `*-results.tsv`.
-- **Violation counts come from tool JSON only** — the loop never self-certifies electrical or
-  manufacturing cleanliness by prose.
+Resolve paths from this loaded `SKILL.md`, independently of the user's project directory.
+In either installed plugin, its containing directory is `ANVIL_ROOT` and contains `references/`,
+`scripts/`, and `templates/anvil-project/`. Claude Code may also expose that directory as
+`${CLAUDE_PLUGIN_ROOT}/skills/anvil`; Codex does not need that variable. For the canonical
+`.claude/skills/anvil/SKILL.md` in this repository, scripts and templates are at the repository
+root instead. Workflow files are always at `../../commands/` relative to this skill directory.
 
-## Dispatch (bare `/anvil`)
+Resolve every `scripts/...` and `templates/...` example below and in workflows to those actual
+absolute paths. Run checks against the user's project scope; keep outputs in that project,
+outside the installed plugin cache. Use Python 3.10+ with `scripts/anvil.py`, or Bash with
+`scripts/score-anvil.sh`. On Windows, `scripts/doctor.cmd` finds Git Bash without the WSL stub;
+direct Python invocation also works. No Node dependency.
 
-| Condition | Mode |
-|---|---|
-| `Metric:` or `Verify:` present | **Classic** — metric loop over an existing design (an `improve` alias) |
-| `Spec:` file or free-form goal | Route to `build` (greenfield) — confirm once |
-| Nothing | **Setup wizard** — interactive config builder |
+## Route the request
 
-Print a banner on every invocation: `[anvil] mode: classic | build | wizard`.
-
-## Subcommands
-
-| Command | Does | Default Iterations |
+| Request | Workflow (read before execution) | Contract |
 |---|---|---|
-| `/anvil` | Bare metric loop over an existing design (`Metric:`/`Verify:`), route to `build` (`Spec:`/`Goal:`), or setup wizard | 25 |
-| `/anvil:build` | Full gated pipeline: charter → feasibility → HRS → architecture + part selection → schematic (ERC=0) → simulation (spec assertions at corners) → layout (DRC=0) → fab package + docs, to passing weighted acceptance. **Product mode** (spec with `product:` block / assembled-unit goal) adds: system decomposition + ICD → COTS selection → mechanical CAD track (mesh/fit/mass/dfm) → wiring harness (pinout) → product BOM + system budgets + assembly package | 40 |
-| `/anvil:requirements` | Hardware requirements elicitation → validated HRS (HR-n, every spec measurable: value + unit + tolerance + verification method) + a ready `build` spec | N/A |
-| `/anvil:improve` | Optimization loop on an existing design: minimize `bom_cost` \| `board_area` \| `part_count` or maximize `worst_case_margin`, under a hard non-regression ratchet (ERC=0 ∧ DRC=0 ∧ sim assertions hold) | 20 |
-| `/anvil:evals` | Analyze iteration results: trends, plateaus, regressions, margin + cost trajectories | N/A |
+| Raw need / requirements | [requirements](../../commands/anvil/requirements.md) | [hardware requirements](references/hardware-requirements-protocol.md) |
+| New board or product | [build](../../commands/anvil/build.md) | G0–G3 by default; explicit release kind |
+| Bring-up, EVT/DVT/PVT, launch, support | [lifecycle](../../commands/anvil/lifecycle.md) | [lifecycle](references/lifecycle-protocol.md) |
+| Improve cost, area, mass, or margin | [improve](../../commands/anvil/improve.md) | Preserve requirements and gate evidence |
+| Review an iteration run | [evals](../../commands/anvil/evals.md) | Diagnostic analysis; recompute claimed gate |
+| Existing custom metric loop | [custom loop](../../commands/anvil.md) | Bounded change, verify, retain/discard |
 
-## The Dimensions (scoring contract)
+In Codex, invoke `$anvil` with a workflow name or natural-language task, for example
+`$anvil build Goal: environmental monitor Scope: ./sensor Release: product Target: G3`.
+In Claude Code, use `/anvil:<workflow>` or `/anvil` for the custom loop. Any `/anvil:*`
+references inside workflows mean read and follow the corresponding linked file in Codex;
+they are not shell commands or a dependency on Claude Code.
 
-Measured by `scripts/score-anvil.sh pass-rate` over `anvil-results.tsv`
-(7 tab-separated cols: `n dimension assertion status weight evidence traces`):
+Infer scope from the project and session. Clarify only missing consequential requirements;
+continue independent work. Do not repeat approvals already granted in the session.
 
-| Dimension | Weight | Gate |
-|---|---|---|
-| `electrical` | 0.30 | **GATING** — any red row caps headline pass-rate at 0.50 |
-| `simulation` | 0.25 | must-pass rows (HRS-derived) |
-| `layout` | 0.20 | DRC rows must-pass |
-| `manufacturing` | 0.15 | |
-| `testability` | 0.10 | |
-| `documentation` | 0.10 | |
+## Evidence and release rules
 
-End-to-end **product** builds (enclosure + COTS modules + wiring + assembly, not a bare board)
-add three must-pass dimensions — absent from board-only ledgers, they renormalize away:
+1. `pass-rate` and `coverage` describe progress. They never authorize fabrication or shipment.
+2. `anvil-project.json` declares product scope, features, sectors, destinations, controlled
+   artifacts, and automated checks. `hrs/requirements.tsv` is the authoritative requirement set.
+3. `plan` derives the ledger from the bundled checklist and every project requirement. All
+   75 research items are represented, with extra early planning checkpoints for market duties.
+   Never delete required checks, reduce weights, or narrow product applicability to gain a pass.
+4. Use `record` for actual tool runs; import reviewed receipts for analysis, inspection,
+   physical tests, and approvals. Read [evidence-protocol.md](references/evidence-protocol.md).
+   Never manufacture a reviewer, measurement, certificate, signature, or executed test.
+5. `manifest` binds release files; `gate` checks cumulative readiness against exact hashes,
+   methods, applicability, and review records. Missing, skipped, stale, failed, and errored work
+   stays blocked. Product requirements define suitable methods; there is no universal ranking
+   of test, simulation, analysis, and inspection.
+6. A changed release input reopens G3 and later evidence. Reassess safety, compliance,
+   manufacturing, firmware compatibility, and field effectivity before releasing a change.
+7. Run `handoff <project> --write <command>` and `validate-handoff.sh <handoff.json>` before
+   chaining. Carry blockers forward. A valid blocked handoff is not authorization to release.
 
-| Dimension | Weight | Gate |
-|---|---|---|
-| `mechanical` | 0.20 | mesh/fit/mass/mech-dfm rows must-pass |
-| `integration` | 0.15 | pinout + assembly-package rows must-pass |
-| `system` | 0.15 | decomposition, budgets close, product BOM — must-pass |
+## Execution boundaries
 
-Weights renormalize over the dimensions that actually ran. Full contract:
-`references/metrics.md`; product tracks: `references/system-protocol.md`,
-`references/mechanical-protocol.md`, `references/cots-protocol.md`,
-`references/harness-protocol.md`, `references/assembly-protocol.md`.
+Complete authorized local design, verification, documentation, and packaging work. Preserve
+unrelated user changes; use isolated worktrees or targeted reversions when needed. Do not
+automatically create/push a remote repository, contact suppliers, submit regulatory documents,
+order parts, spend money, deploy firmware, energize hardware, or ship a product without session
+authorization for that action. Prepare the concrete package before requesting any missing approval.
 
-## Universal Flags
+Select safety standards, derating, wire ratings, samples, and test stop conditions from the
+actual product and risk assessment. The agent cannot approve hazardous testing or replace the
+responsible safety, clinical, regulatory, production, or commercial authority. Continue other
+work while an external gate is pending. `MARKET_READY` reports reviewed project evidence;
+Anvil is not a certification body or a legally validated quality-management system.
 
-| Flag | Applies To | Purpose |
-|---|---|---|
-| `Iterations: N` | All looping | Set iteration count |
-| `Iterations: unlimited` | All looping | Opt-in unbounded |
-| `--evals` / `--evals-interval N` | All looping | Mid-loop checkpoints + final summary |
-| `--chain <targets>` | All | Sequential handoff after completion |
-| `--dry-run` | build | Print derived config + planned pipeline; no execution |
+## Read the relevant tracks
 
-## Seam & reference resolution
-
-Gates ship in `skills/anvil/scripts/` and contracts in `skills/anvil/references/`. Resolve
-`ANVIL_ROOT` to the FIRST that exists:
-1. `${CLAUDE_PLUGIN_ROOT}/skills/anvil` — installed plugin.
-2. `.claude/skills/anvil` — project-local install (or this repo's canonical tree).
-3. The directory containing the invoked command file.
-4. Last resort: glob `**/skills/anvil/scripts/score-anvil.sh` and take its grandparent.
-
-Then read every `scripts/<x>` as `$ANVIL_ROOT/scripts/<x>` (falling back to the repo-root
-`scripts/` when running inside this harness repo) and every `references/<x>` as
-`$ANVIL_ROOT/references/<x>`. If nothing resolves, STOP and tell the user to reinstall — the gates
-are mechanical requirements of the pipeline, not optional helpers.
-
-Run `bash scripts/doctor.sh` once at Phase 0 of any command (`--require-build` for `build`): a
-missing `kicad-cli` or `ngspice` means the electrical/simulation/layout dimensions cannot be
-verified, which blocks convergence later — surface that now, not at iteration 30.
+- Electronics: [schematic](references/schematic-protocol.md), [simulation](references/simulation-protocol.md),
+  [layout](references/layout-protocol.md), [fabrication](references/fab-protocol.md).
+- Product: [system](references/system-protocol.md), [COTS](references/cots-protocol.md),
+  [harness](references/harness-protocol.md), [mechanical](references/mechanical-protocol.md).
+- Delivery: [firmware](references/firmware-protocol.md), [manufacturing and assembly](references/assembly-protocol.md),
+  [compliance](references/standards.md), [support and retirement](references/sustaining-protocol.md).
+- Tool contracts: [metrics](references/metrics.md), [toolchain](references/toolchain.md).

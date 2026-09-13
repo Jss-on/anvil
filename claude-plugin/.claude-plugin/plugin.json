@@ -1,7 +1,7 @@
 {
   "name": "anvil",
-  "description": "AutoForge's hardware sibling — autonomous electronics design from requirements to fab-ready PCB. 5 commands: anvil (metric loop), build, requirements, improve, evals. Mechanical gates: kicad-cli ERC/DRC, ngspice .measure assertions, pinned-catalog BOM cost, Edge.Cuts area. Gating electrical dimension; fab submission always human-gated.",
-  "version": "0.2.1",
+  "description": "Evidence-backed hardware product development: requirements, PCB, firmware, mechanics, EVT/DVT/PVT, market release and sustaining.",
+  "version": "0.5.0",
   "author": {
     "name": "Jss-on",
     "url": "https://github.com/Jss-on"

@@ -41,4 +41,7 @@ recommendation block.
 - The seven analyses above, tables not prose where numbers carry it.
 - **Recommendations:** next dimension to attack, mutation classes to prefer/retire, whether to
   re-run `build` convergence or hand to `improve`, iteration budget suggestion for the next run.
-- `handoff.json` with the verdict + bottleneck dimension for chaining.
+- Diagnostic convergence does not authorize release. Recompute `gate <project> <target>` and
+  report missing, skipped, errored, stale or method-mismatched evidence separately from scores.
+- Use `handoff <project> --write evals`, then `validate-handoff.sh <project>/handoff.json` before
+  chaining. Keep the analysis verdict in the report and the actual lifecycle verdict in the handoff.

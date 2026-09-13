@@ -1,189 +1,196 @@
-<div align="center">
-
 # Anvil
 
-**AutoForge's hardware sibling — turn Claude Code into a relentless hardware-design engine: from requirements to a fab-ready PCB, or to a full end-to-end product — boards, enclosure, COTS modules, wiring harness, and the assembly kit to build the final unit.**
+**Hardware product development with explicit release gates and revision-bound evidence.**
+Version **0.5.0** · Claude Code and Codex plugins · Proprietary license
 
-Anvil is the product; `anvil` is its command namespace — every command is `/anvil:*`.
+Anvil carries a product from requirements and architecture through PCB fabrication, firmware,
+mechanics, integration, EVT/DVT/PVT, market release, support and retirement. Its commands perform
+authorized engineering work and keep missing external tests or approvals visible as blockers.
 
-Based on the same principles as [AutoForge](https://github.com/Jss-on/autoforge) and [Karpathy's autoresearch](https://github.com/karpathy/autoresearch): constraint + **mechanical metric** + autonomous iteration = compounding gains. Software forges on green tests; hardware forges on **clean ERC/DRC, passing simulation assertions, closed power budgets, and a BOM that costs what the spec says**.
-
-![Version](https://img.shields.io/badge/version-0.4.0-blue.svg)
-![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)
-
-*"Set the SPEC → The agent runs the LOOP → You wake up to a fab package."*
-
-</div>
-
----
-
-```
- REQUIREMENTS      ARCHITECTURE      SCHEMATIC          SIMULATION        LAYOUT            FAB PACKAGE
- ┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐
- │   HRS    │     │  Blocks  │     │ Netlist  │     │ ngspice  │     │  Place   │     │ Gerbers  │
- │  HR-n +  │────▶│  Power   │────▶│  as code │────▶│ .measure │────▶│  Route   │────▶│ BOM/CPL  │
- │ verify   │     │  budget  │     │  ERC=0   │     │ corners  │     │  DRC=0   │     │ DFM+cost │
- └──────────┘     └──────────┘     └──────────┘     └──────────┘     └──────────┘     └──────────┘
- /anvil:            (build P4)       (build P5)       (build P6)       (build P7)       (build P8)
-   requirements    ─────────────────────── /anvil:build orchestrates all phases ───────────────────
-
-                   ┌──────────┐     ┌──────────┐
-                   │ Improve  │     │  Evals   │
-                   │ cost/area│     │ trends   │
-                   │ /margin  │     │ plateaus │
-                   └──────────┘     └──────────┘
-                   /anvil:improve   /anvil:evals
+```mermaid
+flowchart LR
+  G0["G0 Opportunity"] --> G1["G1 Requirements"] --> G2["G2 Architecture"]
+  G2 --> G3["G3 Prototype release"] --> G4["G4 EVT"] --> G5["G5 DVT"]
+  G5 --> G6["G6 PVT"] --> G7["G7 Market release"] --> S["Support and retirement"]
+  S -->|Controlled changes| G2
 ```
 
----
+Electronics, firmware/services, mechanics, supply/manufacturing, quality/compliance and commercial
+work proceed concurrently. The [lifecycle protocol](.claude/skills/anvil/references/lifecycle-protocol.md)
+defines gates, owners, artifacts and checklists. The [research report](research/hardware-product-lifecycle.md)
+and [original assessment](ASSESSMENT.md) explain the upgrade's basis.
 
-## Why This Exists
+## Use with Claude Code
 
-AutoForge proved the loop generalizes: one metric, constrained scope, fast mechanical verification, automatic rollback, git as memory. Hardware design is the next domain that fits the loop **exactly** — because EDA toolchains already emit machine-readable truth:
+Install the repository's marketplace in Claude Code, then its `anvil` plugin:
 
-| Question | Mechanical answer | Tool |
-|---|---|---|
-| Is the schematic electrically sane? | ERC violation count → **0** | `kicad-cli sch erc --format json` |
-| Does the circuit meet spec? | `.measure` values vs HRS limits, at worst-case corners | `ngspice -b` |
-| Is the board manufacturable? | DRC + fab rule-deck violation count → **0** | `kicad-cli pcb drc --format json` |
-| What does it cost? | BOM joined against a **pinned parts-catalog snapshot** | `score-anvil.sh bom-cost` |
-| How big is it? | Edge.Cuts bounding box, mm² | `score-anvil.sh area` |
-| Are parts stressed? | Derating table — no part above 80 % of rating | schematic protocol |
-| Is the enclosure printable and sound? | STL watertight/manifold defects → **0**; walls/overhangs vs process floors | `score-anvil.sh mesh` / `mech-dfm` |
-| Does the board fit the enclosure? | interference mm³ = 0, clearances ≥ spec, bosses coaxial | `score-anvil.sh fit` |
-| Is the wiring legal? | harness ↔ ICD consistency + AWG ampacity floor → **0** violations | `score-anvil.sh pinout` |
-| Does the product close? | mass/power/endurance/cost budgets: demand ≤ capability × derate | `score-anvil.sh sys-budget` |
-| What does the UNIT cost/weigh? | full rollup: PCBs + COTS + printed parts + fasteners + wire + spares | `score-anvil.sh product-bom` |
-
-None of these are vibes. All of them are numbers a loop can ratchet.
-
-## The Loop
-
-```
-LOOP (N iterations or until FAB_READY):
-  1. Review current state + git history + anvil-results.tsv
-  2. Pick the next change (lowest-scoring dimension first; electrical gate first of all)
-  3. Make ONE focused change (netlist edit, value change, part swap, placement/route change)
-  4. Git commit (before verification)
-  5. Mechanical verification — cheap gates first: ERC → derating → affected sims → DRC → full
-  6. If improved → keep. If worse → git revert. If crashed → fix or skip.
-  7. Log to anvil-results.tsv / iterations.tsv
-  8. Repeat.
-```
-
-**"Done" is passing weighted acceptance across six dimensions** — measured by `scripts/score-anvil.sh pass-rate`:
-
-| Dimension | Weight | Covers | Gate |
-|---|---|---|---|
-| `electrical` | 0.30 | ERC = 0, connectivity golden cases, derating table green, power budget closes | **GATING** — any red row caps headline pass-rate at 0.50 |
-| `simulation` | 0.25 | Every simulable HRS spec asserted via ngspice `.measure`, nominal + worst-case corners | must-pass rows |
-| `layout` | 0.20 | DRC = 0 (incl. fab rule deck), stackup valid, critical-net constraints | DRC rows must-pass |
-| `manufacturing` | 0.15 | Complete fab package (gerbers/drill/BOM/CPL), DFM clean, parts in stock + not EOL, BOM cost ≤ target | |
-| `testability` | 0.10 | Test points on key nets, bring-up plan, DFT checklist | |
-| `documentation` | 0.10 | Schematic PDF, board renders (viewed, not just exported), README, RTM complete | |
-
-The `electrical` gate is the hardware analog of AutoForge's `logic` gate: a board can never ride a pretty layout or a cheap BOM to "done" while the electricity is wrong.
-
-**Product mode** (a spec with a `product:` block — e.g. `evals/product/fpv-drone.spec.yaml`, a rugged FPV quad) adds three must-pass dimensions — `mechanical` 0.20 (mesh/fit/mass/dfm on the CAD-as-code enclosure and frame furniture) · `integration` 0.15 (wiring harness realizes every ICD edge; assembly package a cold technician can follow) · `system` 0.15 (decomposition, closing budgets, product BOM) — renormalized alongside the six above. The deliverable becomes **everything needed to assemble the final unit**: fab packages per board, STL/STEP + measures for every printed/machined part, the pinned COTS module list, the cut-and-crimp harness table, the costed-and-massed product BOM, and the assembly/integration/QC docs.
-
-**Ordering parts and submitting fab/assembly jobs is always human-gated.** The loop produces the package; you spend the money.
-
-## Installation
-
-**As a Claude Code plugin (recommended — works in any repo):**
-
-```
+```text
 /plugin marketplace add Jss-on/anvil
+/plugin install anvil@anvil
 ```
 
-then install `anvil` from the plugin picker. Commands surface as `/anvil` and `/anvil:*`; the gate
-scripts ship inside the plugin (`skills/anvil/scripts/`), so nothing else needs copying. Private
-repo — the account adding the marketplace needs access to `Jss-on/anvil`.
+For local development, load the actual packaged directory with `claude --plugin-dir ./claude-plugin`.
+The repository's canonical command and skill files also support project-local development.
+Do not assume editing this checkout changes an already cached installation; reload the local
+plugin or update the installed package after publishing an authorized release.
 
-**Project-local:** copy the `claude-plugin/` payload into the target repo's `.claude/`
-(`commands/` and `skills/` merge in as-is). `claude-plugin/` is generated from the canonical
-`.claude/` tree by `bash scripts/sync-plugin.sh` — pure byte copies, parity-gated in CI
-(`sync-plugin.sh --check`); edit canonical, never the mirror.
+| Command | Purpose |
+|---|---|
+| `/anvil` | Bounded custom metric loop or task routing |
+| `/anvil:requirements` | Requirements, methods, owners, verification gates and applicability |
+| `/anvil:build` | Concurrent product development, default target G3 |
+| `/anvil:lifecycle` | Bring-up, EVT/DVT/PVT, market release and sustaining |
+| `/anvil:improve` | Cost/area/mass/margin optimization with non-regression checks |
+| `/anvil:evals` | Run analysis and evidence/gate review |
 
-## Commands
+Examples:
 
-| Command | Does | Default iterations |
-|---|---|---|
-| `/anvil` | Bare metric loop over an existing design (`Metric:`/`Verify:`) with the hardware ratchet — or routes `Spec:`/`Goal:` to `build`, or setup wizard | 25 |
-| `/anvil:build` | Full pipeline: charter → feasibility → HRS → architecture + parts → schematic → simulation → layout → fab package, every phase gated. Product mode adds: system architecture + ICD → COTS selection → mechanical CAD track → harness → product BOM + assembly package | 40 |
-| `/anvil:requirements` | Hardware requirements elicitation → validated HRS (HR-n IDs, every spec measurable) + a ready `build` spec | N/A |
-| `/anvil:improve` | Optimization loop on an existing design: minimize BOM cost / board area / part count or maximize worst-case margin, under a hard non-regression ratchet | 20 |
-| `/anvil:evals` | Analyze iteration results: trends, plateaus, regressions, margin + cost trajectories | N/A |
-
-Roadmap: `bringup` (physical board bring-up via measured evidence), `feature` (board revision with delta acceptance + ratchet), `test` (independent design review engagement), `panel` (panelization + assembly package).
-
-## Quick Start
-
-```bash
-# 1. Check the toolchain (KiCad 9 CLI, ngspice, python, node, git)
-bash scripts/doctor.sh          # from Git Bash / a Claude Code session
-scripts\doctor.cmd              # from Windows PowerShell or cmd
-
-# 2. Elicit requirements → HRS
-/anvil:requirements Goal: "USB-C powered 3.3V/1A buck regulator board, JLCPCB 2-layer, under $8 BOM @ qty 10"
-
-# 3. Build to fab-ready
-/anvil:build Spec: evals/hardware/buck-3v3.spec.yaml
-
-# 4. Optimize what exists
-/anvil:improve Metric: bom_cost Scope: boards/buck-3v3/
+```text
+/anvil:build Goal: battery-powered environmental monitor Release: product Target: G3
+/anvil:lifecycle Scope: ./sensor Target: G5 Action: execute
+/anvil:improve Metric: bom_cost Scope: ./sensor Iterations: 10
 ```
 
-### Toolchain prerequisites
+## Use with Codex
 
-- **KiCad 9** (`winget install KiCad.KiCad`) — `kicad-cli` does ERC, DRC, netlist, gerber/drill/BOM/CPL export, PDF/PNG renders.
-- **ngspice** (standalone CLI on PATH) — batch simulation with `.measure`.
-- **Python 3** (`py -3` / `uv`) — SKiDL for netlist-as-code, kiutils for board file surgery.
-- **node** — JSON parsing seam for the score scripts.
-- Optional: **freerouting** (Java) as an autorouting seam.
+Install and sign in using the [official Codex CLI setup](https://learn.chatgpt.com/docs/codex/cli).
+Install Anvil's engineering tools under [Run the checks directly](#run-the-checks-directly).
+From this checkout, register its local marketplace and install the native Codex plugin:
 
-`bash scripts/doctor.sh --require-build` fails fast if a build can't be verified in this environment — surfaced at Phase 0, not at iteration 30.
-
-## Project layout (what `build` produces)
-
-```
-boards/<name>/
-  charter.md                 P1 — objectives, in/out scope, iteration budget, risk register
-  hrs/requirements.md        P3 — the HRS: HR-n, each with value + unit + tolerance + verify method
-  arch/architecture.md       P4 — block diagram (mermaid), power budget table, interface map, trade study
-  catalog/parts-catalog.csv  P4 — pinned parts snapshot: MPN, price @ qty, stock, lifecycle (Goodhart guard)
-  sch/                       P5 — netlist source (SKiDL .py / .ato / .kicad_sch) + exported netlist
-  sim/                       P6 — ngspice harnesses (*.cir), vendor models/, assertions.tsv
-  pcb/<name>.kicad_pcb       P7 — board + pcb/rules/*.kicad_dru fab rule deck
-  fab/                       P8 — gerbers/, drill, bom.csv, cpl.csv, DFM-REPORT.md
-  docs/                      P8 — TEST-PLAN.md, BRINGUP.md, renders/ (viewed evidence)
-  anvil-results.tsv          the acceptance ledger (7 cols, traces → HR-n)
-  handoff.json               chain contract
+```sh
+codex plugin marketplace add .
+codex plugin add anvil@anvil
+codex -C . --sandbox workspace-write
 ```
 
-Every build gets its **own private GitHub repo** (same transparency contract as AutoForge): CI runs ERC/DRC/sim on the actual output; found-but-deferred defects become issues; releases stay human-gated.
+The [Codex marketplace](.agents/plugins/marketplace.json) selects the self-contained package
+in [`plugins/anvil/`](plugins/anvil/.codex-plugin/plugin.json). Codex loads its `$anvil` skill;
+Claude Code uses the separate marketplace and package above. This follows Codex's
+[native plugin and marketplace format](https://learn.chatgpt.com/docs/enterprise/plugin-management).
 
-## Metric correctness (the autoresearch discipline)
+Start a **new thread** after installation. In Codex CLI or the IDE extension, type `$` to select
+Anvil, or paste a prompt such as:
 
-A metric you can game is not a metric. Anvil's guards:
+```text
+$anvil build Goal: battery-powered environmental monitor Scope: ./build-output/sensor Release: product Target: G3
+$anvil lifecycle Scope: ./build-output/sensor Target: G5 Action: review
+$anvil improve Metric: bom_cost Scope: ./build-output/sensor Iterations: 10
+```
 
-- **Violation counts come from tool JSON only** — never from the agent's reading of its own schematic.
-- **Sim limits verify at worst-case corners** (line/load/temp/tolerance), not typicals; margins are logged in engineering units, and the improve loop may never trade a hard gate for a soft win.
-- **BOM cost joins against a pinned catalog snapshot** committed to the repo — reproducible across runs; refreshing the snapshot is an explicit, logged event.
-- **Renders and schematic PDFs must be VIEWED** by the agent (image reads) before a phase gate — exported-but-never-looked-at evidence hides ratsnest disasters the same way unviewed screenshots hid error overlays in software builds.
-- **Anti-demo, hardware edition:** a board is not "done" as a floating-enable dev-board frankenstein. Bench-ready means: connector pinouts documented, polarity + pin-1 silkscreen marks, mounting holes, test points on every power rail and key signal, ESD on user-facing connectors, reverse-polarity protection where the spec implies field use.
+Send one prompt at a time. The skill also routes `requirements`, `evals`, and custom metric
+loops. All six workflows use the same engineering protocols, Python checks, receipts and gates
+as the Claude Code plugin. In the Codex app, select Anvil and describe the task in a new thread.
 
-## Safety invariants
+To work in an existing hardware repository, launch `codex -C <project-directory>` and use
+`Scope: .`; installed Anvil tools resolve from the plugin cache. When working in this checkout,
+`build-output/sensor` is ignored by Git; maintain the product's own source history and release
+archive. Keep project outputs outside the plugin cache.
 
-- **Never order parts, submit fabrication or assembly jobs, or spend money** without explicit user approval. `FAB_READY` is a verdict, not a purchase.
-- Designs with any net above 30 V trigger the **HV register**: IPC-2221 creepage/clearance rows are added to acceptance and require human review before `FAB_READY`. Mains-connected designs additionally require a human sign-off row that the loop can never mark pass.
-- Bounded by default; unbounded is opt-in (`Iterations: unlimited`).
-- All results logged to `anvil/{subcommand}-{YYMMDD}-{HHMM}/`; chain handoff via `handoff.json`.
+For a noninteractive review of an existing project, use single quotes so PowerShell and Bash
+preserve the `$anvil` skill mention. See the [Codex CLI reference](https://learn.chatgpt.com/docs/developer-commands?surface=cli).
 
-## Relation to AutoForge
+```sh
+codex exec -C . --sandbox workspace-write 'Use $anvil lifecycle Scope: ./build-output/sensor Target: G3 Action: review. Report the actual gate result and blockers.'
+```
 
-Same engine, different physics. AutoForge's gates are Playwright + test runners; Anvil's are `kicad-cli` + ngspice. The scoring contract (weighted TSV, gating dimension, coverage = RTM), the phase-gate SDLC shape, the handoff schema, and the loop discipline are deliberately isomorphic — learnings port both ways.
+For development without installation, open this checkout and ask Codex to read
+`.claude/skills/anvil/SKILL.md` and the desired `.claude/commands/anvil/<workflow>.md` directly.
+Use the checkout's `scripts/` and `templates/`. Installed plugins are cached copies; editing
+this repository does not update an existing session.
 
-## License
+Scope tailoring supports embedded/connected, robotics/industrial, medical and automotive
+products; US, EU, Great Britain, Northern Ireland and Taiwan markets; Taiwan manufacture/export;
+firmware, mechanics, radio, battery and cloud features. Classification and dates are reviewed
+per product. Selecting a profile does not certify a design.
 
-Proprietary. Private harness — see [LICENSE](LICENSE).
+## Run the checks directly
+
+Python 3.10+ standard library is the core dependency. Git tracks controlled source; KiCad CLI
+is needed for ERC/DRC/exports and standalone ngspice for simulation. Use only the CAD, firmware,
+HIL and authoring tools the project actually needs. On Windows, `scripts\doctor.cmd` locates
+Git Bash; direct `uv run --no-project --offline python scripts/anvil.py ...` also works.
+
+```sh
+python scripts/anvil.py doctor --require-build
+python scripts/anvil.py init ../sensor --scope product --sectors embedded,connected --markets US,EU --features electronics,firmware,mechanics,radio,battery
+# Populate real requirements, artifacts and checks in the generated project.
+python scripts/anvil.py plan ../sensor
+python scripts/anvil.py manifest ../sensor
+python scripts/anvil.py record ../sensor AUTO-ERC
+python scripts/anvil.py record ../sensor AUTO-DRC
+python scripts/anvil.py gate ../sensor G3
+python scripts/anvil.py handoff ../sensor --write build --gate G3
+```
+
+Initialization creates incomplete templates and cannot produce a ready verdict by itself. For an
+existing hardware project, copy/add the required files individually and preserve its existing work.
+See the [CLI contract](.claude/skills/anvil/references/metrics.md) and
+[evidence schema](.claude/skills/anvil/references/evidence-protocol.md) for command arrays,
+receipts, strict table formats and exit statuses.
+
+## Readiness means evidence
+
+- All **75 research checklist items** are bundled, with **19 early applicability checkpoints**.
+  Planning adds applicable automatic checks and every project requirement; deleting a required
+  ledger row cannot improve readiness.
+- `pass-rate` and `coverage` are diagnostics. `gate` requires exact due checks, matching methods,
+  scoped artifacts, current file hashes and substantive review/external records.
+- G3 distinguishes `PCB_FAB_READY`, `ASSEMBLY_READY` and `PRODUCT_BUILD_READY`. G5 is
+  `DESIGN_QUALIFIED`, G6 `PRODUCTION_READY`, and G7 `MARKET_READY`. Earlier gates remain required.
+- KiCad reports must come from successful fresh runs with valid schemas and active adjacent
+  rule/project files. Simulation runs every declared corner and never falls back to old logs.
+- BOM/cost/mass/budget and wiring inputs have strict numeric and source-join checks. Firmware
+  and factory records identify builds, unit revisions, fixtures/calibration, attempts and rework.
+- Changed design inputs invalidate G3+ evidence. Handoffs recompute the actual verdict and
+  include blockers; stale or unsupported readiness is rejected before chaining.
+
+Physical measurements, factory qualification and legal/customer approvals must come from actual
+execution and responsible reviewers. Anvil verifies record structure and file integrity; it does
+not authenticate approval identities, certify products, or replace a regulated quality system.
+The filesystem receipt model assumes trusted editors; externally signed records/access controls
+are needed where adversarial tampering or authenticated approvals are in scope.
+
+No remote publication, supplier contact, purchase, hardware energization, firmware deployment,
+filing or shipment happens without the session's authorization for that action. Local work and
+reviewable packages proceed without repeated permission requests.
+
+## Migrate from 0.4
+
+1. Archive the old ledger as history. Add `anvil-project.json`, structured
+   `hrs/requirements.tsv`, complete artifact roles and explicit check command arrays.
+2. Run `plan`; migrate a prior observation only after its actual input/configuration, execution
+   and review provenance is established. Old `evidence:path` strings are not receipts.
+3. Put `<board>.kicad_dru` beside its matching PCB/project/schematic. A nested `pcb/rules/`
+   deck is inactive. Only the reviewed JLCPCB two-layer starter is bundled.
+4. Add `circuit` to simulation rows. Declare each swept parameter on its own `.param` line.
+   `SKIP_NGSPICE` and implicit cached logs are rejected.
+5. Replace subsystem-only ICD endpoints with physical pins, qualified ratings, voltage/protocol
+   and mate pin lists. Product BOM `source` becomes `relative.csv#item_id`; budget sources use
+   `relative.json#key` with explicit value and units. Record firmware/build and factory evidence.
+6. Generate the release manifest, record/review checks, and run `gate`. Legacy `verdict <tsv>`
+   stays `FAB_BLOCKED`. Renew affected receipts after configuration changes.
+
+## Develop and verify
+
+Canonical sources: `.claude/commands/`, `.claude/skills/anvil/`, `scripts/` and `templates/`.
+`claude-plugin/` and `plugins/anvil/` are their byte-for-byte installable mirrors for Claude Code
+and Codex. Edit canonical files, then sync. Each package has its own native manifest.
+
+```sh
+python -B tests/test_anvil.py
+bash scripts/sync-plugin.sh
+bash scripts/sync-plugin.sh --check
+bash scripts/score-e2e-capability.sh
+```
+
+For local Codex updates, use `$plugin-creator` to refresh Anvil from this checkout's `anvil`
+marketplace. Its update flow adds a version cachebuster and reinstalls the plugin; start a new
+thread afterward. The base version stays aligned with `VERSION`.
+
+Tests cover valid observations and the assessment's negative cases, cumulative lifecycle gates,
+stale receipts/handoffs, sector/market tailoring, firmware/cost/factory records and both isolated
+installed payloads, including workflow links. CI runs the Python contracts on Linux and Windows
+and verifies both packages.
+Optional native checks run with `ANVIL_NATIVE_TESTS=1` when KiCad/ngspice are installed.
+`score-e2e-capability.sh` runs executable software checks; it no longer reports grep matches
+as end-to-end physical product capability.

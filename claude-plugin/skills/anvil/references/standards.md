@@ -1,123 +1,98 @@
-# Standards & Compliance Reference
+# Product classification, standards and market access
 
-The numbers annex. Protocols cite this file instead of re-transcribing standards; the loop reads
-anchor values here, the human verifies against the purchased standard for anything safety-critical.
+Research baseline: **14 September 2026**. Recheck binding rules, adopted editions, harmonized
+lists, transitions and authority guidance for the SKU's intended use and actual launch date.
+Profiles are planning prompts, not a legal classification or certification. The responsible
+regulatory/quality owner approves applicability and evidence; Anvil cannot issue certificates.
 
-## Provenance caveat (read first)
+`compliance/market-matrix.csv` records SKU, market, intended use/classification, legislation,
+edition, effective date, route, authority, owner, required evidence, status, source URL and
+checked date. Link hazard/risk controls, test reports, declarations, labels/instructions,
+economic operators, registration, shipment and post-market obligations. Resolve scope early
+at G1 and retain final external approval at G7. An approved NA needs rationale and expiry.
 
-IPC standards are copyrighted and paywalled. Values below are corroborated across multiple
-secondary sources (EDA-vendor and fab documentation, mutually consistent) but are transcriptions,
-not quotations. For Class 3 / safety-critical work, verify against the purchased standard. Always
-state the exact revision on RFQs ("IPC-A-610**J** Class 2") — acceptance criteria change between
-revisions. Revisions listed are current as of 2026; re-check before citing on a new RFQ.
+## Electronics and engineering standards
 
-## The IPC registry (what owns what)
+Select design/manufacturing/acceptance documents for their actual scope: IPC design guidance,
+rigid-board performance, bare-board acceptance, assembly acceptability, soldering, land patterns,
+current carrying, moisture handling and data exchange are different subjects. State the
+contracted edition and class on drawings/RFQs and reconcile with supplier capability. Medical
+or aerospace use alone does not mandate an IPC class. Use the actual standard and datasheet
+for limits; this plugin intentionally supplies no universal clearance, ampacity, plating,
+hole-fill, MSL or derating lookup table. [IPC scope and standards](https://www.ipc.org/ipc-design-standards).
 
-| Standard | Owns | Current rev |
-|---|---|---|
-| IPC-2221 | generic design: spacing/creepage, conductor sizing, materials, thermal | C (Dec 2023) |
-| IPC-2222 | rigid-board sectional (supplements 2221) | |
-| IPC-2152 | conductor current capacity — replaced 2221's 1950s-era charts | 2009 |
-| IPC-2141A | controlled-impedance formulas (use the fab's REAL dielectric values) | |
-| IPC-7351 | SMT land patterns — density levels A/B/C, computed not fixed | |
-| IPC-A-600 | bare-board acceptability | |
-| IPC-A-610 | assembly acceptability (Acceptable / Process Indicator / Defect) | J (Apr 2024) |
-| IPC-6012 | rigid-board qualification & performance | F (2023) |
-| J-STD-001 | soldering requirements | |
-| J-STD-020 / 033 | moisture sensitivity classification / handling | 020F (Nov 2022) |
-| IPC-2581 / ODB++ | intelligent fab data exchange (single-file: copper + stackup + netlist + BOM) | |
-| Gerber RS-274X | de-facto fab image format (~90 % of boards); X2/X3 add metadata | |
-| IEEE 1149.1 | JTAG boundary scan (BSDL, scan chains) | |
-| IEEE 315 / ASME Y14.44 | reference-designator class letters / application practice | |
+For electrical/mechanical/thermal/battery hazards, select the applicable product safety standard
+and installation conditions. Insulation coordination depends on working/transient voltage,
+pollution, material, altitude and protective measures. IEC 62368-1, IEC 60601 families, machinery
+standards and other product regimes have different applicability. A generic board guideline
+does not replace those requirements.
 
-## Class election (1/2/3) — the most consequential early decision
+## Sector routes
 
-Declared in the HRS manufacturing domain, recorded in the charter and `build-spec.yaml`
-(`ipc_class`), stated on the DFM report and every RFQ. Default: **Class 2**. Changing the
-operating environment, data rate, or reliability target re-opens the election.
-
-| | Class 1 | Class 2 (default) | Class 3 |
-|---|---|---|---|
-| Domain | general/consumer | dedicated service — commercial/industrial | high-rel: aerospace, medical, military |
-| Annular ring | breakout tolerated | reduced ring acceptable | **zero tolerance for breaks** |
-| Hole-wall Cu plating (6012F) | 20 µm (0.8 mil) | 20 µm | **25 µm (1 mil)** |
-| Vertical barrel fill (6012F) | — | ≥ 50 % | ≥ 75 % |
-| Inspection posture | functionality primary | process-indicator tolerant | strictest accept criteria |
-
-Class drives annular-ring minimums, spacing, hole fill, and inspection criteria through every
-downstream gate — electing it late re-prices the whole board.
-
-## IPC-2152 ampacity anchors (1 oz copper, 10 °C rise)
-
-| Width | External copper |
+| Sector | Resolve and retain |
 |---|---|
-| 10 mil (0.25 mm) | ~1.0 A |
-| 20 mil (0.51 mm) | ~1.7 A |
-| 50 mil (1.27 mm) | ~3.5 A |
+| Connected products | Device/service security, data/account/offline operation, dependencies, support duration, updates/recovery, vulnerability handling and destination duties |
+| Robotics/industrial | Robot versus cell/machinery/installation scope, safety functions and performance claims, stopping/restart/maintenance, payload/tools, FAT/SAT and integrator responsibility |
+| Medical | Intended medical purpose, class, QMS/design controls, ISO 14971 risk lifecycle, applicable software/usability/electrical/clinical evidence, transfer and destination authorization |
+| Automotive | OEM/supplier interface and assumptions, ISO 26262 functional safety, ISO 21448 SOTIF and ISO/SAE 21434 cybersecurity applicability, customer APQP/control plan/PPAP and vehicle integration |
 
-Internal traces carry only **50–70 % of external** (poorer heat escape). Rule of thumb:
-~1 mm width per amp, external 1 oz — anchors and thumb are for sanity checks; real nets are
-sized from the standard/calculator and recorded per net in the layout report. Heavier copper
-(2 oz) halves required width for the same rise.
+[ISO 10218-1:2025](https://www.iso.org/standard/73933.html) addresses industrial robots;
+[Part 2](https://www.iso.org/standard/73934.html) addresses their applications/cells. Do not
+extend these scopes automatically to medical or public-access service robots.
+[IEC 62443-4-1](https://webstore.iec.ch/en/publication/33615) addresses industrial secure
+product lifecycle processes. [ISO 14971](https://www.iso.org/standard/72704.html) and
+[IEC 62304](https://webstore.iec.ch/en/publication/6792) cover different medical risk/software
+responsibilities. [AIAG](https://go.aiag.org/apqp-cp) provides the automotive core-tool baseline;
+UN R155/R156 responsibilities are vehicle/destination dependent, not a PCB certificate.
 
-## IPC-2221 spacing (creepage & clearance) — Table 6-1 anchors
+## Destination checklist
 
-Columns: B1 internal · B2 external uncoated (sea level) · B3 external uncoated > 3050 m ·
-B4 polymer coated. Spacing keys on **PEAK** working voltage:
+| Destination | Scope and release evidence |
+|---|---|
+| US | FCC intentional/unintentional radiator route, module/host integration, labels/responsible party; applicable CPSC product rules/certificates/import filings; workplace electrical approval where required; FDA route for medical devices |
+| EU | Applicable CE legislation and conformity route, technical documentation/declaration, marking/instructions/operators; radio/EMC/safety, RoHS and REACH, GPSR/WEEE/producer obligations and sector-specific rules; cybersecurity and machinery transitions |
+| Great Britain | Product-specific UKCA/recognized CE route and exceptions, declarations/labels/operators, connected-product security, separate medical rules |
+| Northern Ireland | Applicable EU product regime and NI-specific operator/marking details; do not apply GB rules indiscriminately |
+| Taiwan domestic | Current BSMI commodity scope and scheme/CNS/labels/material information; NCC controlled RF obligations; TFDA product and manufacturer quality-system routes for medical devices |
+| Taiwan manufacture/export | Manufacturing-location duties plus each destination's own approvals, importer/operator, regional configuration, labels/languages/customs and shipping evidence |
 
-| Peak working V | B2 external uncoated | Known cross-checks |
-|---|---|---|
-| ≤ 30 | ~0.1 mm | |
-| 50–150 | ~0.6 mm | |
-| 170–300 | ~1.25 mm | internal (B1) ~0.2 mm @ 300 V |
-| 301–500 | ~2.5 mm | coated (B4) ~0.8 mm @ 340 V |
-| > 500 | ≈ 2.5 + 0.005 × (V − 500) mm | per-volt formula, third-party derivation |
+Use the actual rule/authority as the project source:
+[FCC digital devices](https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-15/subpart-B/section-15.101),
+[FCC intentional radiators](https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-15/subpart-C/section-15.201),
+[EU manufacturer obligations](https://single-market-economy.ec.europa.eu/single-market/goods/ce-marking/manufacturers_en),
+[UK sector marking guidance](https://www.gov.uk/government/publications/product-regulations-by-sector-and-current-approaches-to-product-marking-ukca-and-ce-regimes/product-regulations-by-sector-and-current-approaches-to-product-marking-ukca-and-ce-regimes),
+[BSMI regulated products](https://www.bsmi.gov.tw/wSite/lp?BaseDSD=7&CtUnit=4131&ctNode=9845),
+[NCC law](https://ncclaw.ncc.gov.tw/Eng/PrintFLAWDAT0201.aspx?beginpos=18&id=FL091365&keyword=),
+and [TFDA licensing](https://www.fda.gov.tw/ENG/lawContent.aspx?cid=5063&id=3354).
+An approved radio module does not remove the final host's integration/conformity duties.
 
-Creepage additionally depends on **RMS** voltage, pollution degree (1 = none, 2 = normally
-non-conductive/condensation, 3 = conductive) and material group. IPC values are voluntary:
-where a product falls under a safety standard, the creepage/clearance rules of **IEC 60664-1**
-(insulation coordination) or **IEC 62368-1** (AV/IT/telecom — replaced 60950-1) are mandatory
-and override. Every HV-register row states which regime applied.
+## Date-sensitive checks
 
-## IPC-7351 land-pattern density levels
+- EU CRA Article 14 reporting applies from **11 September 2026**; main application is
+  **11 December 2027**. Establish scope, support and reporting ownership now; do not treat
+  already-applicable reporting as a future launch task. [Commission CRA summary and binding text](https://digital-strategy.ec.europa.eu/en/policies/cra-summary).
+- FDA QMSR became effective **2 February 2026**, incorporating ISO 13485:2016 by reference.
+  [FDA QMSR](https://www.fda.gov/medical-devices/postmarket-requirements-devices/quality-management-system-regulation-qmsr).
+  Use the [February 2026 medical cybersecurity guidance](https://www.fda.gov/regulatory-information/search-fda-guidance-documents/cybersecurity-medical-devices-quality-management-system-considerations-and-content-premarket), which supersedes June 2025 guidance.
+- EU Machinery Regulation applies from **20 January 2027**; use the correct launch-date
+  legislation and transition. [Commission machinery guidance](https://single-market-economy.ec.europa.eu/sectors/mechanical-engineering/machinery_en).
+- UK PSTI has applied since **29 April 2024** to in-scope consumer connectable products:
+  password, vulnerability-reporting, support-period and statement obligations need evidence.
+  [UK enforcement guidance](https://www.gov.uk/guidance/regulations-consumer-connectable-product-security).
+- CPSC import eFiling requirements began for most covered imported regulated products on
+  **8 July 2026**; determine actual product and importer applicability.
+  [CPSC certification guidance](https://www.cpsc.gov/Business--Manufacturing/Testing-Certification/General-Use-Products-Certification-and-Testing).
 
-| Level | Name | Use |
-|---|---|---|
-| A | Most | maximum pads — hand-soldering, high-reliability |
-| B | Nominal | **default** for standard reflow production |
-| C | Least | high-density — only with the CM's confirmation |
+Medical destinations have distinct approval, registration, representative, labeling and
+post-market obligations. See [EU medical economic operators](https://health.ec.europa.eu/medical-devices-topics-interest/economic-operators_en),
+[MHRA GB/NI guidance](https://www.gov.uk/guidance/regulating-medical-devices-in-the-uk), and
+TFDA domestic QMS versus foreign-manufacturer QSD requirements. Device authorization and
+manufacturer quality-system assessment are separate workstreams.
 
-Patterns are computed from lead geometry + solder-joint goals + fab tolerances, never fixed pads.
-Undersized pads → fatigue failures; oversized → bridging on fine pitch, tombstoning on chips.
+Lithium battery transport has its own classification, UN 38.3 evidence/test-summary,
+packaging, carrier and shipment-document requirements. It is separate from product safety or
+radio approval. [PHMSA test-summary guidance](https://www.phmsa.dot.gov/training/hazmat/new-un-requirement-test-summaries).
 
-## Moisture sensitivity (J-STD-020F / J-STD-033)
-
-Floor life at ≤ 30 °C / 60 % RH after bag open; exceeded = bake before reflow (popcorning risk):
-
-| MSL | 1 | 2 | 2a | 3 | 4 | 5 | 5a | 6 |
-|---|---|---|---|---|---|---|---|---|
-| Floor life | unlimited* | 1 year | 4 weeks | **168 h** | 72 h | 48 h | 24 h | bake always |
-
-*MSL 1 rated at ≤ 30 °C/85 % RH. MSL 3 is the most common rating for fine-pitch BGAs/QFNs —
-one calendar week of floor life. SAC305 reflow peaks ~230–250 °C.
-
-## Substance & material compliance
-
-- **RoHS 3 (EU 2015/863):** 10 restricted substances measured at the *homogeneous-material*
-  level — Pb, Hg, Cr(VI), PBB, PBDE + 4 phthalates (DEHP, BBP, DBP, DIBP) each < 1000 ppm;
-  **Cd < 100 ppm**. Drove the industry to lead-free SAC solder.
-- **REACH (EU):** SVHC Candidate List grows ~2×/year (253 entries, early 2026). Article
-  suppliers must notify when an SVHC exceeds 0.1 % w/w per article; SCIP database entry
-  required since Jan 2021.
-- **UL:** UL 796 = bare-board recognition ("UR" mark + E-file number + flammability rating on
-  the board); **UL 94V-0** the typical FR-4 flammability target (no burning > 10 s, no flaming
-  drips). Assembled end products list separately (e.g. UL 62368-1).
-
-## Obsolescence numbers (why the pinned-catalog discipline exists)
-
-- **> 50 % of 2025 component discontinuations shipped with NO PCN** (Z2Data: 323 286 of
-  621 909); 25–30 % was typical in prior years. Lifecycle silence ≠ safety — check status at
-  every explicit catalog refresh, not only when a notice arrives.
-- When a PCN does land: JEDEC requires 90 days' notice, and the **last-time-buy window is
-  typically ~6 months**. An LTB on a catalog part is a drop-everything GitHub issue, not a
-  backlog item.
+G7 requires actual applicable records and responsible release approvals, not this reference
+table. Sustaining retains complaint, vulnerability, supplier-change and field-action processes
+with jurisdiction-specific deadlines and accountable owners.

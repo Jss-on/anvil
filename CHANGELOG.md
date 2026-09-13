@@ -1,5 +1,17 @@
 # Changelog
 
+Native Codex packaging is included in 0.5.0: an installable `$anvil` skill, local marketplace,
+shared workflow routing, bundled tools/templates, and parity checks for both host packages.
+
+## 0.5.0 ? 2026-09-14
+
+- Implement the lifecycle research: all 75 checklist items, 19 early applicability checkpoints, G0?G7 plus sustaining, and a new lifecycle command. Distinguish PCB, assembly, product-build, design, production and market readiness.
+- Replace score-derived release verdicts with required checks, exact requirement traces, method checks, review/NA dispositions, hashed release manifests and validated handoffs.
+- Replace duplicated Bash/Node parsers with one Python standard-library seam. Fail closed on stale/invalid KiCad reports, failed or skipped simulations, missing corners, malformed numbers, mixed currencies, source drift and incorrect wiring. Correct curved outline bounds and degenerate mesh checks.
+- Add firmware/build record, factory traceability/yield, full cost-model checks and templates; concurrent firmware, manufacturing, sector/market, commercial, support and retirement workflows.
+- Bundle scripts, Windows doctor shim and all templates; align package versions and add executable regression/native-tool/installation checks. Remove unsupported manufacturer presets and universal engineering thresholds.
+- Breaking migration: release claims require anvil-project.json, structured requirements, explicit evidence receipts and gate. Legacy score ledgers and SKIP_NGSPICE cannot authorize release; sim rows need circuit, product BOM needs pinned source joins, and ICDs need exact endpoints and qualified ratings. See README.
+
 ## 0.4.0 — 2026-08-26
 
 Industry-process deepening — the protocols absorb the standard PCB design discipline (IPC

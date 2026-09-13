@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "name": "new-product",
+  "release_kind": "pcb",
+  "target_gate": "G3",
+  "sectors": [
+    "embedded"
+  ],
+  "markets": [
+    "US",
+    "EU"
+  ],
+  "features": [
+    "electronics",
+    "firmware"
+  ],
+  "verification_methods": [],
+  "requirements": "hrs/requirements.tsv",
+  "artifacts": {},
+  "checks": {},
+  "hardware_revision": "unreleased"
+}

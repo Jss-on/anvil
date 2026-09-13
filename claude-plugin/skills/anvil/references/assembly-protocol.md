@@ -1,80 +1,72 @@
-# Assembly Protocol
+# Manufacturing transfer, assembly and factory validation
 
-The last mile: everything needed to turn the kit — fabbed boards, printed/machined parts, COTS
-modules, cut wire — into a working unit, written for a **technician who has never seen the
-project**. If a step needs tribal knowledge, the step is incomplete. The assembly package is a
-deliverable with acceptance rows, not an afterthought README.
+## G3 assembly and bring-up preparation
 
-## assembly/ tree
+Write sequential illustrated work instructions with part IDs/quantities, orientation, polarity,
+tools, fastening/torque/adhesive requirements, inspection criteria and safe handling. Reconcile
+every consumed part with the product BOM in both directions. Include harness routing/strain
+relief, enclosure closure, firmware programming and calibration access. Supplier/process-specific
+instructions control soldering, moisture, ESD, cleaning, seals and traceability.
 
+The bring-up plan identifies configuration, serials, instrumentation, calibrated ranges,
+current/voltage limits, staged power domains, safe outputs, expected observations, stop conditions
+and rework capture. Hazardous energization, motion and battery testing need an actual approved
+procedure, responsible operator and session action authorization. Do not reuse a drone, medical,
+or mains procedure as a generic product default.
+
+## EVT and DVT
+
+Record first power, rails/clocks/reset, peripheral interfaces, programming/debug, core function,
+fault states and integration with mechanics/harnesses. Tie raw results to unit serial, hardware,
+firmware/bootloader, settings and rework. DVT uses representative production intent, justified
+sample/corner/environment/reliability profiles and intended-user validation. Track deviations,
+failures, corrective actions and regression results; a repaired prototype is not an untouched
+production-intent sample.
+
+## PVT and process transfer
+
+Transfer released BOM/drawings, suppliers/alternates, firmware/programming, assembly and
+inspection instructions, tooling, material handling and change controls. Qualify people and
+equipment. `manufacturing/control-plan.csv` records operation, characteristic/limit, method,
+fixture, frequency, owner, reaction plan and record. Select ICT/flying probe/boundary scan,
+functional tests or other methods according to fault coverage and product constraints.
+
+Demonstrate that tests detect representative defects and that measurements can distinguish
+acceptable product: fault injection/known bad samples, repeatability/reproducibility, guardbands,
+calibration/traceability and fixture maintenance. Validate provisioning, test privilege separation,
+calibration schema, data upload, rework, retest and repair. Document cycle time, throughput,
+capacity, first-pass yield, final yield, scrap, rework, escapes and acceptance targets.
+
+## Executable factory record check
+
+`factory <manufacturing-directory>` reads `acceptance.json`:
+
+```json
+{
+  "hardware_revision": "A",
+  "firmware_sha256": "<actual release binary SHA-256>",
+  "minimum_units": 30,
+  "first_pass_yield": 0.95,
+  "fixtures": {"FCT-01": "3"}
+}
 ```
-assembly/
-  ASSEMBLY.md        ordered build instructions (the script)
-  exploded.png       exploded view render — VIEWED evidence
-  step-*.png         per-stage renders where a step is ambiguous in prose
-  INTEGRATION.md     system bring-up + functional test ladder
-  config/            firmware/config artifacts (FC dump, VTX table, radio model)
-  QC.md              final inspection checklist
-```
 
-## ASSEMBLY.md — ordered steps
+The numbers above are examples; set justified pilot size/yield limits for the actual process.
+Add this approved `acceptance.json` under the release artifact role `factory_policy` before PVT
+recording. Changing a sample, yield, fixture or configuration criterion then invalidates the
+release baseline and its reviews, instead of silently relaxing acceptance after a failed pilot.
+`unit-records.csv` fields: serial, lot, hardware_revision, firmware_sha256, fixture_id,
+fixture_revision, calibration_due, operator, timestamp, attempt, rework_reference, result,
+measurement_record, provisioning_record. Timestamps include timezone. Calibration must cover
+the actual test time. Each serial starts at attempt 1 with no omitted/duplicate attempts;
+retest/rework needs a real disposition record. Evidence paths are relative to the factory folder.
 
-Each step:
+The checker rejects mismatched configuration/fixture revisions, expired calibration, incomplete
+records and hidden test attempts. It reports both first-pass and final yield; the agreed minimum
+sample count, first-pass target and all units' final acceptance must pass. It does not measure
+hardware or validate the factual truth of imported records. G6 also requires external review
+of fault coverage, measurement qualification, provisioning and actual process capability.
 
-```
-### Step 7 — Mount flight controller
-Parts:  PB-14 (FC), PB-31 ×4 (M3×8 socket), PB-32 ×4 (TPU grommet)   ← product-BOM ids
-Tools:  2.5 mm hex driver
-Do:     Seat grommets in frame bosses; orient FC arrow FORWARD; torque M3×8 to 0.5 N·m.
-Check:  FC sits level; USB port faces service cutout; no grommet extruded.
-```
-
-Rules:
-
-- **Every part reference is a product-BOM id** — a step that names a part not in the BOM, or a
-  BOM line no step consumes, is a red `documentation` row (both-direction orphan check).
-- Torque values on every threaded fastener into insert/metal; adhesive type + cure time where
-  bonded; thread-locker grade where vibration-exposed.
-- Soldered joints list gauge, joint type, and heat-shrink spec (from the harness table).
-- Order respects reachability: no step may require access a previous step closed. The exploded
-  render is generated from the CAD assembly and **VIEWED** to sanity-check sequence and
-  orientation before the gate.
-- Consumables (zip ties, heat-shrink, TPU tape) are BOM lines with quantities, not assumptions.
-
-## INTEGRATION.md — power-up and functional ladder
-
-The system-level sibling of the board `BRINGUP.md`, ordered so each rung is safe given the last:
-
-1. **Smoke check** — bench supply at current limit (value stated), props OFF, expected idle
-   current ± tolerance per rail.
-2. **Config load** — flash/restore artifacts from `assembly/config/` (FC dump, VTX band/power
-   within the region table, radio model + failsafe). Every artifact is committed — a config that
-   lives on someone's laptop is not a deliverable.
-3. **Link checks** — RC bind + failsafe verified (throttle-cut on signal loss), telemetry, video
-   link on the configured channel.
-4. **Actuation** — motor order + direction per the layout diagram (props still OFF), then
-   sensors (arm angle sanity, GPS lock if fitted).
-5. **First armed test** — props on, restrained/tethered per the safety note; vibration check
-   (blackbox/IMU trace where available).
-6. Expected value + tolerance on every rung; a rung without a number is inspection-only and says
-   so explicitly.
-
-Safety notes are explicit and first: props off until step 5, LiPo handling, RF power legality
-(region sign-off row from the COTS protocol).
-
-## QC.md — final inspection
-
-Checklist a second person can run in < 10 minutes: fastener torque spot-checks, connector
-fully-seated pass, strain relief present at every exit, no wire chafe points against carbon
-edges, CG within the spec'd range (measured, value logged), AUW weighed and logged against the
-mass budget row, function ladder rungs 1–4 re-run green.
-
-## Acceptance wiring
-
-| Row (dimension) | Evidence |
-|---|---|
-| assembly instructions complete, BOM-consistent (documentation) | `assembly/ASSEMBLY.md` + orphan check |
-| exploded render viewed (documentation) | `assembly/exploded.png` Read |
-| integration ladder with numbers (testability) | `assembly/INTEGRATION.md` |
-| config artifacts committed (system) | `assembly/config/*` |
-| QC checklist exists + AUW/CG rows measured (testability) | `assembly/QC.md` |
+Tie each shipped unit to its configuration, measurement/provisioning/calibration records and
+release authority. Preserve failed attempts and nonconformances. Never copy a later configuration
+over a historical unit record or log secret keys/passwords as provisioning evidence.

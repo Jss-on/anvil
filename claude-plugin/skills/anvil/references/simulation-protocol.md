@@ -1,76 +1,44 @@
-# Simulation Protocol
+# Circuit simulation
 
-Contract for `build` Phase 6 and the `simulation` dimension. One rule above all: **a spec passes at
-its declared corners with a recorded margin, or it does not pass.**
+Choose simulations from requirement claims, operating corners and model validity. Use vendor
+models with source/license/version recorded; pin every model and include in the release manifest.
+Compare a known operating point/reference circuit before trusting an imported model. State
+unsupported effects such as layout parasitics, thermal behavior or firmware interactions.
 
-## Harness shape
+`sim/assertions.tsv` requires `id, measure, op, limit, units, corners, traces, circuit` as tab
+columns. Each unique row names its exact relative circuit path. No global measurement-name
+pooling or inferred association with another harness is allowed.
 
-One ngspice batch harness per simulable HRS spec: `sim/<spec-id>.cir`.
-
-```spice
-* A-HR-2 — output ripple, worst-case line/load
-.include models/TPS562200.lib      ; vendor model, provenance header in the file
-.param VIN=4.5 ILOAD=1
-VIN in 0 DC {VIN}
-* ... circuit under test, parameterized by the corner params ...
-.tran 100n 5m 4m uic
-.measure tran vripple PP v(out) from=4.2m to=5m
-.control
-run
-.endc
-.end
+```text
+id	measure	op	limit	units	corners	traces	circuit
+A-1	vout_avg	within	3.3±3%	V	vin=4.5,5.5;iload=0,1	HR-1	buck.cir
 ```
 
-Rules:
-- **Vendor SPICE models first**, `models/` with a provenance header (source URL, accessed date,
-  encrypted/unencrypted). No vendor model → datasheet-derived behavioral model with derivation
-  shown in a comment block. Model provenance is a `documentation` row.
-- `.measure` names match assertion IDs — the parser keys on them.
-- Corner parameters enter via `.param`; the runner sweeps them. Never hand-edit values per run.
-- Deterministic: fixed seeds where MC is used; timesteps chosen for the measured quantity
-  (ripple needs ≥100 pts/switching period).
+In `buck.cir`, declare each swept parameter exactly once on its own line, for example
+`.param vin=5` and `.param iload=0.5`, after the SPICE title. Corner values are finite decimal
+or scientific-notation numbers in base units, not SPICE suffix abbreviations. Semicolon joins
+parameters and comma lists values; Anvil executes the Cartesian product, up to 256 variants
+per assertion. Use `nominal` for an intentionally single-condition assertion. Name non-nominal
+model/temperature/load assumptions explicitly in the requirements and harness.
 
-## assertions.tsv (the contract — 7 tab-separated cols)
+`sim <directory>` materializes a fresh circuit variant for each corner in a temporary directory
+under the original circuit directory, invokes ngspice there with the original working directory,
+checks exit status, and reads that run's log only. Relative includes keep their original meaning.
+Each measurement must appear exactly once and be finite. Missing tools, missing/ambiguous
+measures, malformed assertions, a failed run or unsupported corner declaration are errors.
+An old `*.log` cannot satisfy a measurement. `SKIP_NGSPICE` is rejected.
+The runner disables `.spiceinit` and follows included model dependencies, including files outside
+the sim folder. Ambiguous relative include locations are conservatively both hashed; prefer
+unambiguous paths. `.control` scripts require a separately reviewed runner; built-in assertions
+use batch `.measure` so hidden interactive commands cannot change the execution contract.
 
-```
-id	measure	op	limit	units	corners	traces
-A-HR-1	vout_avg	within	3.3±3%	V	vin=4.5,5.5;iload=0,1	HR-1
-A-HR-2	vripple	le	0.030	V	vin=4.5,5.5;iload=1	HR-2
-A-HR-6	eff	ge	0.85	-	vin=5.0;iload=0.5	HR-6
-```
-`op ∈ le|ge|within` (`within` takes `center±pct%` or `lo..hi`). `corners`: `;`-joined param lists —
-the runner executes the **cross product** and the row passes only if EVERY corner passes. Margin =
-worst-corner distance to the limit, in the row's units (and as % of limit in the report).
+One assertion passes only when all corners pass. The units column is a declared contract:
+ngspice returns scalar values, so engineering review must confirm the expression's physical
+units and sign. Anvil does not infer dimensional correctness from the measure name.
+`within` uses the magnitude of the center for percent tolerance, including negative centers.
+The transcript records each corner, observed value, margin and disposition. Gate recordings
+also bind the assertions, circuits and local model dependencies to the release hashes.
 
-`scripts/score-anvil.sh sim sim/` runs every harness (`ngspice -b -o <id>.log <id>.cir`), parses
-`measure = value` lines, evaluates ops, prints per-row `PASS|FAIL` + margin, and
-`SIM_PASS: x/y` last.
-
-## Corner policy
-
-- **Nominal first** (fast inner-loop signal), **corners before any keep** that touches the block,
-  full corner suite before the phase gate.
-- Standard corner set: line min/max × load min/max × Ta-driven parameter shifts where the model
-  supports temp. Component tolerance: `.step`/Monte Carlo on the parts that dominate the spec
-  (feedback dividers, sense elements) — worst-case method recorded in the report.
-- **Maximin discipline:** the margin that matters is the WORST corner's. Averages hide cliffs.
-
-## Convergence playbook (a sim that can't run is a red row, never a skip)
-
-In order: check topology floats (every node DC path to ground) → `.options gmin=1e-10` then step
-gmin → `uic` with sensible `.ic` on reactive states → relax `reltol` to 1e-2 ONLY for exploratory
-runs, never for the gated result → replace the vendor model with the behavioral fallback and note
-the downgrade. Every workaround is a comment in the harness, not tribal memory.
-
-## Downgrades
-
-A spec that genuinely cannot be simulated (no model, mechanical property, EMC field behavior) is
-downgraded `simulation → analysis` **in the HRS itself** with a one-line reason, and the analysis
-must show work (equations, datasheet figures). Silent downgrades are audit failures — the
-requirement-satisfaction audit re-checks every `verify:` tag against the evidence class.
-
-## Report (`docs/SIM-REPORT.md`)
-
-Per assertion: limit · worst corner · value at worst corner · margin (units and %) · harness path ·
-log path. The margin table is the input to `improve`'s `worst_case_margin` metric and to evals'
-silent-erosion detection. Plots optional; numbers mandatory.
+Review convergence warnings, model applicability, startup and steady-state windows, sampling,
+operating limits and fault behavior. Simulation is evidence for its modeled claim; it does not
+replace physical EMC, environmental, safety, RF or production qualification tests.

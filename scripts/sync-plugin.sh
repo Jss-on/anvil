@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
-# sync-plugin.sh — mirror the canonical .claude tree into claude-plugin/ (the
-# distributable Claude Code plugin), as PURE BYTE COPIES.
+# sync-plugin.sh — mirror canonical sources into the Claude Code and Codex
+# distributable plugins as PURE BYTE COPIES.
 #
 #   sync-plugin.sh          → copy canonical → plugin tree, prune orphans
 #   sync-plugin.sh --check  → verify byte-parity, no writes (CI gate)
 #
 # NEVER transform contents while mirroring — a transformed mirror diverges from
 # canonical and the divergence hides until an install breaks (the forge lesson).
-# Canonical sources: .claude/commands/**, .claude/skills/anvil/**, scripts/*.sh
-# (the three gate scripts ship INSIDE the plugin at skills/anvil/scripts/ so
-# ${CLAUDE_PLUGIN_ROOT}/skills/anvil resolution works in installed repos).
+# Canonical sources: .claude/commands/**, .claude/skills/anvil/**, scripts/, templates/.
+# Both plugins resolve tools and references from their loaded skills/anvil/SKILL.md.
 set -uo pipefail
 export LC_ALL=C
 
@@ -20,30 +19,40 @@ CHECK=0
 
 # --- build the src|dst mapping ---------------------------------------------
 pairs=()
-add() { pairs+=("$1|$2"); }
+targets=(claude-plugin plugins/anvil)
+manifests=(claude-plugin/.claude-plugin/plugin.json plugins/anvil/.codex-plugin/plugin.json)
+add() {
+  local target
+  for target in "${targets[@]}"; do pairs+=("$1|$target/$2"); done
+}
 
-[[ -f .claude/commands/anvil.md ]] && add ".claude/commands/anvil.md" "claude-plugin/commands/anvil.md"
+[[ -f .claude/commands/anvil.md ]] && add ".claude/commands/anvil.md" "commands/anvil.md"
 for f in .claude/commands/anvil/*.md; do
-  [[ -f "$f" ]] && add "$f" "claude-plugin/commands/anvil/$(basename "$f")"
+  [[ -f "$f" ]] && add "$f" "commands/anvil/$(basename "$f")"
 done
-add ".claude/skills/anvil/SKILL.md" "claude-plugin/skills/anvil/SKILL.md"
-for f in .claude/skills/anvil/references/*.md; do
-  [[ -f "$f" ]] && add "$f" "claude-plugin/skills/anvil/references/$(basename "$f")"
+while IFS= read -r f; do
+  add "$f" "${f#.claude/}"
+done < <(find .claude/skills/anvil -type f | sort)
+for s in anvil.py score-anvil.sh doctor.sh doctor.cmd validate-handoff.sh; do
+  add "scripts/$s" "skills/anvil/scripts/$s"
 done
-for s in score-anvil.sh doctor.sh validate-handoff.sh; do
-  add "scripts/$s" "claude-plugin/skills/anvil/scripts/$s"
-done
+while IFS= read -r f; do
+  add "$f" "skills/anvil/$f"
+done < <(find templates -type f | sort)
+add LICENSE LICENSE
 
 # --- expected destination set (for orphan detection) ------------------------
 expected() {
   local p
   for p in "${pairs[@]}"; do echo "${p#*|}"; done
-  echo "claude-plugin/.claude-plugin/plugin.json"
+  printf '%s\n' "${manifests[@]}"
 }
 
 actual() {
-  [[ -d claude-plugin ]] || return 0
-  find claude-plugin -type f | sed 's|^\./||' | sort
+  local target
+  for target in "${targets[@]}"; do
+    [[ ! -d "$target" ]] || find "$target" -type f | sort
+  done
 }
 
 # --- check mode --------------------------------------------------------------
@@ -57,7 +66,9 @@ if [[ $CHECK -eq 1 ]]; then
   while IFS= read -r f; do
     expected | grep -qxF "$f" || { echo "orphan in plugin (no canonical source): $f" >&2; bad=$((bad + 1)); }
   done < <(actual)
-  [[ -f claude-plugin/.claude-plugin/plugin.json ]] || { echo "missing plugin.json" >&2; bad=$((bad + 1)); }
+  for manifest in "${manifests[@]}"; do
+    [[ -f "$manifest" ]] || { echo "missing $manifest" >&2; bad=$((bad + 1)); }
+  done
   if [[ $bad -eq 0 ]]; then echo "PLUGIN_PARITY: OK"; exit 0
   else echo "PLUGIN_PARITY: DIVERGED ($bad)"; exit 1; fi
 fi

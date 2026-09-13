@@ -1,0 +1,4 @@
+interface:
+  display_name: "Anvil"
+  short_description: "Hardware development with evidence-backed release gates"
+  default_prompt: "Use $anvil to develop this hardware product and report its release gate blockers."
