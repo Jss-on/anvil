@@ -125,7 +125,7 @@ class Solvers(unittest.TestCase):
 class Boards(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        self.dir = Path(self.temp.name)
+        self.dir = Path(self.temp.name).resolve()  # Windows runners hand out 8.3 short temp paths
         anvil.DETAILS.clear()
 
     def tearDown(self):

@@ -1,4 +1,4 @@
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-h1kvhfaa\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-h1kvhfaa\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-ajnxg19b\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-ajnxg19b\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -13,7 +13,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-h1kvhfaa\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-ajnxg19b\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -35,18 +35,18 @@ att100k             =  -2.37103e+01
 att1meg             =  -3.15300e+01
 
 
-Total analysis time (seconds) = 0.0023981
+Total analysis time (seconds) = 0.0007822
 
-Total elapsed time (seconds) = 0.256 
+Total elapsed time (seconds) = 0.008 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8908.016 MB.
-Maximum ngspice program size =   10.098 MB.
-Current ngspice program size =   10.098 MB.
+DRAM currently available = 8531.152 MB.
+Maximum ngspice program size =   10.094 MB.
+Current ngspice program size =   10.094 MB.
 
 
 S-1 {"ctol": "0.8", "rd": "5", "rtol": "0.95"}: -2.37103e+01 dB margin=20.7103 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-0gxt_k54\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-0gxt_k54\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-yq2tii1w\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-yq2tii1w\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -61,7 +61,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-0gxt_k54\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-yq2tii1w\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -83,18 +83,18 @@ att100k             =  -1.50983e+01
 att1meg             =  -3.09513e+01
 
 
-Total analysis time (seconds) = 0.0013323
+Total analysis time (seconds) = 0.0008266
 
-Total elapsed time (seconds) = 0.014 
+Total elapsed time (seconds) = 0.011 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8915.855 MB.
-Maximum ngspice program size =   10.098 MB.
-Current ngspice program size =   10.098 MB.
+DRAM currently available = 8534.641 MB.
+Maximum ngspice program size =   10.102 MB.
+Current ngspice program size =   10.102 MB.
 
 
 S-1 {"ctol": "0.8", "rd": "20", "rtol": "0.95"}: -1.50983e+01 dB margin=12.0983 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-z8prohjo\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-z8prohjo\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-p4ty814q\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-p4ty814q\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -109,7 +109,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-z8prohjo\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-p4ty814q\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -131,18 +131,18 @@ att100k             =  -2.39824e+01
 att1meg             =  -3.46860e+01
 
 
-Total analysis time (seconds) = 0.0012974
+Total analysis time (seconds) = 0.0008209
 
-Total elapsed time (seconds) = 0.013 
+Total elapsed time (seconds) = 0.011 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8918.289 MB.
-Maximum ngspice program size =   10.102 MB.
-Current ngspice program size =   10.102 MB.
+DRAM currently available = 8530.121 MB.
+Maximum ngspice program size =   10.094 MB.
+Current ngspice program size =   10.094 MB.
 
 
 S-1 {"ctol": "1.2", "rd": "5", "rtol": "0.95"}: -2.39824e+01 dB margin=20.9824 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-i9h61jc9\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-i9h61jc9\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-p2d0r9b4\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-p2d0r9b4\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -157,7 +157,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-i9h61jc9\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-p2d0r9b4\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -179,162 +179,18 @@ att100k             =  -1.67822e+01
 att1meg             =  -3.44356e+01
 
 
-Total analysis time (seconds) = 0.0008035
-
-Total elapsed time (seconds) = 0.014 
-
-Total DRAM available = 23981.586 MB.
-DRAM currently available = 8912.023 MB.
-Maximum ngspice program size =   10.098 MB.
-Current ngspice program size =   10.098 MB.
-
-
-S-1 {"ctol": "1.2", "rd": "20", "rtol": "0.95"}: -1.67822e+01 dB margin=13.7822 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-jah8act2\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-jah8act2\\corner.cir"]
-EXIT: 0
-******
-** ngspice-47 : Circuit level simulation program
-** Compiled with KLU Direct Linear Solver
-** The U. C. Berkeley CAD Group
-** Copyright 1985-1994, Regents of the University of California.
-** Copyright 2001-2026, The ngspice team.
-** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
-** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
-** Creation Date: Aug 11 2026   13:55:25
-******
-
-Batch mode
-
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-jah8act2\run.log
-
-
-Warning: can't parse 'vd': ignored
-
-Note: No compatibility mode selected!
-
-
-Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
-
-Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
-
-Using SPARSE 1.3 as Direct Linear Solver
-
-No. of Data Rows : 251
-
-  Measurements for AC Analysis
-
-att100k             =  -2.45269e+01
-att1meg             =  -3.23907e+01
-
-
-Total analysis time (seconds) = 0.0009778
-
-Total elapsed time (seconds) = 0.015 
-
-Total DRAM available = 23981.586 MB.
-DRAM currently available = 8909.094 MB.
-Maximum ngspice program size =   10.105 MB.
-Current ngspice program size =   10.105 MB.
-
-
-S-1 {"ctol": "0.8", "rd": "5", "rtol": "1.05"}: -2.45269e+01 dB margin=21.5269 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-w3qf2vnc\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-w3qf2vnc\\corner.cir"]
-EXIT: 0
-******
-** ngspice-47 : Circuit level simulation program
-** Compiled with KLU Direct Linear Solver
-** The U. C. Berkeley CAD Group
-** Copyright 1985-1994, Regents of the University of California.
-** Copyright 2001-2026, The ngspice team.
-** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
-** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
-** Creation Date: Aug 11 2026   13:55:25
-******
-
-Batch mode
-
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-w3qf2vnc\run.log
-
-
-Warning: can't parse 'vd': ignored
-
-Note: No compatibility mode selected!
-
-
-Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
-
-Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
-
-Using SPARSE 1.3 as Direct Linear Solver
-
-No. of Data Rows : 251
-
-  Measurements for AC Analysis
-
-att100k             =  -1.58527e+01
-att1meg             =  -3.18177e+01
-
-
-Total analysis time (seconds) = 0.000873
-
-Total elapsed time (seconds) = 0.013 
-
-Total DRAM available = 23981.586 MB.
-DRAM currently available = 8913.191 MB.
-Maximum ngspice program size =   10.086 MB.
-Current ngspice program size =   10.086 MB.
-
-
-S-1 {"ctol": "0.8", "rd": "20", "rtol": "1.05"}: -1.58527e+01 dB margin=12.8527 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-drm66kys\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-drm66kys\\corner.cir"]
-EXIT: 0
-******
-** ngspice-47 : Circuit level simulation program
-** Compiled with KLU Direct Linear Solver
-** The U. C. Berkeley CAD Group
-** Copyright 1985-1994, Regents of the University of California.
-** Copyright 2001-2026, The ngspice team.
-** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
-** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
-** Creation Date: Aug 11 2026   13:55:25
-******
-
-Batch mode
-
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-drm66kys\run.log
-
-
-Warning: can't parse 'vd': ignored
-
-Note: No compatibility mode selected!
-
-
-Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
-
-Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
-
-Using SPARSE 1.3 as Direct Linear Solver
-
-No. of Data Rows : 251
-
-  Measurements for AC Analysis
-
-att100k             =  -2.48022e+01
-att1meg             =  -3.55511e+01
-
-
-Total analysis time (seconds) = 0.0010902
+Total analysis time (seconds) = 0.0008067
 
 Total elapsed time (seconds) = 0.012 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8907.406 MB.
-Maximum ngspice program size =   10.098 MB.
-Current ngspice program size =   10.098 MB.
+DRAM currently available = 8532.680 MB.
+Maximum ngspice program size =   10.141 MB.
+Current ngspice program size =   10.141 MB.
 
 
-S-1 {"ctol": "1.2", "rd": "5", "rtol": "1.05"}: -2.48022e+01 dB margin=21.8022 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-c0l7i3_r\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-c0l7i3_r\\corner.cir"]
+S-1 {"ctol": "1.2", "rd": "20", "rtol": "0.95"}: -1.67822e+01 dB margin=13.7822 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-es5okjp2\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-es5okjp2\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -349,247 +205,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-c0l7i3_r\run.log
-
-
-Warning: can't parse 'vd': ignored
-
-Note: No compatibility mode selected!
-
-
-Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
-
-Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
-
-Using SPARSE 1.3 as Direct Linear Solver
-
-No. of Data Rows : 251
-
-  Measurements for AC Analysis
-
-att100k             =  -1.75738e+01
-att1meg             =  -3.53036e+01
-
-
-Total analysis time (seconds) = 0.0011683
-
-Total elapsed time (seconds) = 0.013 
-
-Total DRAM available = 23981.586 MB.
-DRAM currently available = 8905.371 MB.
-Maximum ngspice program size =   10.105 MB.
-Current ngspice program size =   10.105 MB.
-
-
-S-1 {"ctol": "1.2", "rd": "20", "rtol": "1.05"}: -1.75738e+01 dB margin=14.5738 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-f5pgatdv\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-f5pgatdv\\corner.cir"]
-EXIT: 0
-******
-** ngspice-47 : Circuit level simulation program
-** Compiled with KLU Direct Linear Solver
-** The U. C. Berkeley CAD Group
-** Copyright 1985-1994, Regents of the University of California.
-** Copyright 2001-2026, The ngspice team.
-** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
-** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
-** Creation Date: Aug 11 2026   13:55:25
-******
-
-Batch mode
-
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-f5pgatdv\run.log
-
-
-Warning: can't parse 'vd': ignored
-
-Note: No compatibility mode selected!
-
-
-Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
-
-Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
-
-Using SPARSE 1.3 as Direct Linear Solver
-
-No. of Data Rows : 251
-
-  Measurements for AC Analysis
-
-att100k             =  -2.37103e+01
-att1meg             =  -3.15300e+01
-
-
-Total analysis time (seconds) = 0.0007998
-
-Total elapsed time (seconds) = 0.008 
-
-Total DRAM available = 23981.586 MB.
-DRAM currently available = 8881.797 MB.
-Maximum ngspice program size =   10.094 MB.
-Current ngspice program size =   10.094 MB.
-
-
-S-2 {"ctol": "0.8", "rd": "5", "rtol": "0.95"}: -3.15300e+01 dB margin=21.5300 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-64a6c96b\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-64a6c96b\\corner.cir"]
-EXIT: 0
-******
-** ngspice-47 : Circuit level simulation program
-** Compiled with KLU Direct Linear Solver
-** The U. C. Berkeley CAD Group
-** Copyright 1985-1994, Regents of the University of California.
-** Copyright 2001-2026, The ngspice team.
-** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
-** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
-** Creation Date: Aug 11 2026   13:55:25
-******
-
-Batch mode
-
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-64a6c96b\run.log
-
-
-Warning: can't parse 'vd': ignored
-
-Note: No compatibility mode selected!
-
-
-Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
-
-Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
-
-Using SPARSE 1.3 as Direct Linear Solver
-
-No. of Data Rows : 251
-
-  Measurements for AC Analysis
-
-att100k             =  -1.50983e+01
-att1meg             =  -3.09513e+01
-
-
-Total analysis time (seconds) = 0.0007507
-
-Total elapsed time (seconds) = 0.007 
-
-Total DRAM available = 23981.586 MB.
-DRAM currently available = 8894.109 MB.
-Maximum ngspice program size =   10.102 MB.
-Current ngspice program size =   10.102 MB.
-
-
-S-2 {"ctol": "0.8", "rd": "20", "rtol": "0.95"}: -3.09513e+01 dB margin=20.9513 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-qk3d_q2q\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-qk3d_q2q\\corner.cir"]
-EXIT: 0
-******
-** ngspice-47 : Circuit level simulation program
-** Compiled with KLU Direct Linear Solver
-** The U. C. Berkeley CAD Group
-** Copyright 1985-1994, Regents of the University of California.
-** Copyright 2001-2026, The ngspice team.
-** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
-** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
-** Creation Date: Aug 11 2026   13:55:25
-******
-
-Batch mode
-
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-qk3d_q2q\run.log
-
-
-Warning: can't parse 'vd': ignored
-
-Note: No compatibility mode selected!
-
-
-Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
-
-Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
-
-Using SPARSE 1.3 as Direct Linear Solver
-
-No. of Data Rows : 251
-
-  Measurements for AC Analysis
-
-att100k             =  -2.39824e+01
-att1meg             =  -3.46860e+01
-
-
-Total analysis time (seconds) = 0.0007908
-
-Total elapsed time (seconds) = 0.008 
-
-Total DRAM available = 23981.586 MB.
-DRAM currently available = 8902.254 MB.
-Maximum ngspice program size =   10.094 MB.
-Current ngspice program size =   10.094 MB.
-
-
-S-2 {"ctol": "1.2", "rd": "5", "rtol": "0.95"}: -3.46860e+01 dB margin=24.6860 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-0mhmv2ke\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-0mhmv2ke\\corner.cir"]
-EXIT: 0
-******
-** ngspice-47 : Circuit level simulation program
-** Compiled with KLU Direct Linear Solver
-** The U. C. Berkeley CAD Group
-** Copyright 1985-1994, Regents of the University of California.
-** Copyright 2001-2026, The ngspice team.
-** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
-** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
-** Creation Date: Aug 11 2026   13:55:25
-******
-
-Batch mode
-
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-0mhmv2ke\run.log
-
-
-Warning: can't parse 'vd': ignored
-
-Note: No compatibility mode selected!
-
-
-Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
-
-Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
-
-Using SPARSE 1.3 as Direct Linear Solver
-
-No. of Data Rows : 251
-
-  Measurements for AC Analysis
-
-att100k             =  -1.67822e+01
-att1meg             =  -3.44356e+01
-
-
-Total analysis time (seconds) = 0.0007991
-
-Total elapsed time (seconds) = 0.008 
-
-Total DRAM available = 23981.586 MB.
-DRAM currently available = 8904.727 MB.
-Maximum ngspice program size =   10.105 MB.
-Current ngspice program size =   10.105 MB.
-
-
-S-2 {"ctol": "1.2", "rd": "20", "rtol": "0.95"}: -3.44356e+01 dB margin=24.4356 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-7_u417d5\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-7_u417d5\\corner.cir"]
-EXIT: 0
-******
-** ngspice-47 : Circuit level simulation program
-** Compiled with KLU Direct Linear Solver
-** The U. C. Berkeley CAD Group
-** Copyright 1985-1994, Regents of the University of California.
-** Copyright 2001-2026, The ngspice team.
-** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
-** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
-** Creation Date: Aug 11 2026   13:55:25
-******
-
-Batch mode
-
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-7_u417d5\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-es5okjp2\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -611,18 +227,18 @@ att100k             =  -2.45269e+01
 att1meg             =  -3.23907e+01
 
 
-Total analysis time (seconds) = 0.0010507
+Total analysis time (seconds) = 0.0008221
 
-Total elapsed time (seconds) = 0.007 
+Total elapsed time (seconds) = 0.012 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8906.828 MB.
-Maximum ngspice program size =   10.109 MB.
-Current ngspice program size =   10.109 MB.
+DRAM currently available = 8534.738 MB.
+Maximum ngspice program size =   10.082 MB.
+Current ngspice program size =   10.082 MB.
 
 
-S-2 {"ctol": "0.8", "rd": "5", "rtol": "1.05"}: -3.23907e+01 dB margin=22.3907 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-wcq5j2qb\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-wcq5j2qb\\corner.cir"]
+S-1 {"ctol": "0.8", "rd": "5", "rtol": "1.05"}: -2.45269e+01 dB margin=21.5269 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-qjt_k_lt\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-qjt_k_lt\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -637,7 +253,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-wcq5j2qb\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-qjt_k_lt\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -659,18 +275,18 @@ att100k             =  -1.58527e+01
 att1meg             =  -3.18177e+01
 
 
-Total analysis time (seconds) = 0.0007983
+Total analysis time (seconds) = 0.0007898
 
-Total elapsed time (seconds) = 0.008 
+Total elapsed time (seconds) = 0.007 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8906.645 MB.
+DRAM currently available = 8530.586 MB.
 Maximum ngspice program size =   10.090 MB.
 Current ngspice program size =   10.090 MB.
 
 
-S-2 {"ctol": "0.8", "rd": "20", "rtol": "1.05"}: -3.18177e+01 dB margin=21.8177 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-9wj6b_nn\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-9wj6b_nn\\corner.cir"]
+S-1 {"ctol": "0.8", "rd": "20", "rtol": "1.05"}: -1.58527e+01 dB margin=12.8527 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-3hs9q00k\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-3hs9q00k\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -685,7 +301,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-9wj6b_nn\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-3hs9q00k\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -707,18 +323,18 @@ att100k             =  -2.48022e+01
 att1meg             =  -3.55511e+01
 
 
-Total analysis time (seconds) = 0.0008085
+Total analysis time (seconds) = 0.0009977
 
-Total elapsed time (seconds) = 0.007 
+Total elapsed time (seconds) = 0.015 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8905.125 MB.
-Maximum ngspice program size =   10.105 MB.
-Current ngspice program size =   10.105 MB.
+DRAM currently available = 8530.016 MB.
+Maximum ngspice program size =   10.117 MB.
+Current ngspice program size =   10.117 MB.
 
 
-S-2 {"ctol": "1.2", "rd": "5", "rtol": "1.05"}: -3.55511e+01 dB margin=25.5511 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-nxesemhf\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-nxesemhf\\corner.cir"]
+S-1 {"ctol": "1.2", "rd": "5", "rtol": "1.05"}: -2.48022e+01 dB margin=21.8022 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-4lyav3w0\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-4lyav3w0\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -733,7 +349,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-nxesemhf\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-4lyav3w0\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -755,14 +371,398 @@ att100k             =  -1.75738e+01
 att1meg             =  -3.53036e+01
 
 
-Total analysis time (seconds) = 0.0007814
+Total analysis time (seconds) = 0.0010426
+
+Total elapsed time (seconds) = 0.012 
+
+Total DRAM available = 23981.586 MB.
+DRAM currently available = 8532.250 MB.
+Maximum ngspice program size =   10.090 MB.
+Current ngspice program size =   10.090 MB.
+
+
+S-1 {"ctol": "1.2", "rd": "20", "rtol": "1.05"}: -1.75738e+01 dB margin=14.5738 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-j13e0zqc\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-j13e0zqc\\corner.cir"]
+EXIT: 0
+******
+** ngspice-47 : Circuit level simulation program
+** Compiled with KLU Direct Linear Solver
+** The U. C. Berkeley CAD Group
+** Copyright 1985-1994, Regents of the University of California.
+** Copyright 2001-2026, The ngspice team.
+** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
+** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
+** Creation Date: Aug 11 2026   13:55:25
+******
+
+Batch mode
+
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-j13e0zqc\run.log
+
+
+Warning: can't parse 'vd': ignored
+
+Note: No compatibility mode selected!
+
+
+Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 251
+
+  Measurements for AC Analysis
+
+att100k             =  -2.37103e+01
+att1meg             =  -3.15300e+01
+
+
+Total analysis time (seconds) = 0.0007953
+
+Total elapsed time (seconds) = 0.006 
+
+Total DRAM available = 23981.586 MB.
+DRAM currently available = 8532.883 MB.
+Maximum ngspice program size =   10.086 MB.
+Current ngspice program size =   10.086 MB.
+
+
+S-2 {"ctol": "0.8", "rd": "5", "rtol": "0.95"}: -3.15300e+01 dB margin=21.5300 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-44afbkyp\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-44afbkyp\\corner.cir"]
+EXIT: 0
+******
+** ngspice-47 : Circuit level simulation program
+** Compiled with KLU Direct Linear Solver
+** The U. C. Berkeley CAD Group
+** Copyright 1985-1994, Regents of the University of California.
+** Copyright 2001-2026, The ngspice team.
+** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
+** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
+** Creation Date: Aug 11 2026   13:55:25
+******
+
+Batch mode
+
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-44afbkyp\run.log
+
+
+Warning: can't parse 'vd': ignored
+
+Note: No compatibility mode selected!
+
+
+Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 251
+
+  Measurements for AC Analysis
+
+att100k             =  -1.50983e+01
+att1meg             =  -3.09513e+01
+
+
+Total analysis time (seconds) = 0.0007619
 
 Total elapsed time (seconds) = 0.007 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8899.914 MB.
+DRAM currently available = 8516.023 MB.
+Maximum ngspice program size =   10.098 MB.
+Current ngspice program size =   10.098 MB.
+
+
+S-2 {"ctol": "0.8", "rd": "20", "rtol": "0.95"}: -3.09513e+01 dB margin=20.9513 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-7o_1673b\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-7o_1673b\\corner.cir"]
+EXIT: 0
+******
+** ngspice-47 : Circuit level simulation program
+** Compiled with KLU Direct Linear Solver
+** The U. C. Berkeley CAD Group
+** Copyright 1985-1994, Regents of the University of California.
+** Copyright 2001-2026, The ngspice team.
+** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
+** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
+** Creation Date: Aug 11 2026   13:55:25
+******
+
+Batch mode
+
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-7o_1673b\run.log
+
+
+Warning: can't parse 'vd': ignored
+
+Note: No compatibility mode selected!
+
+
+Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 251
+
+  Measurements for AC Analysis
+
+att100k             =  -2.39824e+01
+att1meg             =  -3.46860e+01
+
+
+Total analysis time (seconds) = 0.0010777
+
+Total elapsed time (seconds) = 0.008 
+
+Total DRAM available = 23981.586 MB.
+DRAM currently available = 8517.902 MB.
+Maximum ngspice program size =   10.090 MB.
+Current ngspice program size =   10.090 MB.
+
+
+S-2 {"ctol": "1.2", "rd": "5", "rtol": "0.95"}: -3.46860e+01 dB margin=24.6860 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-jbvk62v9\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-jbvk62v9\\corner.cir"]
+EXIT: 0
+******
+** ngspice-47 : Circuit level simulation program
+** Compiled with KLU Direct Linear Solver
+** The U. C. Berkeley CAD Group
+** Copyright 1985-1994, Regents of the University of California.
+** Copyright 2001-2026, The ngspice team.
+** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
+** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
+** Creation Date: Aug 11 2026   13:55:25
+******
+
+Batch mode
+
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-jbvk62v9\run.log
+
+
+Warning: can't parse 'vd': ignored
+
+Note: No compatibility mode selected!
+
+
+Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 251
+
+  Measurements for AC Analysis
+
+att100k             =  -1.67822e+01
+att1meg             =  -3.44356e+01
+
+
+Total analysis time (seconds) = 0.0008038
+
+Total elapsed time (seconds) = 0.007 
+
+Total DRAM available = 23981.586 MB.
+DRAM currently available = 8534.219 MB.
 Maximum ngspice program size =   10.094 MB.
 Current ngspice program size =   10.094 MB.
+
+
+S-2 {"ctol": "1.2", "rd": "20", "rtol": "0.95"}: -3.44356e+01 dB margin=24.4356 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-efqz0qvk\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-efqz0qvk\\corner.cir"]
+EXIT: 0
+******
+** ngspice-47 : Circuit level simulation program
+** Compiled with KLU Direct Linear Solver
+** The U. C. Berkeley CAD Group
+** Copyright 1985-1994, Regents of the University of California.
+** Copyright 2001-2026, The ngspice team.
+** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
+** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
+** Creation Date: Aug 11 2026   13:55:25
+******
+
+Batch mode
+
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-efqz0qvk\run.log
+
+
+Warning: can't parse 'vd': ignored
+
+Note: No compatibility mode selected!
+
+
+Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 251
+
+  Measurements for AC Analysis
+
+att100k             =  -2.45269e+01
+att1meg             =  -3.23907e+01
+
+
+Total analysis time (seconds) = 0.0012396
+
+Total elapsed time (seconds) = 0.008 
+
+Total DRAM available = 23981.586 MB.
+DRAM currently available = 8529.902 MB.
+Maximum ngspice program size =   10.090 MB.
+Current ngspice program size =   10.090 MB.
+
+
+S-2 {"ctol": "0.8", "rd": "5", "rtol": "1.05"}: -3.23907e+01 dB margin=22.3907 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-ps7wpob7\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-ps7wpob7\\corner.cir"]
+EXIT: 0
+******
+** ngspice-47 : Circuit level simulation program
+** Compiled with KLU Direct Linear Solver
+** The U. C. Berkeley CAD Group
+** Copyright 1985-1994, Regents of the University of California.
+** Copyright 2001-2026, The ngspice team.
+** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
+** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
+** Creation Date: Aug 11 2026   13:55:25
+******
+
+Batch mode
+
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-ps7wpob7\run.log
+
+
+Warning: can't parse 'vd': ignored
+
+Note: No compatibility mode selected!
+
+
+Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 251
+
+  Measurements for AC Analysis
+
+att100k             =  -1.58527e+01
+att1meg             =  -3.18177e+01
+
+
+Total analysis time (seconds) = 0.0007481
+
+Total elapsed time (seconds) = 0.007 
+
+Total DRAM available = 23981.586 MB.
+DRAM currently available = 8528.988 MB.
+Maximum ngspice program size =   10.098 MB.
+Current ngspice program size =   10.098 MB.
+
+
+S-2 {"ctol": "0.8", "rd": "20", "rtol": "1.05"}: -3.18177e+01 dB margin=21.8177 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-jar2axj0\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-jar2axj0\\corner.cir"]
+EXIT: 0
+******
+** ngspice-47 : Circuit level simulation program
+** Compiled with KLU Direct Linear Solver
+** The U. C. Berkeley CAD Group
+** Copyright 1985-1994, Regents of the University of California.
+** Copyright 2001-2026, The ngspice team.
+** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
+** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
+** Creation Date: Aug 11 2026   13:55:25
+******
+
+Batch mode
+
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-jar2axj0\run.log
+
+
+Warning: can't parse 'vd': ignored
+
+Note: No compatibility mode selected!
+
+
+Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 251
+
+  Measurements for AC Analysis
+
+att100k             =  -2.48022e+01
+att1meg             =  -3.55511e+01
+
+
+Total analysis time (seconds) = 0.0007845
+
+Total elapsed time (seconds) = 0.006 
+
+Total DRAM available = 23981.586 MB.
+DRAM currently available = 8530.508 MB.
+Maximum ngspice program size =   10.102 MB.
+Current ngspice program size =   10.102 MB.
+
+
+S-2 {"ctol": "1.2", "rd": "5", "rtol": "1.05"}: -3.55511e+01 dB margin=25.5511 PASS
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-b3_d6if0\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-b3_d6if0\\corner.cir"]
+EXIT: 0
+******
+** ngspice-47 : Circuit level simulation program
+** Compiled with KLU Direct Linear Solver
+** The U. C. Berkeley CAD Group
+** Copyright 1985-1994, Regents of the University of California.
+** Copyright 2001-2026, The ngspice team.
+** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html
+** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html
+** Creation Date: Aug 11 2026   13:55:25
+******
+
+Batch mode
+
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-b3_d6if0\run.log
+
+
+Warning: can't parse 'vd': ignored
+
+Note: No compatibility mode selected!
+
+
+Circuit: * rffe bias node (nb): 12 v ripple through the 3 x 220r bias resistors, bypassed by c4 100n + c3 10p;
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 251
+
+  Measurements for AC Analysis
+
+att100k             =  -1.75738e+01
+att1meg             =  -3.53036e+01
+
+
+Total analysis time (seconds) = 0.0008123
+
+Total elapsed time (seconds) = 0.008 
+
+Total DRAM available = 23981.586 MB.
+DRAM currently available = 8524.488 MB.
+Maximum ngspice program size =   10.113 MB.
+Current ngspice program size =   10.113 MB.
 
 
 S-2 {"ctol": "1.2", "rd": "20", "rtol": "1.05"}: -3.53036e+01 dB margin=25.3036 PASS

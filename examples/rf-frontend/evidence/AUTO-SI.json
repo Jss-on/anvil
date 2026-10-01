@@ -5,13 +5,13 @@
   "status": "pass",
   "method": "simulation",
   "producer": "anvil",
-  "created_at": "2026-10-01T05:37:34.090480+00:00",
+  "created_at": "2026-10-01T05:52:30.386296+00:00",
   "profile_sha256": "5f687a26eddbbddf4435ca8b799676cfcece9c430b3f95ee3ee722b5c7386eab",
   "release_sha256": "da83c6a372b493b9cd0cbcfa19308026e312715640e92d632eab002551616416",
   "files": {
-    "design/si.tsv": "71d3c58bab7d9f390b0a6e54fc99ad7a7cb7c81005e1dff5e1811187af5acdcb",
     "pcb/rffe.kicad_pcb": "843978fcc5921768812d5b289a9ca0ad8369fcfb412da5fcac271e90a1a4208e",
-    "evidence/AUTO-SI.log": "1cfd47f3418ad3f1499011ab3422576824eec6200f19a99d8e962ff82cc5e5a2"
+    "design/si.tsv": "71d3c58bab7d9f390b0a6e54fc99ad7a7cb7c81005e1dff5e1811187af5acdcb",
+    "evidence/AUTO-SI.log": "81241ae84a622926f07b3351ae2e31ebb3a0ccf6f83e0a3cda139a33c68aa5b2"
   },
   "command": [
     "si",
@@ -22,5 +22,5 @@
   "passed": true,
   "tool_version": "python 3.13.7; kicad-cli 10.0.5; ngspice-47 : Circuit level simulation program",
   "transcript": "evidence/AUTO-SI.log",
-  "engine_sha256": "3979f5fb6c35da20e0c54ad007c018a52fd54d92b1ed268f92410866beba3358"
+  "engine_sha256": "34a9e285e29af587904b1ea21b40719b5a8388f8de406910aea856e84d6bd999"
 }

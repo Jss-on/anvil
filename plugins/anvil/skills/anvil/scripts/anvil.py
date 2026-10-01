@@ -846,6 +846,7 @@ def all_checks(root, cfg, allow_empty=False):
 
 
 def snapshot(root, cfg, enforce=True):
+    root = Path(root).resolve()  # artifact paths come back resolved (Windows 8.3 short names expand)
     mandatory = {"schematic", "pcb", "project", "rules", "gerbers", "drill"}
     if cfg["release_kind"] in {"assembly", "product"}:
         mandatory |= {"bom", "placement", "catalog", "assembly"}
@@ -887,6 +888,7 @@ def timestamp(value):
 
 
 def receipt_valid(root, cfg, check, path, release_hash):
+    root = Path(root).resolve()
     data = read_json(inside(root, path))
     require(isinstance(data, dict) and data.get("schema_version") == 1, "receipt schema_version must be 1")
     require(data.get("check_id") == check["id"], "receipt check ID mismatch")
@@ -1248,7 +1250,7 @@ def doctor(build=False, product_tools=False):
                          ("Freerouting + Java (autorouting)", lambda: " ".join(companion("anvil_board").freerouting()))):
         try:
             print(f"FOUND {label}: {probe()}")
-        except (ValueError, OSError) as error:
+        except (ValueError, OSError, ImportError) as error:  # the analysis modules need numpy
             print(f"OPTIONAL {label}: {error}")
     print("OPTIONAL authoring: SKiDL/kiutils, firmware SDK/HIL, slicer/CAM and fixture tools as selected by the project")
     print("DOCTOR: READY" if not missing else f"DOCTOR: BLOCKED {missing} missing")

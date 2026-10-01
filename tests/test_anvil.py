@@ -27,7 +27,7 @@ jev_spec.loader.exec_module(jev)
 class Regression(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="anvil-test-")
-        self.root = Path(self.temp.name)
+        self.root = Path(self.temp.name).resolve()  # Windows runners hand out 8.3 short temp paths
         anvil.READS.clear()
         anvil.DETAILS.clear()
 

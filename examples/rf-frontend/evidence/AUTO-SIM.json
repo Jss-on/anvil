@@ -5,13 +5,13 @@
   "status": "pass",
   "method": "simulation",
   "producer": "anvil",
-  "created_at": "2026-10-01T05:36:13.721656+00:00",
+  "created_at": "2026-10-01T05:51:04.714915+00:00",
   "profile_sha256": "5f687a26eddbbddf4435ca8b799676cfcece9c430b3f95ee3ee722b5c7386eab",
   "release_sha256": "da83c6a372b493b9cd0cbcfa19308026e312715640e92d632eab002551616416",
   "files": {
     "sim/bias_filter.cir": "e3883be476d6fdc1541fbca31169845aa2c0f012cc6b67d98cefe0090d83507b",
     "sim/assertions.tsv": "b39274fda1e305806e13df4d3802296cc76dcc99fb2d1660c9dfed58408c4a12",
-    "evidence/AUTO-SIM.log": "b7fddf3b7f1dc00da86499d6df068bb17ba07c726906d941e6b3fc03fa5d7649"
+    "evidence/AUTO-SIM.log": "ee48ea7d465e4b45c2a5f631a5a49f477b6c7a6dd9262523ae3d69b6d9804c33"
   },
   "command": [
     "sim",
@@ -21,5 +21,5 @@
   "passed": true,
   "tool_version": "******\n** ngspice-47 : Circuit level simulation program\n** Compiled with KLU Direct Linear Solver\n** The U. C. Berkeley CAD Group\n** Copyright 1985-1994, Regents of the University of California.\n** Copyright 2001-2026, The ngspice team.\n** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html\n** Please file your bug-reports at https://ngspice.sourceforge.io/bugrep.html\n** Creation Date: Aug 11 2026   13:55:25\n******",
   "transcript": "evidence/AUTO-SIM.log",
-  "engine_sha256": "3979f5fb6c35da20e0c54ad007c018a52fd54d92b1ed268f92410866beba3358"
+  "engine_sha256": "34a9e285e29af587904b1ea21b40719b5a8388f8de406910aea856e84d6bd999"
 }

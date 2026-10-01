@@ -1,6 +1,6 @@
 # Audit record: rf-frontend (hardware revision A)
 
-Generated 2026-10-01T05:37:45+00:00 by Anvil from the project's own evidence. Release kind `pcb`, target gate `G3`, sectors ['industrial'], markets ['US', 'EU'], features ['electronics'].
+Generated 2026-10-01T05:52:41+00:00 by Anvil from the project's own evidence. Release kind `pcb`, target gate `G3`, sectors ['industrial'], markets ['US', 'EU'], features ['electronics'].
 
 **Gate result: `G3_BLOCKED`** with 42 blocker(s).
 
@@ -119,16 +119,16 @@ Analysis: **CONTINUE** — 11 kept of 13 tried; consecutive non-improving: 0; me
 
 | check | status | producer | method | command | tool | created | files | receipt |
 |---|---|---|---|---|---|---|---|---|
-| AUTO-CONNECTIVITY | pass | anvil | inspection | connectivity pcb/rffe.kicad_sch sch/connectivity.tsv | 10.0.5 | 2026-10-01T05:36:14.688618+00:00 | 4 | evidence/AUTO-CONNECTIVITY.json |
-| AUTO-DRC | pass | anvil | inspection | drc pcb/rffe.kicad_pcb | 10.0.5 | 2026-10-01T05:36:12.040523+00:00 | 6 | evidence/AUTO-DRC.json |
-| AUTO-EMC | pass | anvil | analysis | emc pcb/rffe.kicad_pcb design | python 3.13.7; kicad-cli 10.0.5 | 2026-10-01T05:37:44.894011+00:00 | 3 | evidence/AUTO-EMC.json |
-| AUTO-ERC | pass | anvil | inspection | erc pcb/rffe.kicad_sch | 10.0.5 | 2026-10-01T05:36:09.915209+00:00 | 3 | evidence/AUTO-ERC.json |
-| AUTO-LAYOUT | pass | anvil | analysis | layout pcb/rffe.kicad_pcb design | python 3.13.7; kicad-cli 10.0.5 | 2026-10-01T05:36:45.496021+00:00 | 4 | evidence/AUTO-LAYOUT.json |
-| AUTO-PDN | pass | anvil | analysis | pdn pcb/rffe.kicad_pcb design | python 3.13.7; kicad-cli 10.0.5 | 2026-10-01T05:37:29.648165+00:00 | 3 | evidence/AUTO-PDN.json |
-| AUTO-RULES | pass | anvil | analysis | rules design | 3.13.7 | 2026-10-01T05:36:14.969774+00:00 | 2 | evidence/AUTO-RULES.json |
-| AUTO-SI | pass | anvil | simulation | si pcb/rffe.kicad_pcb design | python 3.13.7; kicad-cli 10.0.5; ngspice-47 : Circuit level simulation program | 2026-10-01T05:37:34.090480+00:00 | 3 | evidence/AUTO-SI.json |
-| AUTO-SIM | pass | anvil | simulation | sim sim | ngspice-47 : Circuit level simulation program | 2026-10-01T05:36:13.721656+00:00 | 3 | evidence/AUTO-SIM.json |
-| AUTO-THERMAL | pass | anvil | analysis | thermal pcb/rffe.kicad_pcb design | python 3.13.7; kicad-cli 10.0.5 | 2026-10-01T05:37:38.303300+00:00 | 3 | evidence/AUTO-THERMAL.json |
+| AUTO-CONNECTIVITY | pass | anvil | inspection | connectivity pcb/rffe.kicad_sch sch/connectivity.tsv | 10.0.5 | 2026-10-01T05:51:05.645539+00:00 | 4 | evidence/AUTO-CONNECTIVITY.json |
+| AUTO-DRC | pass | anvil | inspection | drc pcb/rffe.kicad_pcb | 10.0.5 | 2026-10-01T05:51:03.216836+00:00 | 6 | evidence/AUTO-DRC.json |
+| AUTO-EMC | pass | anvil | analysis | emc pcb/rffe.kicad_pcb design | python 3.13.7; kicad-cli 10.0.5 | 2026-10-01T05:52:41.040211+00:00 | 3 | evidence/AUTO-EMC.json |
+| AUTO-ERC | pass | anvil | inspection | erc pcb/rffe.kicad_sch | 10.0.5 | 2026-10-01T05:51:01.616009+00:00 | 3 | evidence/AUTO-ERC.json |
+| AUTO-LAYOUT | pass | anvil | analysis | layout pcb/rffe.kicad_pcb design | python 3.13.7; kicad-cli 10.0.5 | 2026-10-01T05:51:34.916537+00:00 | 4 | evidence/AUTO-LAYOUT.json |
+| AUTO-PDN | pass | anvil | analysis | pdn pcb/rffe.kicad_pcb design | python 3.13.7; kicad-cli 10.0.5 | 2026-10-01T05:52:25.944521+00:00 | 3 | evidence/AUTO-PDN.json |
+| AUTO-RULES | pass | anvil | analysis | rules design | 3.13.7 | 2026-10-01T05:51:05.943311+00:00 | 2 | evidence/AUTO-RULES.json |
+| AUTO-SI | pass | anvil | simulation | si pcb/rffe.kicad_pcb design | python 3.13.7; kicad-cli 10.0.5; ngspice-47 : Circuit level simulation program | 2026-10-01T05:52:30.386296+00:00 | 3 | evidence/AUTO-SI.json |
+| AUTO-SIM | pass | anvil | simulation | sim sim | ngspice-47 : Circuit level simulation program | 2026-10-01T05:51:04.714915+00:00 | 3 | evidence/AUTO-SIM.json |
+| AUTO-THERMAL | pass | anvil | analysis | thermal pcb/rffe.kicad_pcb design | python 3.13.7; kicad-cli 10.0.5 | 2026-10-01T05:52:34.221716+00:00 | 3 | evidence/AUTO-THERMAL.json |
 
 ### 5.1 Measured margins
 
@@ -237,7 +237,7 @@ Analysis: **CONTINUE** — 11 kept of 13 tried; consecutive non-improving: 0; me
 <details><summary>AUTO-CONNECTIVITY — evidence/AUTO-CONNECTIVITY.log</summary>
 
 ```text
-COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "sch", "export", "netlist", "--format", "kicadxml", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-net-fmsn0nh4\\netlist.xml", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_sch"]
+COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "sch", "export", "netlist", "--format", "kicadxml", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-net-783dz8ut\\netlist.xml", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_sch"]
 EXIT: 0
 
 NETLIST: 11 nets, 22 parts (fresh kicad-cli export)
@@ -253,12 +253,12 @@ CONNECTIVITY: 5/5
 <details><summary>AUTO-DRC — evidence/AUTO-DRC.log</summary>
 
 ```text
-COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "pcb", "drc", "--format", "json", "--severity-all", "--exit-code-violations", "--schematic-parity", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-aj5w5p8b\\report.json", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_pcb"]
+COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "pcb", "drc", "--format", "json", "--severity-all", "--exit-code-violations", "--schematic-parity", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-67v1nxqv\\report.json", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_pcb"]
 EXIT: 0
 Found 0 violations
 Found 0 unconnected items
 Found 0 schematic parity issues
-Saved DRC Report to C:/dev/anvil/examples/rf-frontend/pcb/anvil-aj5w5p8b/report.json
+Saved DRC Report to C:/dev/anvil/examples/rf-frontend/pcb/anvil-67v1nxqv/report.json
 
 DRC_VIOLATIONS: 0
 ```
@@ -278,10 +278,10 @@ EMC_ESTIMATE: 2/2
 <details><summary>AUTO-ERC — evidence/AUTO-ERC.log</summary>
 
 ```text
-COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "sch", "erc", "--format", "json", "--severity-all", "--exit-code-violations", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-edunhtk0\\report.json", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_sch"]
+COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "sch", "erc", "--format", "json", "--severity-all", "--exit-code-violations", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-urhbxnzi\\report.json", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_sch"]
 EXIT: 0
 Found 0 violations
-Saved ERC Report to C:/dev/anvil/examples/rf-frontend/pcb/anvil-edunhtk0/report.json
+Saved ERC Report to C:/dev/anvil/examples/rf-frontend/pcb/anvil-urhbxnzi/report.json
 
 ERC_VIOLATIONS: 0
 ```
@@ -455,7 +455,7 @@ RULES: 11/11
 <details><summary>AUTO-SI — evidence/AUTO-SI.log</summary>
 
 ```text
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-r", "C:\\Users\\tenso\\AppData\\Local\\Temp\\anvil-si-gegy38w8\\out.raw", "C:\\dev\\anvil\\examples\\rf-frontend\\analysis\\si\\si-CLK_OUT.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-r", "C:\\Users\\tenso\\AppData\\Local\\Temp\\anvil-si-2wy8iib6\\out.raw", "C:\\dev\\anvil\\examples\\rf-frontend\\analysis\\si\\si-CLK_OUT.cir"]
 EXIT: 0
 
 Note: No compatibility mode selected!
@@ -463,7 +463,7 @@ Note: No compatibility mode selected!
 
 Circuit: * anvil si /clk_out
 
-ASCII raw file "C:\Users\tenso\AppData\Local\Temp\anvil-si-gegy38w8\out.raw"
+ASCII raw file "C:\Users\tenso\AppData\Local\Temp\anvil-si-2wy8iib6\out.raw"
 Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
 
 Using SPARSE 1.3 as Direct Linear Solver
@@ -485,14 +485,14 @@ vsrc#branch                                  0
 
 No. of Data Rows : 3242
 
-Total analysis time (seconds) = 0.0353899
+Total analysis time (seconds) = 0.0482643
 
-Total elapsed time (seconds) = 0.054 
+Total elapsed time (seconds) = 0.059 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 9034.645 MB.
-Maximum ngspice program size =   10.023 MB.
-Current ngspice program size =   10.023 MB.
+DRAM currently available = 8546.879 MB.
+Maximum ngspice program size =   10.027 MB.
+Current ngspice program size =   10.027 MB.
 
 
 /CLK_OUT: 2 segments, total flight 80 ps; lines F.Cu w0.32: 49.7 ohm 5.94 ps/mm
@@ -511,7 +511,7 @@ SI: 4/4
 <details><summary>AUTO-SIM — evidence/AUTO-SIM.log</summary>
 
 ```text
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-h1kvhfaa\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-h1kvhfaa\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-ajnxg19b\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-ajnxg19b\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -526,7 +526,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-h1kvhfaa\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-ajnxg19b\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -548,18 +548,18 @@ att100k             =  -2.37103e+01
 att1meg             =  -3.15300e+01
 
 
-Total analysis time (seconds) = 0.0023981
+Total analysis time (seconds) = 0.0007822
 
-Total elapsed time (seconds) = 0.256 
+Total elapsed time (seconds) = 0.008 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8908.016 MB.
-Maximum ngspice program size =   10.098 MB.
-Current ngspice program size =   10.098 MB.
+DRAM currently available = 8531.152 MB.
+Maximum ngspice program size =   10.094 MB.
+Current ngspice program size =   10.094 MB.
 
 
 S-1 {"ctol": "0.8", "rd": "5", "rtol": "0.95"}: -2.37103e+01 dB margin=20.7103 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-0gxt_k54\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-0gxt_k54\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-yq2tii1w\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-yq2tii1w\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -574,7 +574,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-0gxt_k54\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-yq2tii1w\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -596,18 +596,18 @@ att100k             =  -1.50983e+01
 att1meg             =  -3.09513e+01
 
 
-Total analysis time (seconds) = 0.0013323
+Total analysis time (seconds) = 0.0008266
 
-Total elapsed time (seconds) = 0.014 
+Total elapsed time (seconds) = 0.011 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8915.855 MB.
-Maximum ngspice program size =   10.098 MB.
-Current ngspice program size =   10.098 MB.
+DRAM currently available = 8534.641 MB.
+Maximum ngspice program size =   10.102 MB.
+Current ngspice program size =   10.102 MB.
 
 
 S-1 {"ctol": "0.8", "rd": "20", "rtol": "0.95"}: -1.50983e+01 dB margin=12.0983 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-z8prohjo\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-z8prohjo\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-p4ty814q\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-p4ty814q\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -622,7 +622,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-z8prohjo\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-p4ty814q\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -644,18 +644,18 @@ att100k             =  -2.39824e+01
 att1meg             =  -3.46860e+01
 
 
-Total analysis time (seconds) = 0.0012974
+Total analysis time (seconds) = 0.0008209
 
-Total elapsed time (seconds) = 0.013 
+Total elapsed time (seconds) = 0.011 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8918.289 MB.
-Maximum ngspice program size =   10.102 MB.
-Current ngspice program size =   10.102 MB.
+DRAM currently available = 8530.121 MB.
+Maximum ngspice program size =   10.094 MB.
+Current ngspice program size =   10.094 MB.
 
 
 S-1 {"ctol": "1.2", "rd": "5", "rtol": "0.95"}: -2.39824e+01 dB margin=20.9824 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-i9h61jc9\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-i9h61jc9\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-p2d0r9b4\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-p2d0r9b4\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -670,7 +670,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-i9h61jc9\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-p2d0r9b4\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -692,18 +692,18 @@ att100k             =  -1.67822e+01
 att1meg             =  -3.44356e+01
 
 
-Total analysis time (seconds) = 0.0008035
+Total analysis time (seconds) = 0.0008067
 
-Total elapsed time (seconds) = 0.014 
+Total elapsed time (seconds) = 0.012 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8912.023 MB.
-Maximum ngspice program size =   10.098 MB.
-Current ngspice program size =   10.098 MB.
+DRAM currently available = 8532.680 MB.
+Maximum ngspice program size =   10.141 MB.
+Current ngspice program size =   10.141 MB.
 
 
 S-1 {"ctol": "1.2", "rd": "20", "rtol": "0.95"}: -1.67822e+01 dB margin=13.7822 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-jah8act2\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-jah8act2\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-es5okjp2\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-es5okjp2\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -718,7 +718,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-jah8act2\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-es5okjp2\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -740,18 +740,18 @@ att100k             =  -2.45269e+01
 att1meg             =  -3.23907e+01
 
 
-Total analysis time (seconds) = 0.0009778
+Total analysis time (seconds) = 0.0008221
 
-Total elapsed time (seconds) = 0.015 
+Total elapsed time (seconds) = 0.012 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8909.094 MB.
-Maximum ngspice program size =   10.105 MB.
-Current ngspice program size =   10.105 MB.
+DRAM currently available = 8534.738 MB.
+Maximum ngspice program size =   10.082 MB.
+Current ngspice program size =   10.082 MB.
 
 
 S-1 {"ctol": "0.8", "rd": "5", "rtol": "1.05"}: -2.45269e+01 dB margin=21.5269 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-w3qf2vnc\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-w3qf2vnc\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-qjt_k_lt\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-qjt_k_lt\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -766,7 +766,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-w3qf2vnc\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-qjt_k_lt\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -788,18 +788,18 @@ att100k             =  -1.58527e+01
 att1meg             =  -3.18177e+01
 
 
-Total analysis time (seconds) = 0.000873
+Total analysis time (seconds) = 0.0007898
 
-Total elapsed time (seconds) = 0.013 
+Total elapsed time (seconds) = 0.007 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8913.191 MB.
-Maximum ngspice program size =   10.086 MB.
-Current ngspice program size =   10.086 MB.
+DRAM currently available = 8530.586 MB.
+Maximum ngspice program size =   10.090 MB.
+Current ngspice program size =   10.090 MB.
 
 
 S-1 {"ctol": "0.8", "rd": "20", "rtol": "1.05"}: -1.58527e+01 dB margin=12.8527 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-drm66kys\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-drm66kys\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-3hs9q00k\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-3hs9q00k\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -814,7 +814,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-drm66kys\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-3hs9q00k\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -836,18 +836,18 @@ att100k             =  -2.48022e+01
 att1meg             =  -3.55511e+01
 
 
-Total analysis time (seconds) = 0.0010902
+Total analysis time (seconds) = 0.0009977
 
-Total elapsed time (seconds) = 0.012 
+Total elapsed time (seconds) = 0.015 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8907.406 MB.
-Maximum ngspice program size =   10.098 MB.
-Current ngspice program size =   10.098 MB.
+DRAM currently available = 8530.016 MB.
+Maximum ngspice program size =   10.117 MB.
+Current ngspice program size =   10.117 MB.
 
 
 S-1 {"ctol": "1.2", "rd": "5", "rtol": "1.05"}: -2.48022e+01 dB margin=21.8022 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-c0l7i3_r\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-c0l7i3_r\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-4lyav3w0\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-4lyav3w0\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -862,7 +862,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-c0l7i3_r\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-4lyav3w0\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -884,18 +884,18 @@ att100k             =  -1.75738e+01
 att1meg             =  -3.53036e+01
 
 
-Total analysis time (seconds) = 0.0011683
+Total analysis time (seconds) = 0.0010426
 
-Total elapsed time (seconds) = 0.013 
+Total elapsed time (seconds) = 0.012 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8905.371 MB.
-Maximum ngspice program size =   10.105 MB.
-Current ngspice program size =   10.105 MB.
+DRAM currently available = 8532.250 MB.
+Maximum ngspice program size =   10.090 MB.
+Current ngspice program size =   10.090 MB.
 
 
 S-1 {"ctol": "1.2", "rd": "20", "rtol": "1.05"}: -1.75738e+01 dB margin=14.5738 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-f5pgatdv\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-f5pgatdv\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-j13e0zqc\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-j13e0zqc\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -910,7 +910,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-f5pgatdv\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-j13e0zqc\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -932,18 +932,18 @@ att100k             =  -2.37103e+01
 att1meg             =  -3.15300e+01
 
 
-Total analysis time (seconds) = 0.0007998
+Total analysis time (seconds) = 0.0007953
 
-Total elapsed time (seconds) = 0.008 
+Total elapsed time (seconds) = 0.006 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8881.797 MB.
-Maximum ngspice program size =   10.094 MB.
-Current ngspice program size =   10.094 MB.
+DRAM currently available = 8532.883 MB.
+Maximum ngspice program size =   10.086 MB.
+Current ngspice program size =   10.086 MB.
 
 
 S-2 {"ctol": "0.8", "rd": "5", "rtol": "0.95"}: -3.15300e+01 dB margin=21.5300 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-64a6c96b\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-64a6c96b\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-44afbkyp\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-44afbkyp\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -958,7 +958,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-64a6c96b\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-44afbkyp\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -980,18 +980,18 @@ att100k             =  -1.50983e+01
 att1meg             =  -3.09513e+01
 
 
-Total analysis time (seconds) = 0.0007507
+Total analysis time (seconds) = 0.0007619
 
 Total elapsed time (seconds) = 0.007 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8894.109 MB.
-Maximum ngspice program size =   10.102 MB.
-Current ngspice program size =   10.102 MB.
+DRAM currently available = 8516.023 MB.
+Maximum ngspice program size =   10.098 MB.
+Current ngspice program size =   10.098 MB.
 
 
 S-2 {"ctol": "0.8", "rd": "20", "rtol": "0.95"}: -3.09513e+01 dB margin=20.9513 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-qk3d_q2q\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-qk3d_q2q\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-7o_1673b\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-7o_1673b\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -1006,7 +1006,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-qk3d_q2q\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-7o_1673b\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -1028,18 +1028,18 @@ att100k             =  -2.39824e+01
 att1meg             =  -3.46860e+01
 
 
-Total analysis time (seconds) = 0.0007908
+Total analysis time (seconds) = 0.0010777
 
 Total elapsed time (seconds) = 0.008 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8902.254 MB.
-Maximum ngspice program size =   10.094 MB.
-Current ngspice program size =   10.094 MB.
+DRAM currently available = 8517.902 MB.
+Maximum ngspice program size =   10.090 MB.
+Current ngspice program size =   10.090 MB.
 
 
 S-2 {"ctol": "1.2", "rd": "5", "rtol": "0.95"}: -3.46860e+01 dB margin=24.6860 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-0mhmv2ke\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-0mhmv2ke\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-jbvk62v9\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-jbvk62v9\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -1054,7 +1054,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-0mhmv2ke\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-jbvk62v9\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -1076,18 +1076,18 @@ att100k             =  -1.67822e+01
 att1meg             =  -3.44356e+01
 
 
-Total analysis time (seconds) = 0.0007991
+Total analysis time (seconds) = 0.0008038
 
-Total elapsed time (seconds) = 0.008 
+Total elapsed time (seconds) = 0.007 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8904.727 MB.
-Maximum ngspice program size =   10.105 MB.
-Current ngspice program size =   10.105 MB.
+DRAM currently available = 8534.219 MB.
+Maximum ngspice program size =   10.094 MB.
+Current ngspice program size =   10.094 MB.
 
 
 S-2 {"ctol": "1.2", "rd": "20", "rtol": "0.95"}: -3.44356e+01 dB margin=24.4356 PASS
-COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-7_u417d5\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-7_u417d5\\corner.cir"]
+COMMAND: ["C:\\Users\\tenso\\scoop\\shims\\ngspice.EXE", "-n", "-b", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-efqz0qvk\\run.log", "C:\\dev\\anvil\\examples\\rf-frontend\\sim\\.anvil-sim-efqz0qvk\\corner.cir"]
 EXIT: 0
 ******
 ** ngspice-47 : Circuit level simulation program
@@ -1102,7 +1102,7 @@ EXIT: 0
 
 Batch mode
 
-Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-7_u417d5\run.log
+Comments and warnings go to log-file: C:\dev\anvil\examples\rf-frontend\sim\.anvil-sim-efqz0qvk\run.log
 
 
 Warning: can't parse 'vd': ignored
@@ -1124,13 +1124,13 @@ att100k             =  -2.45269e+01
 att1meg             =  -3.23907e+01
 
 
-Total analysis time (seconds) = 0.0010507
+Total analysis time (seconds) = 0.0012396
 
-Total elapsed time (seconds) = 0.007 
+Total elapsed time (seconds) = 0.008 
 
 Total DRAM available = 23981.586 MB.
-DRAM currently available = 8906.828 MB.
-Maximum ngspice pro
+DRAM currently available = 8529.902 MB.
+Maximum ngspice pr
 ```
 </details>
 

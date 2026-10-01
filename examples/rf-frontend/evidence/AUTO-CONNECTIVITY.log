@@ -1,4 +1,4 @@
-COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "sch", "export", "netlist", "--format", "kicadxml", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-net-fmsn0nh4\\netlist.xml", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_sch"]
+COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "sch", "export", "netlist", "--format", "kicadxml", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-net-783dz8ut\\netlist.xml", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_sch"]
 EXIT: 0
 
 NETLIST: 11 nets, 22 parts (fresh kicad-cli export)

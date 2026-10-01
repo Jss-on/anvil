@@ -1,6 +1,6 @@
-COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "sch", "erc", "--format", "json", "--severity-all", "--exit-code-violations", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-edunhtk0\\report.json", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_sch"]
+COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "sch", "erc", "--format", "json", "--severity-all", "--exit-code-violations", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-urhbxnzi\\report.json", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_sch"]
 EXIT: 0
 Found 0 violations
-Saved ERC Report to C:/dev/anvil/examples/rf-frontend/pcb/anvil-edunhtk0/report.json
+Saved ERC Report to C:/dev/anvil/examples/rf-frontend/pcb/anvil-urhbxnzi/report.json
 
 ERC_VIOLATIONS: 0

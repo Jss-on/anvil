@@ -53,7 +53,7 @@ Values:
 class Tools(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="anvil-tools-")
-        self.root = Path(self.temp.name)
+        self.root = Path(self.temp.name).resolve()  # Windows runners hand out 8.3 short temp paths
         anvil.READS.clear()
         anvil.DETAILS.clear()
 
