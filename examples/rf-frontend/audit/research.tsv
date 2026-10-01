@@ -1,0 +1,12 @@
+id	timestamp	kind	source	locator	claim	used_for	rules
+SRC-1	2026-09-30T08:13:13+00:00	book	bowick2008	rulebook BOWICK	RF chain topology: DC blocks, bias tee, choke reactance	architecture	BOWICK-023
+SRC-2	2026-09-30T08:13:13+00:00	book	horowitz2015	AOE-3330	choke reactance above line impedance at all operating frequencies; DC block sized for the lowest frequency	L1/C1/C2 sizing	AOE-3330
+SRC-3	2026-09-30T08:13:13+00:00	book	wilson2011	WILSON-394	derate resistor power by at least 2x	bias resistor rating	WILSON-394
+SRC-4	2026-09-30T08:13:14+00:00	book	archambeault2002	ARCH-065, ARCH-067	fence vias <= lambda/10; MLCC ESL/ESR by dielectric and package	via fence, PDN	ARCH-065;ARCH-067
+SRC-5	2026-09-30T08:13:14+00:00	book	williams2016	WILLIAMS-2038	ground conductors shorter than lambda/20 stay below resonance	pour stitching	WILLIAMS-2038
+SRC-6	2026-09-30T08:13:14+00:00	book	bogatin2018	BOGATIN-2110, 2132, 2135, 2147	target impedance; via-pair, spreading and plane-capacitance models	+3V3 PDN	BOGATIN-2110;BOGATIN-2132;BOGATIN-2135;BOGATIN-2147
+SRC-7	2026-09-30T08:13:14+00:00	book	brooks2021	BROOKS-017, 046, 052	IPC-2152 fits, laminate conductivity, still-air HTC	trace heating, thermal model	BROOKS-017;BROOKS-046;BROOKS-052
+SRC-8	2026-09-30T08:13:14+00:00	book	paul2022	PAUL-1024, 1044, 2011	CISPR 32 Class B limits; trapezoid spectrum; loop radiation	clock emission estimate	PAUL-1024;PAUL-1044;PAUL-2011
+SRC-9	2026-09-30T08:13:14+00:00	datasheet	Mini-Circuits GALI-84+	typical Vd/Id (to confirm)	Vd 4.4 V at Id 100 mA; DC-6 GHz	bias design	
+SRC-10	2026-09-30T08:13:15+00:00	book	johnson2003	JOHNSON03-1307, 1278	an oversized connector pad over a close plane adds parasitic C; cut the plane back under the signal pad and verify in a 3-D solver or by TDR	SMA launch cut-out	JOHNSON03-1307;JOHNSON03-1278
+SRC-11	2026-09-30T08:13:15+00:00	book	bogatin2018	BOGATIN-167, 2128, 222	a real MLCC is a series R-L-C; above its self-resonance it is an inductor set by its ESL	DC-block and bypass values; EM capacitor model	BOGATIN-167;BOGATIN-2128;BOGATIN-222

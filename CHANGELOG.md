@@ -1,5 +1,68 @@
 # Changelog
 
+## 0.7.0 — 2026-09-30
+
+- Board truth: every board analysis reads the board through KiCad's Python (`anvil_pcb.py`: geometry,
+  refilled zones, Board Setup stackup) and reports margin rows; releasing an intent table makes its check
+  mandatory (AUTO-LAYOUT/SI/PDN/THERMAL/EM/EMC at G3, AUTO-SPARAMS at G4).
+- `anvil_fields.py`: 2-D finite-volume field solver (Richardson-extrapolated; stripline/microstrip/CPWG/
+  pairs, asymmetric coplanar gaps) and a layered board thermal solver.
+- `layout` (IPC-2152, IPC-2221, Z0/Zdiff, return path, match, RF fence/stitching/keep-out), `si` (routed
+  topology → ngspice), `pdn` (copper-derived capacitor mounting, cavity, VRM), `thermal` (layered copper,
+  via barrels, Tj), `em` (openEMS FDTD from board copper: thirds-rule mesh, lumped ports and parts,
+  Touchstone out), `sparams` (limits on VNA Touchstone files), `emc` (loop × trapezoid harmonics vs
+  FCC/CISPR lines).
+- `board` (schematic → footprints/nets on a template, symbol-linked for DRC parity), `place`, `route`
+  (Freerouting on a copy + DRC); `doctor` reports numpy, KiCad Python, openEMS, Java/Freerouting.
+- Rulebook completed (11,951 rules in 41 files): Balanis, Pozar, Paul, Williams, Pressman, Erickson, Johnson & Graham
+  1993/2003, Ritchey, Wilson, Mitzner, Coombs, Horowitz & Hill and Scherz & Monk now mined in full.
+- `tests/test_anvil_analysis.py`: analytic anchors for every solver and pass/fail on synthetic KiCad boards
+  (CI installs numpy; KiCad/ngspice/openEMS cases skip when absent, openEMS is opt-in).
+- `em` convergence and fidelity:
+  - Capacitors are series ESR-ESL-C (ARCH-067 or `caps.tsv`). An ideal lumped C spread over mesh edges rang
+    losslessly, so the energy never decayed.
+  - Inductors are series L plus the ESR of their Q (default 50 at the band centre, column `l_q`). openEMS 0.37's
+    lossless series inductor grows without bound, and its parallel R-L element diverges to NaN.
+  - The model region follows the signal path and the listed parts, and a support net (a bias feed) is cut at its
+    edge.
+  - A run whose energy turns NaN or whose port signals are not finite is rejected as diverged; openEMS
+    otherwise reports it as having met the end criterion.
+  - Only the analysed and reference nets are modelled.
+  - The pulse covers only the analysed band.
+  - The default end is −50 dB, and a `<name>:settled` row fails when dropping the last 10 % of the run still moves
+    a checked S by more than 0.01.
+  - Ports sit where the pin or lead enters the pad. Over a launch cut-out they drive the coplanar gaps
+    (validated against the 2-D solver on a CPW), because a tall vertical port adds inductance.
+  - The fine mesh follows the signal path, not a narrow bias feed.
+- Receipts bind the whole checker (`anvil.py` and every `anvil_*.py` module): a changed analysis
+  invalidates the receipts it produced.
+- `report`: the IEEE paper includes every verification figure, keeps each check's tightest margin, wraps long
+  columns in full-width tables and compiles cleanly (symbols such as <=, |, Ω and λ escaped; BibTeX author lists).
+  `log research` now writes `audit/research.tsv`, the ledger the report reads (it wrote `researchs.tsv`);
+  decisions and research rows get D-n / SRC-n IDs.
+- `layout` return path ignores trace length inside the net's own pads (a launch cut-out under a pad is deliberate);
+  `rules` `capacitor_reactance` takes the body ESL (above self-resonance a capacitor is an inductor).
+- `examples/rf-frontend`: a 4-layer 2.4 GHz gain block + 25 MHz clock taken from requirements to recorded
+  G3 evidence for ten automatic checks (ERC, DRC, simulation, connectivity, rules, layout, PDN, SI, thermal,
+  EMC). `rf_in` passes in openEMS (S11 −17.1 dB, S21 −0.21 dB); AUTO-EM is not yet recorded.
+- Known issue: the `rf_out` bias-tee model diverges in openEMS 0.37 with any series-type lumped part (choke or
+  capacitors) on that board, even though the same elements are stable in isolation. The cause is under
+  investigation; diverged runs are rejected, not reported.
+
+## 0.6.0 — 2026-09-29
+
+- Rulebook: ~6,900 cited rules from the reference library in `references/rulebook/` (INDEX marks partial
+  books) plus `bibliography.json` (IEEE strings, rule-id prefixes). Extraction brief kept in `research/`.
+- `anvil_rules.py` cited calculations and the `rules` gate check / `calc` CLI. Fixed against the sources:
+  Onderdonk fusing time (33.5, divides; Brooks §12) and IPC-2221 Table 6-1 A5 column (Mitzner Table 6.8).
+- `anvil_schematic.py`: wired `.kicad_sch` from a golden `sch/circuit.json` (maze-routed orthogonal wires,
+  power symbols, labels, NC flags), proven by KiCad reload + netlist equality + ERC; `schematic-spec`
+  converts existing label-only drawings. `connectivity` gains a `golden` assertion.
+- `anvil_netlist.py` (fresh-netlist wiring assertions, `wiring` tables), `anvil_plots.py` (ngspice rawfile
+  corner plots, margin charts), `renders`, `fabpack`, `log`, `report` (audit + IEEE paper skeleton).
+- New optional project tables `sch/connectivity.tsv`, `design/rules.tsv`, `sim/plots.tsv`; AUTO-CONNECTIVITY
+  and AUTO-RULES join the plan when their artifact roles are declared.
+
 Native Codex packaging is included in 0.5.0: an installable `$anvil` skill, local marketplace,
 shared workflow routing, bundled tools/templates, and parity checks for both host packages.
 

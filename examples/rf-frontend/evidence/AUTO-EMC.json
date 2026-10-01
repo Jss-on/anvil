@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "check_id": "AUTO-EMC",
+  "check_sha256": "4d3ec2b39b5e7aaa61df5302fc0e02dfd10b3451f46b6626c14e94fdfecccf4b",
+  "status": "pass",
+  "method": "analysis",
+  "producer": "anvil",
+  "created_at": "2026-10-01T05:37:44.894011+00:00",
+  "profile_sha256": "5f687a26eddbbddf4435ca8b799676cfcece9c430b3f95ee3ee722b5c7386eab",
+  "release_sha256": "da83c6a372b493b9cd0cbcfa19308026e312715640e92d632eab002551616416",
+  "files": {
+    "pcb/rffe.kicad_pcb": "843978fcc5921768812d5b289a9ca0ad8369fcfb412da5fcac271e90a1a4208e",
+    "design/emc.tsv": "a6f9467968c890070b949503ca828142b99f9d2c903967576f056d15640c99ea",
+    "evidence/AUTO-EMC.log": "4b2b073da32c20b2b4f6124ac30717d806cfe9f83f60519ad2b8859fe6b02aa2"
+  },
+  "command": [
+    "emc",
+    "pcb/rffe.kicad_pcb",
+    "design"
+  ],
+  "exit_code": 0,
+  "passed": true,
+  "tool_version": "python 3.13.7; kicad-cli 10.0.5",
+  "transcript": "evidence/AUTO-EMC.log",
+  "engine_sha256": "3979f5fb6c35da20e0c54ad007c018a52fd54d92b1ed268f92410866beba3358"
+}

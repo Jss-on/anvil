@@ -1,0 +1,8 @@
+# rffe thermal (`anvil.py thermal ...`) at 40 C still air; limits keep 20 C below each part's maximum (HR-007).
+# theta_jb values are datasheet/package typicals to confirm (GALI-84 SOT-89, 2512 thick film, AMS1117 SOT-223 tab).
+ref	power_w	theta_jb_c_per_w	max_tj_c	ambient_c	traces
+U2	0.44	90	130	40	HR-007
+R1	0.352	30	135	40	HR-007
+R3	0.352	30	135	40	HR-007
+R5	0.352	30	135	40	HR-007
+U1	0.142	15	105	40	HR-007

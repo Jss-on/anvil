@@ -1,0 +1,7 @@
+# RF layout rules for `layout` (declared as rf_intent): fence <= lambda_eff/10 (ARCH-065), pour stitching <= lambda_eff/20
+# (WILLIAMS-2038) at 5 GHz (2nd harmonic of the 2.5 GHz band edge), no vias in the RF path, no bends.
+net	f_max_hz	source	max_vias	fence_pitch_mm	fence_band_mm	match_max_mm	keepout_refs	traces
+RF_IN	5e9	-	0	-	1.5	-	-	HR-002
+RF_A	5e9	-	0	-	1.5	-	-	HR-002
+RF_B	5e9	-	0	-	1.5	-	-	HR-002
+RF_OUT	5e9	-	0	-	1.5	-	-	HR-002

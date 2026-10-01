@@ -15,7 +15,9 @@ jobs:
         with:
           python-version: '3.10'
       - name: Regression and installed-payload checks
-        run: python -B tests/test_anvil.py
+        run: python -B tests/test_anvil.py && python -B tests/test_anvil_tools.py
+      - name: Solver anchors (board cases skip without KiCad/ngspice)
+        run: python -m pip install numpy && python -B tests/test_anvil_analysis.py
       - name: Claude Code and Codex plugin byte parity
         shell: bash
         run: bash scripts/sync-plugin.sh --check

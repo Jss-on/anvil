@@ -1,0 +1,4 @@
+# Board thermal for `thermal <pcb> design` (thermal_intent): layered copper model, Tj = T_board(pads) + P x theta_jb.
+# Defaults k_xy 0.5, k_z 0.3 W/m.K, h 10 W/m^2.K per face (BROOKS-017/052); optional columns k_xy, k_z, h_w_m2k, cell_mm (same in every row).
+# example: U2	1.2	8.5	110	40	HR-050
+ref	power_w	theta_jb_c_per_w	max_tj_c	ambient_c	traces

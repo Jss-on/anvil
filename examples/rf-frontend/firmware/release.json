@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_revision": "",
+  "toolchain": "",
+  "build_command": [],
+  "dependency_lock": "",
+  "binary": "",
+  "binary_sha256": "",
+  "supported_hardware": [],
+  "bootloader_versions": [],
+  "sbom": "",
+  "known_issues": "",
+  "support_until": "",
+  "recovery_test": "",
+  "signing_key_id": "",
+  "production_debug_policy": "",
+  "calibration_schema": "",
+  "build_record": ""
+}

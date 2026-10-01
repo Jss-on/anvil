@@ -33,7 +33,7 @@ done
 while IFS= read -r f; do
   add "$f" "${f#.claude/}"
 done < <(find .claude/skills/anvil -type f | sort)
-for s in anvil.py score-anvil.sh doctor.sh doctor.cmd validate-handoff.sh; do
+for s in anvil.py anvil_board.py anvil_em.py anvil_emc.py anvil_fields.py anvil_layout.py anvil_netlist.py anvil_pcb.py anvil_pdn.py anvil_plots.py anvil_report.py anvil_rules.py anvil_schematic.py anvil_si.py anvil_thermal.py jev_triage.py score-anvil.sh doctor.sh doctor.cmd validate-handoff.sh; do
   add "scripts/$s" "skills/anvil/scripts/$s"
 done
 while IFS= read -r f; do

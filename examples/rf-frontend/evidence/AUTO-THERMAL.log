@@ -1,0 +1,13 @@
+thermal: 4 layers, 7200 cells of 0.5 mm, k_xy 0.5, k_z 0.3, h 10.0 W/m^2K per face; energy balance 1.638 W out / 1.638 W in
+U2:tj: 129.031 C margin=0.968688 PASS
+  board under pads 89.4 C + 0.44 W x theta_jb 90 C/W (layered board model)
+R1:tj: 102.845 C margin=32.154617 PASS
+  board under pads 92.3 C + 0.352 W x theta_jb 30 C/W (layered board model)
+R3:tj: 103.233 C margin=31.76703 PASS
+  board under pads 92.7 C + 0.352 W x theta_jb 30 C/W (layered board model)
+R5:tj: 103.812 C margin=31.188143 PASS
+  board under pads 93.3 C + 0.352 W x theta_jb 30 C/W (layered board model)
+U1:tj: 88.8845 C margin=16.1154577 PASS
+  board under pads 86.8 C + 0.142 W x theta_jb 15 C/W (layered board model)
+thermal: hottest board point 93.3 C at ambient 40 C
+THERMAL: 5/5

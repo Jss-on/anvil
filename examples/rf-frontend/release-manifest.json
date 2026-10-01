@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "name": "rf-frontend",
+    "hardware_revision": "A",
+    "release_kind": "pcb",
+    "sectors": [
+      "industrial"
+    ],
+    "markets": [
+      "US",
+      "EU"
+    ],
+    "features": [
+      "electronics"
+    ],
+    "requirements": "hrs/requirements.tsv"
+  },
+  "artifacts": {
+    "schematic": [
+      "pcb/rffe.kicad_sch"
+    ],
+    "pcb": [
+      "pcb/rffe.kicad_pcb"
+    ],
+    "project": [
+      "pcb/rffe.kicad_pro"
+    ],
+    "rules": [
+      "pcb/rffe.kicad_dru"
+    ],
+    "libraries": [
+      "pcb/rffe_symbols.kicad_sym",
+      "pcb/sym-lib-table",
+      "pcb/fp-lib-table"
+    ],
+    "gerbers": [
+      "fab/gerbers/rffe-B_Cu.gbr",
+      "fab/gerbers/rffe-B_Mask.gbr",
+      "fab/gerbers/rffe-B_Paste.gbr",
+      "fab/gerbers/rffe-B_Silkscreen.gbr",
+      "fab/gerbers/rffe-Edge_Cuts.gbr",
+      "fab/gerbers/rffe-F_Cu.gbr",
+      "fab/gerbers/rffe-F_Mask.gbr",
+      "fab/gerbers/rffe-F_Paste.gbr",
+      "fab/gerbers/rffe-F_Silkscreen.gbr",
+      "fab/gerbers/rffe-In1_Cu.gbr",
+      "fab/gerbers/rffe-In2_Cu.gbr"
+    ],
+    "drill": [
+      "fab/gerbers/rffe-PTH.drl",
+      "fab/gerbers/rffe-NPTH.drl"
+    ],
+    "circuit_spec": [
+      "sch/circuit.json"
+    ],
+    "connectivity": [
+      "sch/connectivity.tsv"
+    ],
+    "simulation": [
+      "sim/bias_filter.cir",
+      "sim/assertions.tsv"
+    ],
+    "design_rules": [
+      "design/rules.tsv"
+    ],
+    "layout_intent": [
+      "design/nets.tsv"
+    ],
+    "rf_intent": [
+      "design/rf.tsv"
+    ],
+    "pdn_intent": [
+      "design/pdn.tsv"
+    ],
+    "si_intent": [
+      "design/si.tsv"
+    ],
+    "thermal_intent": [
+      "design/thermal.tsv"
+    ],
+    "em_intent": [
+      "design/em.tsv"
+    ],
+    "emc_intent": [
+      "design/emc.tsv"
+    ]
+  },
+  "files": {
+    "hrs/requirements.tsv": "20c6834b36bb71a14998d94f3d714e93d66b5581ef45847c7aeec6d95c1dd86e",
+    "pcb/rffe.kicad_sch": "7d188bd1c5912604333dd79205ed52739dbefd0768c6a414441a6ee9758d6c88",
+    "pcb/rffe.kicad_pcb": "843978fcc5921768812d5b289a9ca0ad8369fcfb412da5fcac271e90a1a4208e",
+    "pcb/rffe.kicad_pro": "9ed21772ab1f5ed55913d145280e0f9fe03c9350a470b136f453716b9f47403c",
+    "pcb/rffe.kicad_dru": "b7f277f0ab7efc817eac4037e605f4d671cf2cfa2af53a9d750d736f3bcbac75",
+    "pcb/rffe_symbols.kicad_sym": "20c356cb648a187cc7f9194b7cf7143ef8526602f2ce1ab68650abc45c958368",
+    "pcb/sym-lib-table": "271bafd7313a550c40636e26e1e77cc4063b0c06f9d7f8d372b10e9e0b7588f1",
+    "pcb/fp-lib-table": "68b32e6f4628de6f3bd7d026f0c5c613e154ab2e3baa92a13ad7cad3b5a26cc8",
+    "fab/gerbers/rffe-B_Cu.gbr": "91f080d3a8048099c474ea3db1f8ff8faa253ee056b9b177731914fb5d084284",
+    "fab/gerbers/rffe-B_Mask.gbr": "487d9277eb7dfc19a191fee40e018251e27b377e31bfe72b0b9b0a76f541781c",
+    "fab/gerbers/rffe-B_Paste.gbr": "db520ec26ccf3be9d7c1363c7f47aeeef3a337c467cf4a6aa025c05ebb2dc38f",
+    "fab/gerbers/rffe-B_Silkscreen.gbr": "141f627102804ee24f7ca4cf78bc3dfd559cfea763ebdf8efd71d367d90674b9",
+    "fab/gerbers/rffe-Edge_Cuts.gbr": "ed3528b7568236e63d31c3aa7dac8d51652d68d58c93aae228244f80a14b88b4",
+    "fab/gerbers/rffe-F_Cu.gbr": "a6dd237b32a4b3980298bae5e07c2257d2472767b725fb8e23c0c625ae9e824e",
+    "fab/gerbers/rffe-F_Mask.gbr": "e64a9dcb187d3fd2daa236ec5ebf8ab523382025ab0a36e4aab82d30647d02a8",
+    "fab/gerbers/rffe-F_Paste.gbr": "da0af33e9df8c039f92dc3b2a78488ff58cc0f1ddbf1e7a851f8b6bdcd9d9801",
+    "fab/gerbers/rffe-F_Silkscreen.gbr": "b0655c3beca0eab381fcf51634e6e9bf90fd0b89c8e6d7dddfadd6e044c61c5c",
+    "fab/gerbers/rffe-In1_Cu.gbr": "42034e1a31e731f7df89b2da0fea679d7b7f18b9ee277acd8d504d1b6b919b8b",
+    "fab/gerbers/rffe-In2_Cu.gbr": "23008666809b1daf036bf031b4513d5a6ae2b1a64778d2d72f7a052ac1c427d9",
+    "fab/gerbers/rffe-PTH.drl": "e73b5dc91f5b1b681cdbb8b95ea1e9a5656faf0f637b308331a466a0bd86a59e",
+    "fab/gerbers/rffe-NPTH.drl": "044149de226a5d89c08a684ca4d8b96a4a2e3cba3d144794010630fdaa690ac9",
+    "sch/circuit.json": "7fe517bd98857b037cf496327358fd18300c54ba7e4c6b2dbf46a1c44748bfbb",
+    "sch/connectivity.tsv": "0ffc987b574bf8fc86abee3b70ad8d28c76957536fd1b68b1ff167600187e25d",
+    "sim/bias_filter.cir": "e3883be476d6fdc1541fbca31169845aa2c0f012cc6b67d98cefe0090d83507b",
+    "sim/assertions.tsv": "b39274fda1e305806e13df4d3802296cc76dcc99fb2d1660c9dfed58408c4a12",
+    "design/rules.tsv": "21267543d6597ec6b3685dc77e0b3a93958c097a91f7aefc553471d2908f6781",
+    "design/nets.tsv": "63084359b61794e7972f906347a93023d0fa6fc34b35b1b8b9fcda941701e87c",
+    "design/rf.tsv": "f369c74d741273645a3d148070946f590e6ff92c2363b56e21acd4573c2059e5",
+    "design/pdn.tsv": "d5b3944691b5727ccf949c52caf2c6c8b7a8af1c1f0378a022d98cae4efe1725",
+    "design/si.tsv": "71d3c58bab7d9f390b0a6e54fc99ad7a7cb7c81005e1dff5e1811187af5acdcb",
+    "design/thermal.tsv": "f814f54b5dff0e26096c5c88ae5cb5e8b359411ad7faa3155a5cb5ba066b4f34",
+    "design/em.tsv": "42b0267a37d6c384bf4834af059b97f85e61ef7148815a1a29656c800c5761c3",
+    "design/emc.tsv": "a6f9467968c890070b949503ca828142b99f9d2c903967576f056d15640c99ea"
+  },
+  "sha256": "da83c6a372b493b9cd0cbcfa19308026e312715640e92d632eab002551616416"
+}

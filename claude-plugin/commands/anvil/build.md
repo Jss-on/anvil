@@ -29,6 +29,17 @@ product. Do not confuse PCB fabrication, assembled-board readiness, and complete
    harnesses, sourcing, firmware build and compatibility records, assembly/test procedures,
    and manufacturer outputs concurrently. Read the protocol for each track. Render and inspect
    schematic/PCB/mechanical exports; never imply that a generated image was reviewed if unseen.
+   Accuracy loop for every track: size parts from the rulebook and record each calculation in
+   `design/rules.tsv` with its `TAG-nnn` source; write the golden netlist `sch/circuit.json`, run
+   `anvil.py schematic sch/circuit.json pcb/<board>.kicad_sch` (wired, reloaded, netlist == spec, ERC) and
+   add `W-1 golden ../sch/circuit.json` to `sch/connectivity.tsv`; declare `sim/plots.tsv` and run `plots`.
+   View every render/plot you cite. Each modify→verify→keep/discard step is one `log <scope> iteration ...`
+   row (metric, value, checks, result, rules); sources read go to `log research`, choices to `log decision`.
+   Board loop: `board` the schematic onto the fabricator-stackup template, iterate `design/placement.tsv`
+   (`place`) and routing (`route` copy or KiCad by hand) until `layout` (nets.tsv/rf.tsv), `si`, `pdn`,
+   `thermal` and `emc` pass on the copper, then run `em` once on RF paths/antennas before release.
+   Release each intent table as its artifact role so its `AUTO-*` check gates G3 (`sparams` gates G4 on
+   VNA data). Report model limits verbatim; never state RF/EMC/thermal compliance from a simulation.
 6. Install active custom rules as `<board>.kicad_dru` beside the matching `.kicad_pcb`,
    `.kicad_pro`, and `.kicad_sch`. The bundled JLCPCB example is a starting deck requiring
    current manufacturer review; no other manufacturer preset is supplied.
@@ -43,8 +54,11 @@ product. Do not confuse PCB fabrication, assembled-board readiness, and complete
    destination release. Complete all available work, identify specific external evidence still
    needed, and preserve blocked gates until it arrives. Do not label a prototype marketable.
 
-At completion provide the scoped gate result, the artifact package, exact remaining blockers,
-and known verification limits. Write `handoff <scope> --write build --gate <target>`, then run
+If `Jev: shadow` is enabled, follow the skill's Jev triage reference for ambiguous findings
+after step 8. Record its advice separately; it cannot update evidence or remove blockers.
+
+At completion run `renders`, `fabpack` for each board and `report <scope>`; provide the scoped gate
+result, the artifact package, `audit/AUDIT.md`, exact remaining blockers, and known verification limits. Write `handoff <scope> --write build --gate <target>`, then run
 `validate-handoff.sh <scope>/handoff.json` before a requested chain. Validate source inputs and
 gate again after any handoff change. Ordering, submission, deployment, and shipment require
 the session's authorization for those actions; no repeated confirmation after authorization.

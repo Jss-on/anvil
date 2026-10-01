@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "name": "rf-frontend",
+  "release_kind": "pcb",
+  "target_gate": "G3",
+  "sectors": [
+    "industrial"
+  ],
+  "markets": [
+    "US",
+    "EU"
+  ],
+  "features": [
+    "electronics"
+  ],
+  "verification_methods": [],
+  "requirements": "hrs/requirements.tsv",
+  "artifacts": {
+    "schematic": [
+      "pcb/rffe.kicad_sch"
+    ],
+    "pcb": [
+      "pcb/rffe.kicad_pcb"
+    ],
+    "project": [
+      "pcb/rffe.kicad_pro"
+    ],
+    "rules": [
+      "pcb/rffe.kicad_dru"
+    ],
+    "libraries": [
+      "pcb/rffe_symbols.kicad_sym",
+      "pcb/sym-lib-table",
+      "pcb/fp-lib-table"
+    ],
+    "gerbers": [
+      "fab/gerbers/rffe-B_Cu.gbr",
+      "fab/gerbers/rffe-B_Mask.gbr",
+      "fab/gerbers/rffe-B_Paste.gbr",
+      "fab/gerbers/rffe-B_Silkscreen.gbr",
+      "fab/gerbers/rffe-Edge_Cuts.gbr",
+      "fab/gerbers/rffe-F_Cu.gbr",
+      "fab/gerbers/rffe-F_Mask.gbr",
+      "fab/gerbers/rffe-F_Paste.gbr",
+      "fab/gerbers/rffe-F_Silkscreen.gbr",
+      "fab/gerbers/rffe-In1_Cu.gbr",
+      "fab/gerbers/rffe-In2_Cu.gbr"
+    ],
+    "drill": [
+      "fab/gerbers/rffe-PTH.drl",
+      "fab/gerbers/rffe-NPTH.drl"
+    ],
+    "circuit_spec": [
+      "sch/circuit.json"
+    ],
+    "connectivity": [
+      "sch/connectivity.tsv"
+    ],
+    "simulation": [
+      "sim/bias_filter.cir",
+      "sim/assertions.tsv"
+    ],
+    "design_rules": [
+      "design/rules.tsv"
+    ],
+    "layout_intent": [
+      "design/nets.tsv"
+    ],
+    "rf_intent": [
+      "design/rf.tsv"
+    ],
+    "pdn_intent": [
+      "design/pdn.tsv"
+    ],
+    "si_intent": [
+      "design/si.tsv"
+    ],
+    "thermal_intent": [
+      "design/thermal.tsv"
+    ],
+    "em_intent": [
+      "design/em.tsv"
+    ],
+    "emc_intent": [
+      "design/emc.tsv"
+    ]
+  },
+  "checks": {
+    "AUTO-ERC": [
+      "erc",
+      "pcb/rffe.kicad_sch"
+    ],
+    "AUTO-DRC": [
+      "drc",
+      "pcb/rffe.kicad_pcb"
+    ],
+    "AUTO-SIM": [
+      "sim",
+      "sim"
+    ],
+    "AUTO-CONNECTIVITY": [
+      "connectivity",
+      "pcb/rffe.kicad_sch",
+      "sch/connectivity.tsv"
+    ],
+    "AUTO-RULES": [
+      "rules",
+      "design"
+    ],
+    "AUTO-LAYOUT": [
+      "layout",
+      "pcb/rffe.kicad_pcb",
+      "design"
+    ],
+    "AUTO-PDN": [
+      "pdn",
+      "pcb/rffe.kicad_pcb",
+      "design"
+    ],
+    "AUTO-SI": [
+      "si",
+      "pcb/rffe.kicad_pcb",
+      "design"
+    ],
+    "AUTO-THERMAL": [
+      "thermal",
+      "pcb/rffe.kicad_pcb",
+      "design"
+    ],
+    "AUTO-EM": [
+      "em",
+      "pcb/rffe.kicad_pcb",
+      "design"
+    ],
+    "AUTO-EMC": [
+      "emc",
+      "pcb/rffe.kicad_pcb",
+      "design"
+    ]
+  },
+  "hardware_revision": "A"
+}

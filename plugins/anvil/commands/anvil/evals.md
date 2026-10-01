@@ -17,7 +17,8 @@ recommendation block.
 
 ## Inputs (whichever exist in the run dir / board dir)
 `anvil-results.tsv` · `iterations.tsv` · `improve-results.tsv` · `score-log.tsv` ·
-`sim/assertions.tsv` margins · `handoff.json`.
+`sim/assertions.tsv` margins · `handoff.json` · the project's `audit/iterations.tsv`, `decisions.tsv`,
+`research.tsv` and receipt transcripts (`report <project>` computes the trajectory verdict and margins).
 
 ## Analysis (all mechanical, computed from the TSVs — never impressions)
 1. **Trajectory** — pass-rate (or metric) per iteration; mark kept vs reverted; compute
@@ -34,6 +35,9 @@ recommendation block.
 6. **Regression audit** — any row that ever flipped green→red and when; any revert that failed to
    restore the metric.
 7. **Churn** — files touched per kept change; high churn + flat metric = thrashing signal.
+
+If `Jev: shadow` is enabled, follow the skill's Jev triage reference to classify ambiguous
+failure notes. Keep its suggestions separate from these computed analyses and gate results.
 
 ## Output
 `anvil/evals-{YYMMDD}-{HHMM}/report.md`:

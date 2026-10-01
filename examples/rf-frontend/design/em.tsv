@@ -1,0 +1,5 @@
+# Full-wave S-parameters of the passive RF networks (`anvil.py em ...`), ports at the connector launch and the gain-block pin.
+# The GALI-84 itself is an active part: characterise it from the vendor S-parameter file, not from copper.
+name	nets	ports	parts	f_start_hz	f_stop_hz	checks	ref_net	traces
+rf_in	RF_IN,RF_A	J1.1,U2.1	C1=10p	1.5e9	3.5e9	S11<=-15@2.3e9:2.5e9;S21>=-0.6@2.3e9:2.5e9	GND	HR-001
+rf_out	RF_B,RF_OUT,BIAS	U2.3,J2.1	C2=10p;L1=22n;C3=10p;C4=100n	1.5e9	3.5e9	S11<=-15@2.3e9:2.5e9;S21>=-0.6@2.3e9:2.5e9;S22<=-15@2.3e9:2.5e9	GND	HR-001

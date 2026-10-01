@@ -1,0 +1,2 @@
+id	circuit	corners	vectors	x	title	traces
+P-1	bias_filter.cir	ctol=0.8,1.2	v(nb)	frequency	Supply ripple reaching the gain-block bias node	HR-003

@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "rffe_symbols")(type "KiCad")(uri "${KIPRJMOD}/rffe_symbols.kicad_sym")(options "")(descr "Anvil vendored symbols"))
+)

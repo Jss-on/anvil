@@ -1,0 +1,5 @@
+CLK_OUT:excess_over_cispr32_b: -32.2248 dB margin=26.2248313 PASS
+  worst harmonic 225 MHz: -2.2 dBuV/m vs 30 at 10 m; loop 2.69 mm^2 (13.5 mm routed), Z0 49.7 ohm; PAUL-2011/2018 estimate (+/-10 dB), not a compliance result
+CLK:excess_over_cispr32_b: -42.8933 dB margin=36.8932658 PASS
+  worst harmonic 225 MHz: -12.9 dBuV/m vs 30 at 10 m; loop 0.488 mm^2 (2.4 mm routed), Z0 61.5 ohm; PAUL-2011/2018 estimate (+/-10 dB), not a compliance result
+EMC_ESTIMATE: 2/2

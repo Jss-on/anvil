@@ -1,0 +1,55 @@
+PCB statistics report
+=====================
+- Date: 9/30/2026 10:05:18 AM
+- Project: rffe
+- Board name: rffe
+
+Board
+-----
+- Width: 50.0000 mm
+- Height: 36.0000 mm
+- Area: 1800.00 mm²
+- Front copper area: 1729.321 mm²
+- Back copper area: 1817.74 mm²
+- Min track clearance: 0.2022 mm
+- Min track width: 0.2000 mm
+- Min drill diameter: 0.3000 mm
+- Board stackup thickness: 1.6250 mm
+
+- Front footprint area: 849.88 mm²
+- Back footprint area: 591.469 mm²
+- Front component density: 47.22 %
+- Back component density: 32.86 %
+Pads
+----
+- Through hole: 2
+- SMD: 56
+- Connector: 0
+- NPTH: 0
+- Castellated: 0
+- Press-fit: 0
+
+Vias
+----
+- Through vias: 241
+- Blind vias: 0
+- Buried vias: 0
+- Micro vias: 0
+
+Components
+----------
+
+|              | Front Side | Back Side | Total |
+|--------------|------------|-----------|-------|
+|THT:          |          1 |         0 |     1 |
+|SMD:          |         21 |         0 |    21 |
+|Unspecified:  |          0 |         0 |     0 |
+|Total:        |         22 |         0 |    22 |
+
+Drill holes
+-----------
+
+| Count | Shape |    X Size |    Y Size | Plated | Via/Pad | Start Layer | Stop Layer |
+|-------|-------|-----------|-----------|--------|---------|-------------|------------|
+|   241 | Round | 0.3000 mm | 0.3000 mm |    PTH |     Via |        F.Cu |       B.Cu |
+|     2 | Round | 0.7500 mm | 0.7500 mm |    PTH |     Pad |        F.Cu |       B.Cu |

@@ -1,0 +1,7 @@
+(version 1)
+# rffe custom rules. Board Setup keeps a 0.25 mm copper-to-edge floor for the three edge-launch SMAs (pulled back
+# 0.3 mm from the routed edge, the fabricator's copper pullback); everything else keeps 0.5 mm. The 0.3 mm RF gap
+# is the pour clearance.
+(rule "Copper to board edge (all but the edge-launch SMAs)"
+  (condition "!(A.memberOfFootprint('J1') || A.memberOfFootprint('J2') || A.memberOfFootprint('J3') || B.memberOfFootprint('J1') || B.memberOfFootprint('J2') || B.memberOfFootprint('J3'))")
+  (constraint edge_clearance (min 0.5mm)))

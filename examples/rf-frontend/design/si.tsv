@@ -1,0 +1,4 @@
+# 25 MHz clock output into a 50 ohm load (`anvil.py si ...`): oscillator output ~17 ohm (datasheet value to confirm) + R2 33R
+# series termination drive the routed CLK_OUT line; J3 sees the 50 ohm instrument. 1 ns edges (conservative).
+net	driver	receivers	rise_ps	r_drv_ohm	v_swing	c_rx_pf	r_term_ohm	v_term	max_overshoot_pct	max_ringback_pct	max_delay_ns	max_settle_ns	traces
+CLK_OUT	R2.2	J3.1	1000	50	3.3	1	50	0	15	20	1	5	HR-005

@@ -1,0 +1,7 @@
+# Layout intent, checked on the routed board by `layout <pcb> design` (AUTO-LAYOUT once released as layout_intent).
+# kind: power|signal|rf|diff|clock|highspeed (rf/diff/clock/highspeed also get a return-path check). "-" = not applicable.
+# current_a/max_rise_c: IPC-2152 heating of the narrowest segment + via groups; voltage_v: IPC-2221 spacing to every neighbour
+# (Table 6-1 B1 inner, B2 outer; optional column `condition` = B3/B4/A5-A7 sets the outer-layer case: coated, above 3050 m);
+# z_target/z_tol_pct: field-solved Z0 of every routed width; pair/zdiff_target: coupled-pair Zdiff; match_group/match_tol_mm: length match.
+# example: USB_DP	diff	-	-	-	-	10	USB_DN	90	80	usb	0.15	GND	HR-012
+net	kind	current_a	max_rise_c	voltage_v	z_target	z_tol_pct	pair	zdiff_target	max_length_mm	match_group	match_tol_mm	ref_net	traces

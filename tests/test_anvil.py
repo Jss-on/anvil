@@ -17,7 +17,11 @@ ROOT = Path(__file__).resolve().parents[1]
 FIX = ROOT / "tests/fixtures"
 spec = importlib.util.spec_from_file_location("anvil", ROOT / "scripts/anvil.py")
 anvil = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = anvil
 spec.loader.exec_module(anvil)
+jev_spec = importlib.util.spec_from_file_location("jev_triage", ROOT / "scripts/jev_triage.py")
+jev = importlib.util.module_from_spec(jev_spec)
+jev_spec.loader.exec_module(jev)
 
 
 class Regression(unittest.TestCase):
@@ -208,7 +212,7 @@ class Regression(unittest.TestCase):
             key = check["id"]
             data = dict(schema_version=1, check_id=key, check_sha256=anvil.json_digest(check), status="pass", method=check["method"], producer="external" if check["authority"] == "external" else "review", created_at=datetime.now(timezone.utc).isoformat(), profile_sha256=anvil.json_digest(anvil.profile(cfg)), release_sha256=sha, files={"approved.txt":anvil.digest(self.root / "approved.txt"), cfg["requirements"]:anvil.digest(self.root / cfg["requirements"])}, approval=dict(reviewer="SYNTHETIC FIXTURE", role="Test", decision="approved", record="approved.txt"))
             if check["authority"] == "tool":
-                data.update(producer="anvil", command=cfg["checks"].get(key), exit_code=0, passed=True, tool_version="SYNTHETIC", transcript="approved.txt", engine_sha256=anvil.digest(anvil.__file__))
+                data.update(producer="anvil", command=cfg["checks"].get(key), exit_code=0, passed=True, tool_version="SYNTHETIC", transcript="approved.txt", engine_sha256=anvil.engine_digest())
                 for names in cfg["artifacts"].values():
                     data["files"].update({name:anvil.digest(self.root / name) for name in names})
             relative = "evidence/" + key + ".json"
@@ -236,6 +240,61 @@ class Regression(unittest.TestCase):
         cfg.update(markets=["US","EU","GB","NI","TW"], sectors=["embedded","connected","robotics","industrial","medical","automotive"], features=["electronics","firmware","mechanics","radio","battery","cloud","taiwan_export"])
         ids = {r["id"] for r in anvil.expected_checks(cfg)}
         self.assertTrue({f"HW-{i:03}" for i in range(1,76)} <= ids)
+
+    def test_jev_advice_fallback_and_gate_isolation(self):
+        from copy import deepcopy
+        from urllib.error import HTTPError, URLError
+        self.project()
+        before_gate = anvil.gate(self.root, "G3")
+        before_files = {p: p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
+        packet = dict(id="synthetic-finding", sources=["fixture only"], state={"observation":"synthetic failure"})
+        response = dict(model=jev.MODEL, usage=dict(input_tokens=10, output_tokens=5), answers={
+            "review_track": dict(type="choice", choice="circuit", confidence=.95,
+                                 probabilities={track:float(track == "circuit") for track in jev.TRACKS}),
+            "repeated_attempt": dict(type="noul", noul=.1),
+            "insufficient_context": dict(type="noul", noul=.1),
+        })
+        with patch.object(jev, "fetch", return_value=response) as fetch:
+            advice = jev.triage(packet, key="synthetic-test-key")
+            self.assertEqual(advice["suggested_track"], "circuit")
+            self.assertEqual(advice["mode"], "shadow")
+            self.assertNotIn("synthetic-test-key", json.dumps(advice))
+            fetch.assert_called_once_with(packet["state"], "synthetic-test-key", 10)
+        self.assertEqual(anvil.gate(self.root, "G3"), before_gate)
+        self.assertEqual(before_gate[0], "G3_BLOCKED")
+        self.assertEqual({p: p.read_bytes() for p in self.root.rglob("*") if p.is_file()}, before_files)
+        with patch.object(jev, "fetch") as fetch:
+            self.assertEqual(jev.triage(packet, key="")["fallback_reason"], "missing_api_key")
+            fetch.assert_not_called()
+        for error, reason in [(TimeoutError("synthetic-secret"), "network_error"),
+                              (URLError("synthetic-secret"), "network_error"),
+                              (HTTPError(jev.ENDPOINT, 429, "synthetic-secret", {}, None), "http_429")]:
+            with self.subTest(reason=reason), patch.object(jev, "fetch", side_effect=error):
+                result = jev.triage(packet, key="synthetic-test-key")
+                self.assertIsNone(result["suggested_track"])
+                self.assertEqual(result["fallback_reason"], reason)
+                self.assertNotIn("synthetic-secret", json.dumps(result))
+        for bad in (None, {}, dict(response, model="jev-latest"), dict(response, answers={})):
+            with self.subTest(response=bad), patch.object(jev, "fetch", return_value=bad):
+                self.assertEqual(jev.triage(packet, key="synthetic-test-key")["fallback_reason"], "invalid_response")
+        for field, value, reason in [("confidence", .2, "low_confidence"), ("confidence", True, "invalid_response"),
+                                     ("confidence", float("nan"), "invalid_response"), ("choice", "approve_release", "invalid_response"),
+                                     ("probabilities", {"circuit":1}, "invalid_response")]:
+            bad = deepcopy(response)
+            bad["answers"]["review_track"][field] = value
+            with self.subTest(field=field, value=value), patch.object(jev, "fetch", return_value=bad):
+                self.assertEqual(jev.triage(packet, key="synthetic-test-key")["fallback_reason"], reason)
+        bad = deepcopy(response)
+        bad["answers"]["insufficient_context"]["noul"] = .9
+        with patch.object(jev, "fetch", return_value=bad):
+            self.assertEqual(jev.triage(packet, key="synthetic-test-key")["fallback_reason"], "insufficient_context")
+        for bad in (dict(packet, expected="circuit"), dict(packet, state={"key":"synthetic-test-key"})):
+            with self.assertRaises(ValueError), patch.object(jev, "fetch"):
+                jev.triage(bad, key="synthetic-test-key")
+        self.assertIsNone(jev.NoRedirect().redirect_request(None, None, 302, "", {}, "https://example.invalid"))
+        for plugin in ("claude-plugin", "plugins/anvil"):
+            self.assertEqual((ROOT / "scripts/jev_triage.py").read_bytes(),
+                             (ROOT / plugin / "skills/anvil/scripts/jev_triage.py").read_bytes())
 
     def test_evidence_cannot_be_missing_skipped_wrong_method_or_expired(self):
         cfg, sha = self.project()

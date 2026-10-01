@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "check_id": "AUTO-RULES",
+  "check_sha256": "a768c5d37fb56733d45713e2cda62b0290529e615cb1e4ca18ac6c6d18765f9d",
+  "status": "pass",
+  "method": "analysis",
+  "producer": "anvil",
+  "created_at": "2026-10-01T05:36:14.969774+00:00",
+  "profile_sha256": "5f687a26eddbbddf4435ca8b799676cfcece9c430b3f95ee3ee722b5c7386eab",
+  "release_sha256": "da83c6a372b493b9cd0cbcfa19308026e312715640e92d632eab002551616416",
+  "files": {
+    "design/rules.tsv": "21267543d6597ec6b3685dc77e0b3a93958c097a91f7aefc553471d2908f6781",
+    "evidence/AUTO-RULES.log": "5f190a26729c90fe78a19917bc768c2f42056131b194df3e7eb2f5de34099837"
+  },
+  "command": [
+    "rules",
+    "design"
+  ],
+  "exit_code": 0,
+  "passed": true,
+  "tool_version": "3.13.7",
+  "transcript": "evidence/AUTO-RULES.log",
+  "engine_sha256": "3979f5fb6c35da20e0c54ad007c018a52fd54d92b1ed268f92410866beba3358"
+}

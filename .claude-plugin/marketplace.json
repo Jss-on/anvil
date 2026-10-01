@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "anvil",
-  "version": "0.5.0",
+  "version": "0.7.0",
   "description": "Evidence-backed hardware product development: requirements, PCB, firmware, mechanics, EVT/DVT/PVT, market release and sustaining.",
   "owner": {
     "name": "Jss-on",
@@ -11,7 +11,7 @@
     {
       "name": "anvil",
       "description": "Six commands for hardware requirements, builds, optimization, lifecycle gates and evaluation. Revision-bound evidence and complete product release workflows.",
-      "version": "0.5.0",
+      "version": "0.7.0",
       "author": {
         "name": "Jss-on",
         "url": "https://github.com/Jss-on"

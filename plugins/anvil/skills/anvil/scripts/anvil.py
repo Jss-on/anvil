@@ -659,6 +659,41 @@ def inside(root, relative):
     return path
 
 
+# Board-geometry analyses: command -> (module, function), the intent table it reads, its release role,
+# the gate it belongs to, its dimension and the external tools whose versions its receipt records.
+ANALYSES = {"layout": ("anvil_layout", "evaluate"), "pdn": ("anvil_pdn", "evaluate"), "si": ("anvil_si", "evaluate"),
+            "thermal": ("anvil_thermal", "evaluate"), "em": ("anvil_em", "evaluate"), "sparams": ("anvil_em", "measured"),
+            "emc": ("anvil_emc", "evaluate")}
+INTENTS = {"layout": ("nets.tsv", "layout_intent", "G3", "layout", "analysis", ["kicad-cli"]),
+           "pdn": ("pdn.tsv", "pdn_intent", "G3", "electrical", "analysis", ["kicad-cli"]),
+           "si": ("si.tsv", "si_intent", "G3", "simulation", "simulation", ["kicad-cli", "ngspice"]),
+           "thermal": ("thermal.tsv", "thermal_intent", "G3", "electrical", "analysis", ["kicad-cli"]),
+           "em": ("em.tsv", "em_intent", "G3", "simulation", "simulation", ["kicad-cli", "openEMS"]),
+           "emc": ("emc.tsv", "emc_intent", "G3", "compliance", "analysis", ["kicad-cli"]),
+           "sparams": ("sparams.tsv", "sparams_intent", "G4", "electrical", "test", [])}
+
+
+def tool_version(name):
+    if name == "openEMS":
+        run = execute([companion("anvil_em").openems(), "--help"])
+        match = re.search(r"version\s+(\S+)", run.stdout)
+        require(match, "openEMS version could not be recorded")
+        return f"openEMS {match[1]}"
+    run = execute([executable(name), "--version" if name == "ngspice" else "version"])
+    require(run.returncode == 0 and run.stdout.strip(), f"{name} version could not be recorded")
+    text = next((line.strip(" *") for line in run.stdout.splitlines() if re.search(r"\d", line)), run.stdout.strip())
+    return text if name.lower() in text.lower() else f"{name} {text}"
+
+
+def companion(name):
+    """Import a sibling module (anvil_netlist, anvil_rules, ...) from this script's directory."""
+    spec = importlib.util.spec_from_file_location(name, Path(__file__).resolve().parent / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules.setdefault("anvil", sys.modules[__name__])
+    spec.loader.exec_module(module)
+    return module
+
+
 def metric(command, arguments):
     functions = {"pass-rate": pass_rate, "coverage": coverage, "sim": sim, "bom-cost": bom_cost,
                  "product-bom": product_bom, "sys-budget": budget, "pinout": pinout, "area": area, "mesh": mesh,
@@ -667,6 +702,14 @@ def metric(command, arguments):
         return kicad(command, *arguments)
     if command in {"fit", "mass", "mech-dfm"}:
         return mechanical("dfm" if command == "mech-dfm" else command, *arguments)
+    if command == "connectivity":
+        return companion("anvil_netlist").connectivity(*arguments)
+    if command == "rules":
+        return companion("anvil_rules").evaluate(*arguments)
+    if command in ANALYSES:
+        require(len(arguments) == (1 if command == "sparams" else 2), f"{command} takes {'<design-dir>' if command == 'sparams' else '<pcb> <design-dir>'}")
+        module, function = ANALYSES[command]
+        return getattr(companion(module), function)(*arguments)
     require(command in functions, f"unknown metric: {command}")
     return functions[command](*arguments)
 
@@ -685,6 +728,12 @@ def digest(path):
 
 def json_digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()).hexdigest()
+
+
+def engine_digest():
+    """Checker version: this file and every analysis module beside it (a changed checker voids its receipts);
+    not the report, which only quotes evidence."""
+    return json_digest({p.name: digest(p) for p in sorted(Path(__file__).resolve().parent.glob("anvil*.py")) if p.name != "anvil_report.py"})
 
 
 def write_json(path, value):
@@ -768,8 +817,17 @@ def expected_checks(cfg):
                   ("AUTO-DFM", "mechanical", "analysis", "mech-dfm")]
     if "firmware" in cfg["features"]:
         autos.append(("AUTO-FIRMWARE", "firmware", "inspection", "firmware"))
+    # Wiring truth and cited design rules are required whenever the project declares them.
+    if "connectivity" in cfg.get("artifacts", {}):
+        autos.append(("AUTO-CONNECTIVITY", "electrical", "inspection", "connectivity"))
+    if "design_rules" in cfg.get("artifacts", {}):
+        autos.append(("AUTO-RULES", "electrical", "analysis", "rules"))
     for key, dim, method, command in autos:
         rows.append(dict(id=key, gate="G3", dimension=dim, method=method, authority="tool", criterion=command, owner="Engineering"))
+    # Board-geometry analyses become mandatory as soon as their intent table is released.
+    for command, (_, role, gate_id, dim, method, _) in INTENTS.items():
+        if role in cfg.get("artifacts", {}):
+            rows.append(dict(id=f"AUTO-{command.upper()}", gate=gate_id, dimension=dim, method=method, authority="tool", criterion=command, owner="Engineering"))
     rows += [dict(id="AUTO-FACTORY", gate="G6", dimension="manufacturing", method="analysis", authority="tool", criterion="factory", owner="Manufacturing quality"),
              dict(id="AUTO-COST", gate="G7", dimension="commercial", method="analysis", authority="tool", criterion="commercial", owner="Product owner")]
     return rows
@@ -854,12 +912,13 @@ def receipt_valid(root, cfg, check, path, release_hash):
         require(data.get("command") == command, "receipt command differs from project check")
         require(data.get("exit_code") == 0 and data.get("passed") is True, "automatic check did not succeed")
         require(data.get("tool_version") and data.get("transcript") in files, "automatic receipt needs tool version and hashed transcript")
-        require(data.get("engine_sha256") == digest(__file__), "automatic receipt is from a different Anvil checker version")
+        require(data.get("engine_sha256") == engine_digest(), "automatic receipt is from a different Anvil checker version")
         for operand in command[1:]:
             path = (root / operand).resolve()
             require(path.is_relative_to(root), "check operand outside project")
             if path.is_dir():
-                filenames = {"sim": ["assertions.tsv"], "fit": ["assertions.tsv", "measures.json"], "mass": ["assertions.tsv", "measures.json"], "mech-dfm": ["assertions.tsv", "measures.json"], "factory": ["acceptance.json", "unit-records.csv"]}.get(command[0], [])
+                filenames = {"sim": ["assertions.tsv"], "fit": ["assertions.tsv", "measures.json"], "mass": ["assertions.tsv", "measures.json"], "mech-dfm": ["assertions.tsv", "measures.json"], "factory": ["acceptance.json", "unit-records.csv"], "rules": ["rules.tsv"],
+                             **{c: [spec[0]] for c, spec in INTENTS.items()}}.get(command[0], [])
                 require(filenames, "unexpected automatic check directory")
                 require(all((path / name).relative_to(root).as_posix() in files for name in filenames), "receipt omitted required check inputs")
             else:
@@ -996,10 +1055,20 @@ def record(root, check_id, evidence=None):
             require(not Path(operand).is_absolute() and path.is_relative_to(root) and path.exists(), "check inputs must exist inside the project")
             inputs.append(str(path))
         manifest_files = snapshot(root, cfg)[0]["files"]
-        role = {"erc": "schematic", "drc": "pcb", "bom-cost": "bom", "pinout": "harness", "product-bom": "product_bom", "sys-budget": "budgets", "fit": "mechanical_measures", "mass": "mechanical_measures", "mech-dfm": "mechanical_measures", "firmware": "firmware_manifest"}.get(command[0])
+        role = {"erc": "schematic", "drc": "pcb", "bom-cost": "bom", "pinout": "harness", "product-bom": "product_bom", "sys-budget": "budgets", "fit": "mechanical_measures", "mass": "mechanical_measures", "mech-dfm": "mechanical_measures", "firmware": "firmware_manifest", "connectivity": "schematic", "rules": "design_rules"}.get(command[0])
         if role:
             operand = Path(inputs[0]) / "measures.json" if command[0] in {"fit", "mass", "mech-dfm"} else Path(inputs[0])
+            if command[0] == "rules":
+                operand = Path(inputs[0]) / "rules.tsv"
             require(operand in {inside(root, p) for p in cfg["artifacts"].get(role, [])}, f"check does not use released {role}")
+        if command[0] == "connectivity":
+            require(len(inputs) == 2 and Path(inputs[1]) in {inside(root, p) for p in cfg["artifacts"].get("connectivity", [])}, "connectivity must use the released assertion table")
+        if command[0] in INTENTS:
+            filename, intent_role = INTENTS[command[0]][:2]
+            board_args = [] if command[0] == "sparams" else inputs[:1]
+            require(len(inputs) == len(board_args) + 1, f"{command[0]} takes {'<design-dir>' if not board_args else '<pcb> <design-dir>'}")
+            require(all(Path(b) in {inside(root, p) for p in cfg["artifacts"].get("pcb", [])} for b in board_args), f"{command[0]} must analyse the released board")
+            require(Path(inputs[-1]) / filename in {inside(root, p) for p in cfg["artifacts"].get(intent_role, [])}, f"{command[0]} must use the released {intent_role} ({filename})")
         if command[0] == "pinout":
             require(len(inputs) == 3, "product harness recording requires the actual mates file")
             require(Path(inputs[1]) in {inside(root, p) for p in cfg["artifacts"].get("icd", [])}, "pinout must use the released ICD")
@@ -1045,15 +1114,17 @@ def record(root, check_id, evidence=None):
         (root / transcript).write_text("\n".join(DETAILS) + "\n", encoding="utf-8")
         input_hashes[transcript] = digest(root / transcript)
         version = sys.version.split()[0]
-        if command[0] in {"erc", "drc", "sim"}:
+        if command[0] in {"erc", "drc", "sim", "connectivity"}:
             tool = executable("ngspice" if command[0] == "sim" else "kicad-cli")
             version_run = execute([tool, "--version" if command[0] == "sim" else "version"])
             require(version_run.returncode == 0 and version_run.stdout.strip(), "tool version could not be recorded")
             version = version_run.stdout.strip()
+        if command[0] in INTENTS and INTENTS[command[0]][5]:
+            version = "; ".join([f"python {version}"] + [tool_version(t) for t in INTENTS[command[0]][5]])
         data = dict(schema_version=1, check_id=check_id, check_sha256=json_digest(check), status="pass" if passed else "fail", method=check["method"],
                     producer="anvil", created_at=datetime.now(timezone.utc).isoformat(), profile_sha256=json_digest(profile(cfg)),
                     release_sha256=release_hash, files=input_hashes, command=command, exit_code=0, passed=passed,
-                    tool_version=version, transcript=transcript, engine_sha256=digest(__file__))
+                    tool_version=version, transcript=transcript, engine_sha256=engine_digest())
     write_json(destination, data)
     for row in ledger:
         if row["assertion"] == check_id:
@@ -1083,6 +1154,67 @@ def handoff(path):
     return "HANDOFF: VALID"
 
 
+def renders(root_path):
+    """Review exports: schematic SVG/PDF, board SVG front/back, 3D renders, board statistics.
+
+    Every command and exit code is written to audit/renders/commands.json so a reviewer can
+    see exactly what was rendered from which files. Rendering never edits the design.
+    """
+    root, cfg = project(root_path)
+    tool = executable("kicad-cli")
+    outdir = root / "audit" / "renders"
+    outdir.mkdir(parents=True, exist_ok=True)
+    log = []
+
+    def run(name, command, cwd):
+        result = execute(command, cwd=cwd)
+        log.append(dict(name=name, command=[str(c) for c in command], exit_code=result.returncode))
+        require(result.returncode == 0, f"{name} failed ({result.returncode}): {result.stdout[-400:]}")
+
+    for name in cfg["artifacts"].get("schematic", []):
+        sch = inside(root, name)
+        run("schematic-svg", [tool, "sch", "export", "svg", "-e", "-o", str(outdir / "schematic"), str(sch)], sch.parent)
+        run("schematic-pdf", [tool, "sch", "export", "pdf", "-o", str(outdir / f"{sch.stem}-schematic.pdf"), str(sch)], sch.parent)
+    for name in cfg["artifacts"].get("pcb", []):
+        pcb = inside(root, name)
+        run("pcb-svg-front", [tool, "pcb", "export", "svg", "--mode-single", "--page-size-mode", "2", "-l", "F.Cu,F.Silkscreen,F.Mask,Edge.Cuts", "-o", str(outdir / f"{pcb.stem}-front.svg"), str(pcb)], pcb.parent)
+        run("pcb-svg-back", [tool, "pcb", "export", "svg", "--mode-single", "--page-size-mode", "2", "-m", "-l", "B.Cu,B.Silkscreen,B.Mask,Edge.Cuts", "-o", str(outdir / f"{pcb.stem}-back.svg"), str(pcb)], pcb.parent)
+        for side in ("top", "bottom"):
+            run(f"pcb-render-{side}", [tool, "pcb", "render", "--quality", "basic", "--side", side, "-w", "1600", "--height", "1000", "-o", str(outdir / f"{pcb.stem}-{side}.png"), str(pcb)], pcb.parent)
+        run("pcb-stats", [tool, "pcb", "export", "stats", "-o", str(outdir / f"{pcb.stem}-stats.txt"), str(pcb)], pcb.parent)
+    write_json(outdir / "commands.json", dict(schema_version=1, created_at=datetime.now(timezone.utc).isoformat(), tool=tool, runs=log))
+    DETAILS.clear()
+    return f"RENDERS: {len(log)} exports -> {outdir}"
+
+
+def fabpack(board, outdir):
+    """Manufacturing exports with fixed, logged options. Review the outputs before any order."""
+    board = Path(board).resolve()
+    read(board)
+    tool = executable("kicad-cli")
+    outdir = Path(outdir).resolve()
+    outdir.mkdir(parents=True, exist_ok=True)
+    stem, log = board.stem, []
+    commands = [
+        ("gerbers", [tool, "pcb", "export", "gerbers", "--board-plot-params", "--use-drill-file-origin", "-o", str(outdir / "gerbers") + os.sep, str(board)]),
+        ("drill", [tool, "pcb", "export", "drill", "--format", "excellon", "--drill-origin", "plot", "--excellon-separate-th", "--generate-map", "--map-format", "pdf", "-o", str(outdir / "gerbers") + os.sep, str(board)]),
+        ("placement", [tool, "pcb", "export", "pos", "--format", "csv", "--units", "mm", "--use-drill-file-origin", "--exclude-dnp", "-o", str(outdir / f"{stem}-placement.csv"), str(board)]),
+        ("ipc2581", [tool, "pcb", "export", "ipc2581", "-o", str(outdir / f"{stem}.xml"), str(board)]),
+        ("ipcd356", [tool, "pcb", "export", "ipcd356", "-o", str(outdir / f"{stem}.d356"), str(board)]),
+        ("step", [tool, "pcb", "export", "step", "--force", "--subst-models", "-o", str(outdir / f"{stem}.step"), str(board)]),
+    ]
+    (outdir / "gerbers").mkdir(exist_ok=True)
+    for name, command in commands:
+        result = execute(command, cwd=board.parent)
+        log.append(dict(name=name, command=[str(c) for c in command], exit_code=result.returncode, tail=result.stdout[-300:]))
+        require(result.returncode == 0, f"fabpack {name} failed ({result.returncode}): {result.stdout[-400:]}")
+    files = {p.relative_to(outdir).as_posix(): digest(p) for p in sorted(outdir.rglob("*")) if p.is_file() and p.name != "fabpack.json"}
+    write_json(outdir / "fabpack.json", dict(schema_version=1, created_at=datetime.now(timezone.utc).isoformat(), board=board.name,
+                                             board_sha256=digest(board), tool=tool, runs=log, files=files))
+    DETAILS.clear()
+    return f"FABPACK: {len(files)} files -> {outdir} (review before ordering; not a release authorization)"
+
+
 def doctor(build=False, product_tools=False):
     missing = 0
     require(sys.version_info >= (3, 10), "Python 3.10+ required")
@@ -1109,6 +1241,15 @@ def doctor(build=False, product_tools=False):
     else:
         print(f"{'MISSING' if product_tools else 'OPTIONAL'} CAD: selected build123d, CadQuery or OpenSCAD authoring tool")
         missing += bool(product_tools)
+    print(f"{'FOUND' if importlib.util.find_spec('matplotlib') else 'OPTIONAL'} matplotlib (verification plots)")
+    print(f"{'FOUND' if importlib.util.find_spec('numpy') else 'OPTIONAL'} numpy (field solver, layout/PDN/SI/thermal/EM analyses)")
+    for label, probe in (("KiCad Python (pcbnew: board dump, build, place, route)", lambda: companion("anvil_board").kicad_python()),
+                         ("openEMS (full-wave S-parameters)", lambda: companion("anvil_em").openems()),
+                         ("Freerouting + Java (autorouting)", lambda: " ".join(companion("anvil_board").freerouting()))):
+        try:
+            print(f"FOUND {label}: {probe()}")
+        except (ValueError, OSError) as error:
+            print(f"OPTIONAL {label}: {error}")
     print("OPTIONAL authoring: SKiDL/kiutils, firmware SDK/HIL, slicer/CAM and fixture tools as selected by the project")
     print("DOCTOR: READY" if not missing else f"DOCTOR: BLOCKED {missing} missing")
     DETAILS.clear()
@@ -1121,9 +1262,50 @@ def main(argv=None):
     p = sub.add_parser("doctor")
     p.add_argument("--require-build", action="store_true")
     p.add_argument("--require-product", action="store_true")
-    for command in ("pass-rate", "coverage", "erc", "drc", "sim", "bom-cost", "area", "mesh", "fit", "mass", "mech-dfm", "pinout", "product-bom", "sys-budget", "firmware", "factory", "commercial", "verdict"):
+    for command in ("pass-rate", "coverage", "erc", "drc", "sim", "bom-cost", "area", "mesh", "fit", "mass", "mech-dfm", "pinout", "product-bom", "sys-budget", "firmware", "factory", "commercial", "connectivity", "rules", "verdict", *ANALYSES):
         p = sub.add_parser(command)
         p.add_argument("inputs", nargs="*")
+    p = sub.add_parser("wiring", help="fresh netlist -> wiring.md, wiring.dot, netlist.xml")
+    p.add_argument("schematic")
+    p.add_argument("outdir")
+    p = sub.add_parser("plots", help="simulation corner waveforms and margin charts")
+    p.add_argument("project")
+    p.add_argument("--sim", default="sim", help="directory with plots.tsv (default sim)")
+    p = sub.add_parser("schematic", help="wired .kicad_sch from a circuit spec, proven by fresh netlist export + ERC")
+    p.add_argument("spec")
+    p.add_argument("output")
+    p.add_argument("--no-verify", action="store_true")
+    p = sub.add_parser("schematic-spec", help="circuit spec from an existing schematic (to re-draw it with real wires)")
+    p.add_argument("schematic")
+    p.add_argument("output")
+    p = sub.add_parser("renders", help="schematic/PCB exports for review and the audit package")
+    p.add_argument("project")
+    p = sub.add_parser("fabpack", help="gerbers, drill, placement, IPC-2581 and STEP with logged commands")
+    p.add_argument("board")
+    p.add_argument("outdir")
+    p = sub.add_parser("board", help="footprints and nets from the schematic onto a template board (outline, stackup, rules)")
+    p.add_argument("schematic")
+    p.add_argument("template")
+    p.add_argument("output")
+    p.add_argument("--placement", help="placement.tsv: ref, x_mm, y_mm, rot_deg, side")
+    p = sub.add_parser("place", help="apply placement.tsv (and locked pre-routes) to a board, then re-run DRC/layout checks")
+    p.add_argument("board")
+    p.add_argument("placement")
+    p.add_argument("--routes", help="routes.tsv: kind (track|via), net, layer, width_mm, x1, y1, x2, y2, drill_mm")
+    p = sub.add_parser("route", help="autoroute a copy of the board with Freerouting, then DRC it")
+    p.add_argument("board")
+    p.add_argument("output")
+    p.add_argument("--passes", type=int, default=20)
+    p = sub.add_parser("calc", help="evaluate one design-rule calculation from the rulebook")
+    p.add_argument("check")
+    p.add_argument("pairs", nargs="*", help="name=value inputs")
+    p = sub.add_parser("log", help="append to the audit ledgers (iterations, decisions, research)")
+    p.add_argument("project")
+    p.add_argument("ledger", choices=("iteration", "decision", "research"))
+    p.add_argument("pairs", nargs="+", help="column=value pairs")
+    p = sub.add_parser("report", help="audit documentation and IEEE paper skeleton")
+    p.add_argument("project")
+    p.add_argument("--gate", choices=GATES)
     for command in ("init", "plan", "manifest", "gate", "record", "prepare", "handoff"):
         p = sub.add_parser(command)
         p.add_argument("project")
@@ -1187,6 +1369,49 @@ def main(argv=None):
             else:
                 path = args.project
             print(handoff(path))
+        elif command == "wiring":
+            print(companion("anvil_netlist").wiring_tables(args.schematic, args.outdir))
+        elif command == "plots":
+            root, _ = project(args.project)
+            plots = companion("anvil_plots")
+            label, _ = plots.sim_plots(root / args.sim, root / "audit" / "plots")
+            print(label)
+            chart = plots.margin_plot(plots.margins_from_transcripts(root), root / "audit" / "plots")
+            print(f"MARGIN_PLOT: {chart}" if chart else "MARGIN_PLOT: no margins recorded yet")
+        elif command == "schematic":
+            label, ok = companion("anvil_schematic").generate(args.spec, args.output, not args.no_verify)
+            print(label)
+            for detail in DETAILS:
+                print(detail, file=sys.stderr)
+            return 0 if ok else 1
+        elif command == "schematic-spec":
+            print(companion("anvil_schematic").spec_from_schematic(args.schematic, args.output))
+        elif command == "renders":
+            print(renders(args.project))
+        elif command == "fabpack":
+            print(fabpack(args.board, args.outdir))
+        elif command == "board":
+            print(companion("anvil_board").build_board(args.schematic, args.template, args.output, args.placement))
+        elif command == "place":
+            print(companion("anvil_board").place(args.board, args.placement, args.routes))
+        elif command == "route":
+            label, ok = companion("anvil_board").route(args.board, args.output, args.passes)
+            print(label)
+            for detail in DETAILS:
+                print(detail, file=sys.stderr)
+            return 0 if ok else 1
+        elif command == "calc":
+            print(companion("anvil_rules").calc(args.check, dict(pair.split("=", 1) for pair in args.pairs)))
+        elif command == "log":
+            report = companion("anvil_report")
+            root, _ = project(args.project)
+            filename, fields, prefix = report.LEDGERS[args.ledger]
+            row = dict(pair.split("=", 1) for pair in args.pairs)
+            require(set(row) <= set(fields), f"unknown columns; allowed: {fields}")
+            path = report.append_row(root / "audit" / filename, fields, row, prefix)
+            print(f"LOGGED: {args.ledger} -> {path.relative_to(root).as_posix()}")
+        elif command == "report":
+            print(companion("anvil_report").build(args.project, args.gate))
         elif command == "verdict":
             require(len(args.inputs) <= 1, "verdict now accepts a project directory; use gate <project> G3")
             root = Path(args.inputs[0] if args.inputs else ".")

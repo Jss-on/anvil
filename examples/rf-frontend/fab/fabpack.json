@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-30T02:05:11.432055+00:00",
+  "board": "rffe.kicad_pcb",
+  "board_sha256": "843978fcc5921768812d5b289a9ca0ad8369fcfb412da5fcac271e90a1a4208e",
+  "tool": "C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE",
+  "runs": [
+    {
+      "name": "gerbers",
+      "command": [
+        "C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE",
+        "pcb",
+        "export",
+        "gerbers",
+        "--board-plot-params",
+        "--use-drill-file-origin",
+        "-o",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\fab\\gerbers\\",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_pcb"
+      ],
+      "exit_code": 0,
+      "tail": ":\\dev\\anvil\\examples\\rf-frontend\\fab\\gerbers\\rffe-B_Silkscreen.gbr'.\nPlotted to 'C:\\dev\\anvil\\examples\\rf-frontend\\fab\\gerbers\\rffe-F_Mask.gbr'.\nPlotted to 'C:\\dev\\anvil\\examples\\rf-frontend\\fab\\gerbers\\rffe-B_Mask.gbr'.\nPlotted to 'C:\\dev\\anvil\\examples\\rf-frontend\\fab\\gerbers\\rffe-Edge_Cuts.gbr'.\n"
+    },
+    {
+      "name": "drill",
+      "command": [
+        "C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE",
+        "pcb",
+        "export",
+        "drill",
+        "--format",
+        "excellon",
+        "--drill-origin",
+        "plot",
+        "--excellon-separate-th",
+        "--generate-map",
+        "--map-format",
+        "pdf",
+        "-o",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\fab\\gerbers\\",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_pcb"
+      ],
+      "exit_code": 0,
+      "tail": "nvil\\examples\\rf-frontend\\fab\\gerbers\\rffe-PTH.drl'\nCreated file 'C:\\dev\\anvil\\examples\\rf-frontend\\fab\\gerbers\\rffe-NPTH.drl'\nCreated file 'C:\\dev\\anvil\\examples\\rf-frontend\\fab\\gerbers\\rffe-PTH-drl_map.pdf'.\nCreated file 'C:\\dev\\anvil\\examples\\rf-frontend\\fab\\gerbers\\rffe-NPTH-drl_map.pdf'.\nDone.\n"
+    },
+    {
+      "name": "placement",
+      "command": [
+        "C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE",
+        "pcb",
+        "export",
+        "pos",
+        "--format",
+        "csv",
+        "--units",
+        "mm",
+        "--use-drill-file-origin",
+        "--exclude-dnp",
+        "-o",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\fab\\rffe-placement.csv",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_pcb"
+      ],
+      "exit_code": 0,
+      "tail": "Wrote position data to 'C:\\dev\\anvil\\examples\\rf-frontend\\fab\\rffe-placement.csv'.\n"
+    },
+    {
+      "name": "ipc2581",
+      "command": [
+        "C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE",
+        "pcb",
+        "export",
+        "ipc2581",
+        "-o",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\fab\\rffe.xml",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_pcb"
+      ],
+      "exit_code": 0,
+      "tail": ""
+    },
+    {
+      "name": "ipcd356",
+      "command": [
+        "C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE",
+        "pcb",
+        "export",
+        "ipcd356",
+        "-o",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\fab\\rffe.d356",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_pcb"
+      ],
+      "exit_code": 0,
+      "tail": "Successfully created IPC-D-356 file\n"
+    },
+    {
+      "name": "step",
+      "command": [
+        "C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE",
+        "pcb",
+        "export",
+        "step",
+        "--force",
+        "--subst-models",
+        "-o",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\fab\\rffe.step",
+        "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_pcb"
+      ],
+      "exit_code": 0,
+      "tail": "Could not add 3D model for X1.\nFile not found: ${KICAD10_3DMODEL_DIR}/Oscillator.3dshapes/Oscillator_SMD_Abracon_ASE-4Pin_3.2x2.5mm.step\nSTEP file 'C:/dev/anvil/examples/rf-frontend/fab/rffe.step' created.\n\nExport time 1.692 s\n"
+    }
+  ],
+  "files": {
+    "gerbers/rffe-B_Cu.gbr": "91f080d3a8048099c474ea3db1f8ff8faa253ee056b9b177731914fb5d084284",
+    "gerbers/rffe-B_Mask.gbr": "487d9277eb7dfc19a191fee40e018251e27b377e31bfe72b0b9b0a76f541781c",
+    "gerbers/rffe-B_Paste.gbr": "db520ec26ccf3be9d7c1363c7f47aeeef3a337c467cf4a6aa025c05ebb2dc38f",
+    "gerbers/rffe-B_Silkscreen.gbr": "141f627102804ee24f7ca4cf78bc3dfd559cfea763ebdf8efd71d367d90674b9",
+    "gerbers/rffe-Edge_Cuts.gbr": "ed3528b7568236e63d31c3aa7dac8d51652d68d58c93aae228244f80a14b88b4",
+    "gerbers/rffe-F_Cu.gbr": "a6dd237b32a4b3980298bae5e07c2257d2472767b725fb8e23c0c625ae9e824e",
+    "gerbers/rffe-F_Mask.gbr": "e64a9dcb187d3fd2daa236ec5ebf8ab523382025ab0a36e4aab82d30647d02a8",
+    "gerbers/rffe-F_Paste.gbr": "da0af33e9df8c039f92dc3b2a78488ff58cc0f1ddbf1e7a851f8b6bdcd9d9801",
+    "gerbers/rffe-F_Silkscreen.gbr": "b0655c3beca0eab381fcf51634e6e9bf90fd0b89c8e6d7dddfadd6e044c61c5c",
+    "gerbers/rffe-In1_Cu.gbr": "42034e1a31e731f7df89b2da0fea679d7b7f18b9ee277acd8d504d1b6b919b8b",
+    "gerbers/rffe-In2_Cu.gbr": "23008666809b1daf036bf031b4513d5a6ae2b1a64778d2d72f7a052ac1c427d9",
+    "gerbers/rffe-job.gbrjob": "c5b5d10f69125762c06c4f3b9bd807ec78f5dbb6beb2f43e4722881014b917c5",
+    "gerbers/rffe-NPTH-drl_map.pdf": "a3ad71f94a905649fa85117a32e623121ccf8158282fdb58368082b0a9e90485",
+    "gerbers/rffe-NPTH.drl": "044149de226a5d89c08a684ca4d8b96a4a2e3cba3d144794010630fdaa690ac9",
+    "gerbers/rffe-PTH-drl_map.pdf": "3b44406af3f0ba64a35f16cb12e23b9c5bd5c0a67eaac643a76cc469651921bb",
+    "gerbers/rffe-PTH.drl": "e73b5dc91f5b1b681cdbb8b95ea1e9a5656faf0f637b308331a466a0bd86a59e",
+    "rffe-placement.csv": "7d2eb0b8f563598c6cb043e42a809b8f196e6262dbebddce82ba0b0d826a457a",
+    "rffe.d356": "6ff1f07362676414214a9a83644edbca20d37f8e4cdcd97f8fcbba6b5f183438",
+    "rffe.step": "625c181e8bd8abf668076c79207b815b42e9e9b03c84cb7d8be73f21e71f77c2",
+    "rffe.xml": "045b2a5ccba42cb7bcafa1ad3f0e163752b9e20a9616057748c0889699170464"
+  }
+}

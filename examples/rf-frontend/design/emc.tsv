@@ -1,0 +1,5 @@
+# Clock-harmonic radiated-emission estimate (`anvil.py emc ...`) vs CISPR 32 Class B with a 6 dB design margin (HR-008).
+# CLK_OUT carries the half-swing launched into the series-terminated line; CLK is the short oscillator-to-R2 hop.
+net	v_swing	f_clock_hz	duty	rise_ps	limit	margin_db	traces
+CLK_OUT	1.65	25e6	0.5	1000	cispr32_b	6	HR-008
+CLK	3.3	25e6	0.5	1000	cispr32_b	6	HR-008

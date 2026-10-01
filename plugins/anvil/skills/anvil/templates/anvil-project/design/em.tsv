@@ -1,0 +1,11 @@
+# Full-wave S-parameters for `em <pcb> design` (em_intent): openEMS FDTD of the copper of `nets` and ref_net, lumped ports at `ports`.
+# The region follows the nets that carry a port and the listed parts; a support net (bias feed) is cut at its edge.
+# Other nets are not modelled: list in parts every R/L/C that terminates a net you include (an open-ended net rings in the model).
+# checks: S<i><j><=|>=<dB>@<f1>:<f2>, ';'-separated. Optional: parts (C5=1.5p;L2=3.3n;R4=0), ref_net, z_ref, margin_mm, kind (line|antenna),
+# copper (thick|sheet; sheet for antennas), end_db (default 50), max_pulses (run cap in excitation lengths, default 4; the
+# settled row judges convergence), z_cells (per dielectric, default 4), l_q (inductor Q at the band centre, default 50).
+# Outputs analysis/em/<name>.s2p/.png/.xml.
+# Capacitors are series ESR-ESL-C (ARCH-067 by dielectric/package; design/caps.tsv overrides, as for pdn); inductors series L + ESR from l_q.
+# Minutes per port (antennas tens of minutes): run at sign-off, not every loop.
+# example: antfeed	RF_ANT	U3.12,AE1.1	2.0e9	3.0e9	S11<=-10@2.4e9:2.5e9;S21>=-1@2.4e9:2.5e9	HR-021
+name	nets	ports	f_start_hz	f_stop_hz	checks	traces

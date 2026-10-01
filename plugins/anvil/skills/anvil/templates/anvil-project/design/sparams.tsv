@@ -1,0 +1,4 @@
+# Measured RF acceptance for `sparams design` (sparams_intent, gate G4): limits on VNA Touchstone files of the built board.
+# file: project-relative .sNp (declare it as a release artifact); checks as in em.tsv.
+# example: measurements/evt1-antfeed.s2p	S11<=-10@2.4e9:2.5e9	HR-021
+file	checks	traces

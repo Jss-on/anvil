@@ -1,0 +1,7 @@
++3V3: cavity In1.Cu/In2.Cu h=1.06 mm er=4.5 area=1358 mm^2 -> 0.0508 nF (BOGATIN-2147)
+  C8 100 nF: ESL 0.6 nH + trace 0.73 + via pair 0.092 + spreading 2.6 nH (2 fanout vias), ESR 90 mohm [ARCH-067 X7R 0603 (nearest listed size for 0402)]
+  C7 1e+04 nF: ESL 1 nH + trace 0.88 + via pair 0.15 + spreading 2.6 nH (2 fanout vias), ESR 80 mohm [ARCH-067 X5R 0805]
+  C5 100 nF: ESL 0.6 nH + trace 0.8 + via pair 0.092 + spreading 1.6 nH (2 fanout vias), ESR 90 mohm [ARCH-067 X7R 0603 (nearest listed size for 0402)]
++3V3:z_pdn_max: 0.803463 ohm margin=0.846537216 PASS
+  3 capacitors; worst at 1e+08 Hz over 1000-1e+08 Hz; Z_target = 3.3 V x 1% / 0.02 A (BOGATIN-2110)
+PDN: 1/1

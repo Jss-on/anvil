@@ -44,6 +44,10 @@ optimization without verification is vandalism.
    change. A metric gain never substitutes for the cumulative `gate` result.
 A change failing ANY gate is reverted, whatever the metric says.
 
+Also append every iteration to the project ledger: `anvil.py log <scope> iteration phase=improve change=...
+metric=<metric> value=<after> checks=erc,drc,sim,rules result=keep|discard rules=<TAG-nnn> note=...`, and cite
+the rulebook id that motivated each mutation. `report <scope>` turns the ledger into the audit/paper tables.
+
 ## Run directory
 `anvil/improve-{YYMMDD}-{HHMM}/`: `improve-results.tsv`
 (`n change metric_before metric_after gates verdict notes`), `score-log.tsv`, `handoff.json`.
@@ -62,8 +66,10 @@ Ordered by expected value-per-verification-cost:
    inductor at acceptable ripple; re-run the affected assertion at corners). (bom_cost, board_area)
 3. **Consolidation** — merge duplicate values/packages into one BOM line; delete
    provably-redundant parts (the sim must prove redundancy, not intuition). (part_count, bom_cost)
-4. **Placement/route compaction** — tighten placement, shrink outline; full DRC + renders VIEWED
-   after every layout change. (board_area)
+4. **Placement/route compaction** — tighten placement (`design/placement.tsv` + `place`), shrink outline;
+   full DRC + renders VIEWED + every released board analysis (`layout`, `si`, `pdn`, `thermal`, `emc`;
+   `em` when an RF path moved) after every layout change: a smaller board that loses impedance,
+   return path, spacing, PDN or thermal margin is discarded. (board_area)
 5. **Margin hunting** — re-tune compensation/filtering to lift the weakest assertion's corner
    margin. (worst_case_margin)
 6. **Layer/stackup change** — LAST: cheapest per-board but most disruptive; full re-route + full

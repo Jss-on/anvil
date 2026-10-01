@@ -1,0 +1,857 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "name": "rf-frontend",
+    "hardware_revision": "A",
+    "release_kind": "pcb",
+    "sectors": [
+      "industrial"
+    ],
+    "markets": [
+      "US",
+      "EU"
+    ],
+    "features": [
+      "electronics"
+    ],
+    "requirements": "hrs/requirements.tsv"
+  },
+  "checks": [
+    {
+      "id": "HW-001",
+      "gate": "G1",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Intended use, environments, users, markets, variants, and exclusions are agreed.",
+      "owner": "Systems lead"
+    },
+    {
+      "id": "HW-002",
+      "gate": "G1",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Requirements have identifiers, measurable criteria, owners, and planned verification methods.",
+      "owner": "Systems lead"
+    },
+    {
+      "id": "HW-003",
+      "gate": "G1",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Customer needs trace to requirements, including safety, security, manufacturing, and support.",
+      "owner": "Systems lead"
+    },
+    {
+      "id": "HW-004",
+      "gate": "G1",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Unresolved assumptions have owners and planned experiments; feasibility is not assumed.",
+      "owner": "Systems lead"
+    },
+    {
+      "id": "HW-005",
+      "gate": "G1",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Product classification and the applicable regulatory/standards matrix have an accountable owner.",
+      "owner": "Systems lead"
+    },
+    {
+      "id": "HW-006",
+      "gate": "G1",
+      "dimension": "commercial",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Budget, target economics, major dependencies, and commercial stop criteria are explicit.",
+      "owner": "Systems lead"
+    },
+    {
+      "id": "HW-007",
+      "gate": "G2",
+      "dimension": "system",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Functional architecture and hardware/software responsibilities are baselined.",
+      "owner": "Systems lead / discipline owners"
+    },
+    {
+      "id": "HW-008",
+      "gate": "G2",
+      "dimension": "system",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Electrical, mechanical, communication, and firmware interfaces agree at both endpoints.",
+      "owner": "Systems lead / discipline owners"
+    },
+    {
+      "id": "HW-009",
+      "gate": "G2",
+      "dimension": "system",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Critical budgets include tolerances, worst cases, and justified margins.",
+      "owner": "Systems lead / discipline owners"
+    },
+    {
+      "id": "HW-010",
+      "gate": "G2",
+      "dimension": "system",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Highest-risk feasibility questions have evidence and an explicit disposition.",
+      "owner": "Systems lead / discipline owners"
+    },
+    {
+      "id": "HW-011",
+      "gate": "G2",
+      "dimension": "system",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Safety states, security architecture, recovery, programming, and test access are designed.",
+      "owner": "Systems lead / discipline owners"
+    },
+    {
+      "id": "HW-012",
+      "gate": "G2",
+      "dimension": "system",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Manufacturer feedback and procurement constraints are incorporated before layout/tooling commitment.",
+      "owner": "Systems lead / discipline owners"
+    },
+    {
+      "id": "HW-013",
+      "gate": "G3",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Schematics, PCB, enclosure, harnesses, BOM, placement files, and firmware interface definitions use compatible revisions.",
+      "owner": "Design owner / manufacturing engineer"
+    },
+    {
+      "id": "HW-014",
+      "gate": "G3",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "ERC/DRC and relevant calculations run successfully on the release inputs; findings are resolved or formally dispositioned.",
+      "owner": "Design owner / manufacturing engineer"
+    },
+    {
+      "id": "HW-015",
+      "gate": "G3",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Libraries, footprints, polarity, pin mapping, connector mating, and mechanical fit receive explicit review.",
+      "owner": "Design owner / manufacturing engineer"
+    },
+    {
+      "id": "HW-016",
+      "gate": "G3",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "The BOM identifies exact parts, quantities, approved alternates, lifecycle/availability risks, and sourcing assumptions.",
+      "owner": "Design owner / manufacturing engineer"
+    },
+    {
+      "id": "HW-017",
+      "gate": "G3",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Manufacturer DFM/DFA queries are closed; critical dimensions, materials, stack-up, and acceptance requirements are agreed.",
+      "owner": "Design owner / manufacturing engineer"
+    },
+    {
+      "id": "HW-018",
+      "gate": "G3",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Programming, debug, calibration, and production-test access physically exist.",
+      "owner": "Design owner / manufacturing engineer"
+    },
+    {
+      "id": "HW-019",
+      "gate": "G3",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Bring-up procedures define power limits, instrumentation, safe states, and stop conditions.",
+      "owner": "Design owner / manufacturing engineer"
+    },
+    {
+      "id": "HW-020",
+      "gate": "G3",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "An immutable release manifest identifies all supplied files and their hashes or equivalent controlled identifiers.",
+      "owner": "Design owner / manufacturing engineer"
+    },
+    {
+      "id": "HW-028",
+      "gate": "G4",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "test",
+      "authority": "external",
+      "criterion": "EVT defects and reworks are reconciled with the released design.",
+      "owner": "Test lead / quality / manufacturing"
+    },
+    {
+      "id": "HW-029",
+      "gate": "G5",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "test",
+      "authority": "external",
+      "criterion": "DVT samples and firmware are representative of the configuration being released.",
+      "owner": "Test lead / quality / manufacturing"
+    },
+    {
+      "id": "HW-030",
+      "gate": "G5",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "test",
+      "authority": "external",
+      "criterion": "Required verification, user validation, compliance, and reliability evidence is complete.",
+      "owner": "Test lead / quality / manufacturing"
+    },
+    {
+      "id": "HW-031",
+      "gate": "G5",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "test",
+      "authority": "external",
+      "criterion": "Test methods, sample allocation, limits, uncertainty, and exception handling were approved before results were accepted.",
+      "owner": "Test lead / quality / manufacturing"
+    },
+    {
+      "id": "HW-032",
+      "gate": "G6",
+      "dimension": "manufacturing",
+      "applies": "all",
+      "method": "test",
+      "authority": "external",
+      "criterion": "PVT uses the intended line and personnel; fixtures and measurement systems are qualified for their purpose.",
+      "owner": "Test lead / quality / manufacturing"
+    },
+    {
+      "id": "HW-033",
+      "gate": "G6",
+      "dimension": "manufacturing",
+      "applies": "all",
+      "method": "test",
+      "authority": "external",
+      "criterion": "Yield, rework, throughput, traceability, and cost meet agreed production criteria.",
+      "owner": "Test lead / quality / manufacturing"
+    },
+    {
+      "id": "HW-034",
+      "gate": "G6",
+      "dimension": "manufacturing",
+      "applies": "all",
+      "method": "test",
+      "authority": "external",
+      "criterion": "Every shipped unit can be associated with its build configuration, test result, and provisioning/calibration record.",
+      "owner": "Test lead / quality / manufacturing"
+    },
+    {
+      "id": "HW-035",
+      "gate": "G7",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Every SKU and destination has completed its applicable regulatory route and required records.",
+      "owner": "Product owner / quality / regulatory"
+    },
+    {
+      "id": "HW-036",
+      "gate": "G7",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "The approved label, instructions, declarations/statements, language, and economic-operator details accompany the product as required.",
+      "owner": "Product owner / quality / regulatory"
+    },
+    {
+      "id": "HW-037",
+      "gate": "G7",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Supplier capacity, component availability, production acceptance, and logistics support the launch commitment.",
+      "owner": "Product owner / quality / regulatory"
+    },
+    {
+      "id": "HW-038",
+      "gate": "G7",
+      "dimension": "commercial",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Commercial approval uses a complete cost model, price, margin, working-capital, and warranty/support assumptions.",
+      "owner": "Product owner / quality / regulatory"
+    },
+    {
+      "id": "HW-039",
+      "gate": "G7",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Installation, onboarding, intended-user tasks, accessories, and service procedures have validation evidence.",
+      "owner": "Product owner / quality / regulatory"
+    },
+    {
+      "id": "HW-040",
+      "gate": "G7",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Support staff, vulnerability contact, update delivery, incident response, spares, and returns handling are operational.",
+      "owner": "Product owner / quality / regulatory"
+    },
+    {
+      "id": "HW-041",
+      "gate": "G7",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "The release identifies who may authorize shipment, stop shipment, approve a change, and initiate a field action.",
+      "owner": "Product owner / quality / regulatory"
+    },
+    {
+      "id": "HW-042",
+      "gate": "Sustaining",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Production and field quality metrics identify configuration, batch/serial range, and reporting period.",
+      "owner": "Sustaining / service / security owner"
+    },
+    {
+      "id": "HW-043",
+      "gate": "Sustaining",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Complaints, failures, vulnerabilities, and supplier notices have accountable triage and escalation.",
+      "owner": "Sustaining / service / security owner"
+    },
+    {
+      "id": "HW-044",
+      "gate": "Sustaining",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Changes receive impact analysis, required revalidation, and updated production/service records.",
+      "owner": "Sustaining / service / security owner"
+    },
+    {
+      "id": "HW-046",
+      "gate": "Sustaining",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Support duration, spare parts, key ownership, and third-party service dependencies remain funded and assigned.",
+      "owner": "Sustaining / service / security owner"
+    },
+    {
+      "id": "HW-047",
+      "gate": "Sustaining",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Retirement addresses customers, installed devices, data, credentials, service shutdown, and disposal.",
+      "owner": "Sustaining / service / security owner"
+    },
+    {
+      "id": "HW-048",
+      "gate": "G0",
+      "dimension": "commercial",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Define the user problem, intended purpose, operating environment, target markets, and commercial stop criteria.",
+      "owner": "Product owner"
+    },
+    {
+      "id": "HW-049",
+      "gate": "G0",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Identify high-consequence hazards and uncertain technology, supply, and market assumptions before committing the architecture.",
+      "owner": "Systems lead / product owner"
+    },
+    {
+      "id": "HW-050",
+      "gate": "G4",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "test",
+      "authority": "external",
+      "criterion": "Complete staged bring-up and core performance measurements on identified prototypes; record every rework.",
+      "owner": "Hardware / firmware / test leads"
+    },
+    {
+      "id": "HW-051",
+      "gate": "G5",
+      "dimension": "documentation",
+      "applies": "all",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Define risk-appropriate samples, operating corners, reliability profiles, and intended-user validation; justify deviations from production intent.",
+      "owner": "Test lead / quality"
+    },
+    {
+      "id": "HW-052",
+      "gate": "G6",
+      "dimension": "manufacturing",
+      "applies": "all",
+      "method": "test",
+      "authority": "external",
+      "criterion": "Validate the ability of selected factory tests to detect representative faults and distinguish retest or rework from first-pass yield.",
+      "owner": "Manufacturing test / quality"
+    },
+    {
+      "id": "HW-053",
+      "gate": "G6",
+      "dimension": "manufacturing",
+      "applies": "all",
+      "method": "test",
+      "authority": "external",
+      "criterion": "Demonstrate production programming, calibration, identity provisioning, traceability, and rework with the intended personnel and equipment.",
+      "owner": "Manufacturing / firmware / security"
+    },
+    {
+      "id": "HW-055",
+      "gate": "G1",
+      "dimension": "compliance",
+      "applies": "sector:robotics,sector:industrial",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Identify robot, integrated-cell, machinery, or other application scope and its applicable safety standards.",
+      "owner": "Systems safety / regulatory"
+    },
+    {
+      "id": "HW-056",
+      "gate": "G5",
+      "dimension": "compliance",
+      "applies": "sector:robotics,sector:industrial",
+      "method": "test",
+      "authority": "external",
+      "criterion": "Derive and validate safety functions, stopping and restart behavior, safeguards, and maintenance states from risk assessment.",
+      "owner": "Systems safety / test"
+    },
+    {
+      "id": "HW-056-PLAN",
+      "gate": "G1",
+      "dimension": "compliance",
+      "applies": "sector:robotics,sector:industrial",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Resolve applicability, accountable owner, launch-date baseline and evidence plan: Derive and validate safety functions, stopping and restart behavior, safeguards, and maintenance states from risk assessment.",
+      "owner": "Systems safety / test"
+    },
+    {
+      "id": "HW-057",
+      "gate": "G7",
+      "dimension": "compliance",
+      "applies": "sector:industrial",
+      "method": "test",
+      "authority": "external",
+      "criterion": "Complete required factory and site acceptance against the actual payload, tooling, installation, and surrounding interfaces.",
+      "owner": "Integrator / commissioning owner"
+    },
+    {
+      "id": "HW-057-PLAN",
+      "gate": "G1",
+      "dimension": "compliance",
+      "applies": "sector:industrial",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Resolve applicability, accountable owner, launch-date baseline and evidence plan: Complete required factory and site acceptance against the actual payload, tooling, installation, and surrounding interfaces.",
+      "owner": "Integrator / commissioning owner"
+    },
+    {
+      "id": "HW-062",
+      "gate": "G7",
+      "dimension": "compliance",
+      "applies": "market:US",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Resolve FCC intentional/unintentional radiator scope, host/module integration, authorization route, labels, and responsible parties.",
+      "owner": "US regulatory owner"
+    },
+    {
+      "id": "HW-062-PLAN",
+      "gate": "G1",
+      "dimension": "compliance",
+      "applies": "market:US",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Resolve applicability, accountable owner, launch-date baseline and evidence plan: Resolve FCC intentional/unintentional radiator scope, host/module integration, authorization route, labels, and responsible parties.",
+      "owner": "US regulatory owner"
+    },
+    {
+      "id": "HW-063",
+      "gate": "G7",
+      "dimension": "compliance",
+      "applies": "market:US",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Resolve CPSC product-rule, certification and import eFiling duties, and applicable workplace electrical approval requirements.",
+      "owner": "US regulatory / importer"
+    },
+    {
+      "id": "HW-063-PLAN",
+      "gate": "G1",
+      "dimension": "compliance",
+      "applies": "market:US",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Resolve applicability, accountable owner, launch-date baseline and evidence plan: Resolve CPSC product-rule, certification and import eFiling duties, and applicable workplace electrical approval requirements.",
+      "owner": "US regulatory / importer"
+    },
+    {
+      "id": "HW-064",
+      "gate": "G7",
+      "dimension": "compliance",
+      "applies": "market:EU",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Resolve applicable CE legislation, assessment route, technical file, declaration, markings, instructions, and responsible operators.",
+      "owner": "EU regulatory owner"
+    },
+    {
+      "id": "HW-064-PLAN",
+      "gate": "G1",
+      "dimension": "compliance",
+      "applies": "market:EU",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Resolve applicability, accountable owner, launch-date baseline and evidence plan: Resolve applicable CE legislation, assessment route, technical file, declaration, markings, instructions, and responsible operators.",
+      "owner": "EU regulatory owner"
+    },
+    {
+      "id": "HW-065",
+      "gate": "G7",
+      "dimension": "compliance",
+      "applies": "market:EU",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Resolve RoHS, GPSR, WEEE, and any product-specific environmental or producer duties.",
+      "owner": "EU regulatory / operations"
+    },
+    {
+      "id": "HW-065-PLAN",
+      "gate": "G1",
+      "dimension": "compliance",
+      "applies": "market:EU",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Resolve applicability, accountable owner, launch-date baseline and evidence plan: Resolve RoHS, GPSR, WEEE, and any product-specific environmental or producer duties.",
+      "owner": "EU regulatory / operations"
+    },
+    {
+      "id": "HW-066",
+      "gate": "G7",
+      "dimension": "compliance",
+      "applies": "market:EU",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Operate applicable Article 14 reporting from 11 September 2026 and plan main CRA obligations for 11 December 2027.",
+      "owner": "Security / EU regulatory"
+    },
+    {
+      "id": "HW-066-PLAN",
+      "gate": "G1",
+      "dimension": "compliance",
+      "applies": "market:EU",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Resolve applicability, accountable owner, launch-date baseline and evidence plan: Operate applicable Article 14 reporting from 11 September 2026 and plan main CRA obligations for 11 December 2027.",
+      "owner": "Security / EU regulatory"
+    },
+    {
+      "id": "HW-073",
+      "gate": "G7",
+      "dimension": "compliance",
+      "applies": "market:EU&sector:robotics,market:EU&sector:industrial",
+      "method": "inspection",
+      "authority": "external",
+      "criterion": "Use the correct market-placement baseline for the transition to the Machinery Regulation on 20 January 2027.",
+      "owner": "Machinery regulatory owner"
+    },
+    {
+      "id": "HW-073-PLAN",
+      "gate": "G1",
+      "dimension": "compliance",
+      "applies": "market:EU&sector:robotics,market:EU&sector:industrial",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Resolve applicability, accountable owner, launch-date baseline and evidence plan: Use the correct market-placement baseline for the transition to the Machinery Regulation on 20 January 2027.",
+      "owner": "Machinery regulatory owner"
+    },
+    {
+      "id": "AUTO-ERC",
+      "gate": "G3",
+      "dimension": "electrical",
+      "method": "inspection",
+      "authority": "tool",
+      "criterion": "erc",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-DRC",
+      "gate": "G3",
+      "dimension": "layout",
+      "method": "inspection",
+      "authority": "tool",
+      "criterion": "drc",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-SIM",
+      "gate": "G3",
+      "dimension": "simulation",
+      "method": "simulation",
+      "authority": "tool",
+      "criterion": "sim",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-CONNECTIVITY",
+      "gate": "G3",
+      "dimension": "electrical",
+      "method": "inspection",
+      "authority": "tool",
+      "criterion": "connectivity",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-RULES",
+      "gate": "G3",
+      "dimension": "electrical",
+      "method": "analysis",
+      "authority": "tool",
+      "criterion": "rules",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-LAYOUT",
+      "gate": "G3",
+      "dimension": "layout",
+      "method": "analysis",
+      "authority": "tool",
+      "criterion": "layout",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-PDN",
+      "gate": "G3",
+      "dimension": "electrical",
+      "method": "analysis",
+      "authority": "tool",
+      "criterion": "pdn",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-SI",
+      "gate": "G3",
+      "dimension": "simulation",
+      "method": "simulation",
+      "authority": "tool",
+      "criterion": "si",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-THERMAL",
+      "gate": "G3",
+      "dimension": "electrical",
+      "method": "analysis",
+      "authority": "tool",
+      "criterion": "thermal",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-EM",
+      "gate": "G3",
+      "dimension": "simulation",
+      "method": "simulation",
+      "authority": "tool",
+      "criterion": "em",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-EMC",
+      "gate": "G3",
+      "dimension": "compliance",
+      "method": "analysis",
+      "authority": "tool",
+      "criterion": "emc",
+      "owner": "Engineering"
+    },
+    {
+      "id": "AUTO-FACTORY",
+      "gate": "G6",
+      "dimension": "manufacturing",
+      "method": "analysis",
+      "authority": "tool",
+      "criterion": "factory",
+      "owner": "Manufacturing quality"
+    },
+    {
+      "id": "AUTO-COST",
+      "gate": "G7",
+      "dimension": "commercial",
+      "method": "analysis",
+      "authority": "tool",
+      "criterion": "commercial",
+      "owner": "Product owner"
+    },
+    {
+      "id": "REQ-HR-001",
+      "gate": "G3",
+      "dimension": "documentation",
+      "method": "simulation",
+      "authority": "review",
+      "criterion": "RF input and output networks: return loss >= 15 dB and insertion loss <= 0.6 dB from 2.3 to 2.5 GHz (connector landing to gain-block pin)",
+      "owner": "RF engineering"
+    },
+    {
+      "id": "REQ-HR-002",
+      "gate": "G3",
+      "dimension": "documentation",
+      "method": "analysis",
+      "authority": "review",
+      "criterion": "Every RF line 50 ohm +/-10 % on the fabricator stackup",
+      "owner": "RF engineering"
+    },
+    {
+      "id": "REQ-HR-003",
+      "gate": "G3",
+      "dimension": "documentation",
+      "method": "analysis",
+      "authority": "review",
+      "criterion": "Gain-block bias current 100 mA +/-10 % from the 12 V input (device voltage 4.4 V typ, datasheet value to confirm)",
+      "owner": "RF engineering"
+    },
+    {
+      "id": "REQ-HR-004",
+      "gate": "G3",
+      "dimension": "documentation",
+      "method": "analysis",
+      "authority": "review",
+      "criterion": "Every resistor at or below 50 % of its rated power (2x derating)",
+      "owner": "Reliability"
+    },
+    {
+      "id": "REQ-HR-005",
+      "gate": "G3",
+      "dimension": "documentation",
+      "method": "simulation",
+      "authority": "review",
+      "criterion": "25 MHz clock into a 50 ohm load: overshoot <= 15 %, ringback <= 20 %, settled within 5 ns",
+      "owner": "Digital engineering"
+    },
+    {
+      "id": "REQ-HR-006",
+      "gate": "G3",
+      "dimension": "documentation",
+      "method": "analysis",
+      "authority": "review",
+      "criterion": "+3V3 rail impedance at the oscillator below Z_target (2 % ripple on a 20 mA step) from 1 kHz to 100 MHz",
+      "owner": "Power engineering"
+    },
+    {
+      "id": "REQ-HR-007",
+      "gate": "G3",
+      "dimension": "documentation",
+      "method": "analysis",
+      "authority": "review",
+      "criterion": "Every dissipating part at least 20 C below its maximum junction/element temperature",
+      "owner": "Thermal engineering"
+    },
+    {
+      "id": "REQ-HR-008",
+      "gate": "G3",
+      "dimension": "documentation",
+      "method": "analysis",
+      "authority": "review",
+      "criterion": "Clock-harmonic radiated-emission estimate at least 6 dB below CISPR 32 Class B (estimate only; chamber test at EVT)",
+      "owner": "EMC engineering"
+    },
+    {
+      "id": "REQ-HR-009",
+      "gate": "G3",
+      "dimension": "documentation",
+      "method": "analysis",
+      "authority": "review",
+      "criterion": "12 V input path: trace temperature rise <= 10 C at 150 mA",
+      "owner": "Power engineering"
+    },
+    {
+      "id": "REQ-HR-010",
+      "gate": "G3",
+      "dimension": "documentation",
+      "method": "inspection",
+      "authority": "review",
+      "criterion": "Schematic connectivity equals the golden circuit description",
+      "owner": "Electrical engineering"
+    },
+    {
+      "id": "REQ-HR-011",
+      "gate": "G4",
+      "dimension": "documentation",
+      "method": "test",
+      "authority": "external",
+      "criterion": "Assembled board: measured S11 <= -10 dB from 2.3 to 2.5 GHz at both RF ports",
+      "owner": "RF engineering"
+    }
+  ]
+}

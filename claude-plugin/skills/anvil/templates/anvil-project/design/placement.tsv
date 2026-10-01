@@ -1,0 +1,4 @@
+# Placement for `board ... --placement` and `place <pcb> design/placement.tsv`: the knob the layout loop turns.
+# side F|B; unlisted parts are shelf-packed inside the outline by `board`.
+# example: U1	42.0	31.5	90	F
+ref	x_mm	y_mm	rot_deg	side

@@ -12,6 +12,10 @@ plugin; this project does not contain its scripts.
 | `lifecycle-checks.csv` | Reference copy of the 75 research items plus early planning checkpoints; the installed catalog controls gates |
 | `pcb/rules/` | Starter deck; copy to `<board>.kicad_dru` beside the actual PCB/project/schematic to activate |
 | `sim/assertions.tsv` | Exact harness, measure, comparison, units, corners and requirement traces |
+| `sim/plots.tsv` | Corner waveform plots for the audit package (`plots`) |
+| `sch/circuit.json`, `sch/connectivity.tsv` | Golden netlist for the wired `schematic` generator; wiring assertions incl. `golden` |
+| `design/rules.tsv` | Cited sizing calculations (`rules`): every value traces to a rulebook id |
+| `audit/` | Iteration, decision and research ledgers (`log`) and the generated report/paper (`report`) |
 | `system/`, `harness/` | Physical interface endpoints, sourced budgets, wires and explicit mating pin definitions |
 | `bom/`, `catalog/` | Exact source joins for product cost/mass, including mechanical and COTS parts |
 | `mech/` | CAD-derived measurements and fit/mass/process assertions |

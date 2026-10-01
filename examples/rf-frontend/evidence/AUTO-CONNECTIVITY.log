@@ -1,0 +1,10 @@
+COMMAND: ["C:\\Users\\tenso\\AppData\\Local\\Programs\\KiCad\\10.0\\bin\\kicad-cli.EXE", "sch", "export", "netlist", "--format", "kicadxml", "-o", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\anvil-net-fmsn0nh4\\netlist.xml", "C:\\dev\\anvil\\examples\\rf-frontend\\pcb\\rffe.kicad_sch"]
+EXIT: 0
+
+NETLIST: 11 nets, 22 parts (fresh kicad-cli export)
+W-1 golden circuit.json: 11 nets identical PASS
+W-2 decoupled X1: X1 decoupled on ['4'] PASS
+W-3 decoupled U1: U1 decoupled on ['3'] PASS
+W-4 no_floating U2: U2 all pins wired PASS
+W-5 connected U2.3: nets=['/RF_B'] PASS
+CONNECTIVITY: 5/5

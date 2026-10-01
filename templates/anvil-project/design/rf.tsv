@@ -1,0 +1,5 @@
+# RF layout rules for `layout` (declare as rf_intent). Fence pitch defaults to lambda_eff/10 at f_max (ARCH-065), stitching of
+# same-layer ground pour to lambda_eff/20 (WILLIAMS-2038); lambda_eff comes from the net's own field solution.
+# source: REF.PIN of the RF source/IC pin (matching parts must sit within match_max_mm, default lambda/20); keepout_refs: antenna/module refs.
+# example: RF_ANT	2.5e9	U3.12	0	-	1.5	-	AE1	HR-020
+net	f_max_hz	source	max_vias	fence_pitch_mm	fence_band_mm	match_max_mm	keepout_refs	traces

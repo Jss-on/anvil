@@ -1,0 +1,13 @@
+# rffe cited sizing calculations (`anvil.py rules design`). Device values marked "datasheet" are typicals to confirm.
+id	check	inputs	op	limit	units	traces	source
+R-01	bias_current	supply_v=12;device_v=4.4;resistance_ohm=73.33	within	100±10%	mA	HR-003	GALI-84+ Vd 4.4 V / Id 100 mA (datasheet); three 220R in parallel (iteration 2: was two 150R, R-03 failed); AOE-3330
+R-02	bias_current	supply_v=13.2;device_v=4.4;resistance_ohm=73.33	le	130	mA	HR-003	worst-case +10 % input
+R-03	derating_ratio	applied=0.352;rated=1.0	le	50	%	HR-004	R1/R3/R5 each: (40.0 mA)^2 x 220R at 13.2 V vs 1 W 2512 rating; WILSON-394 (2x derating)
+R-04	inductor_reactance	inductance_nh=22;frequency_mhz=2300	ge	250	ohm	HR-001	RF choke L1 >= 5 x Z0 at the band bottom; AOE-3330
+R-05	capacitor_reactance	capacitance_pf=10;frequency_mhz=2500;esl_nh=0.6	le	5	ohm	HR-001	DC blocks C1/C2 series |X| with body ESL <= Z0/10 at the band top (ARCH-067 NPO ESL; 100 pF was 8.8 ohm inductive, iteration 12); AOE-3330
+R-11	capacitor_reactance	capacitance_pf=10;frequency_mhz=2300;esl_nh=0.3	le	5	ohm	HR-001	same at the band bottom with a low 0402 ESL (capacitive corner); AOE-3330
+R-06	capacitor_reactance	capacitance_pf=10;frequency_mhz=2500;esl_nh=0.6	le	10	ohm	HR-001	RF bypass C3 at the bias node with its ESL: << the 22 nH choke (R-04); ARCH-067
+R-07	linear_regulator_dissipation	vin_v=13.2;vout_v=3.3;iout_a=0.0163;theta_ja_c_per_w=90;ta_c=40;tj_max_c=125	ge	20	C	HR-007	AMS1117 SOT-223 theta_JA 90 C/W (datasheet); oscillator 15 mA + LED 1.3 mA
+R-08	trace_rise_ipc2152	current_a=0.15;width_mm=0.25;thickness_mm=0.035;layer=external	le	10	C	HR-009	12 V input path, narrowest routed width; BROOKS-046
+R-09	return_loss	z_load_ohm=49.7;z0_ohm=50	ge	20	dB	HR-002	field-solved RF line vs 50 ohm system (tools/size_rf_line.py)
+R-10	bias_current	supply_v=3.3;device_v=2.0;resistance_ohm=1000	within	1.3±0.5	mA	HR-007	indicator LED Vf 2.0 V (datasheet)

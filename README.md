@@ -1,7 +1,7 @@
 # Anvil
 
 **Hardware product development with explicit release gates and revision-bound evidence.**
-Version **0.5.0** · Claude Code and Codex plugins · Proprietary license
+Version **0.6.0** · Claude Code and Codex plugins · Proprietary license
 
 Anvil carries a product from requirements and architecture through PCB fabrication, firmware,
 mechanics, integration, EVT/DVT/PVT, market release, support and retirement. Its commands perform
@@ -128,6 +128,73 @@ See the [CLI contract](.claude/skills/anvil/references/metrics.md) and
 [evidence schema](.claude/skills/anvil/references/evidence-protocol.md) for command arrays,
 receipts, strict table formats and exit statuses.
 
+## Accuracy and outputs (0.6)
+
+- **Rulebook.** About 12,000 cited rules (0.7; 6,900 in 0.6) extracted from the reference library, in the skill's
+  `references/rulebook/`. Sources include IPC-2221C/6012F/A-610J, Brooks & Adam, Bogatin, Coombs & Holden,
+  Hall/McCall, Hall & Heck, Archambeault, Williams, Paul, Pressman, Erickson, Pozar, Balanis, Bowick,
+  Johnson & Graham (1993, 2003), Horowitz & Hill, Scherz & Monk, Ritchey, Mitzner, Wilson, Stringham, White
+  and Cohen, each mined in full. Every rule carries its page, section, table or figure, and
+  `bibliography.json` maps rule ids to IEEE references; each file's section 8 lists OCR losses and printed
+  errata found while re-checking worked examples.
+- **Cited calculations.** `design/rules.tsv` rows run textbook formulas as a gate check (`rules`). They cover
+  trace temperature and current, IPC-2221 spacing, fusing, impedance, PDN target and decoupling, converter
+  ripple and RHP zero, loop and common-mode radiation, slot shielding, I²C pull-ups, return loss, Friis
+  link, patch antenna, thermal and mass.
+- **Wired schematics.** `schematic sch/circuit.json pcb/board.kicad_sch` places KiCad symbols, draws real
+  orthogonal wires and power symbols, then proves the drawing. KiCad must reload it, the fresh netlist
+  must equal the spec, and ERC must be clean. `schematic-spec` converts an existing label-only drawing.
+- **Evidence outputs.** `plots` renders ngspice corner waveforms and margin charts. `renders` produces
+  schematic and PCB SVG/PDF/3D files. `fabpack` produces Gerber X2, drill, placement, IPC-2581,
+  IPC-D-356 and STEP files, with every command logged and hashed.
+- **Audit and paper.** `log` keeps iteration, decision and research ledgers for the modify→verify→keep
+  loop. `report` writes `audit/AUDIT.md`, `audit.json` and an IEEEtran `paper.tex` with `refs.bib`. Both
+  are built from the ledgers, receipts, BOMs and plots.
+
+## Board truth (0.7)
+
+Every board claim is now measured on the copper KiCad itself reports, read through KiCad's own Python with
+zones refilled in memory. Nothing is taken from typed numbers.
+
+- **Board, placement, routing.** `board` puts footprints and nets from the schematic onto a template board
+  that carries the fabricator's stackup, outline and rules. `place` applies `design/placement.tsv`, and
+  `route` runs Freerouting on a copy and checks the result with DRC.
+- **Layout.** `layout` checks the routed copper against `design/nets.tsv` and `rf.tsv`:
+  - IPC-2152 trace heating (Brooks & Adam fits) and via groups;
+  - IPC-2221 spacing to every neighbour net;
+  - field-solved Z0 and Zdiff with the real mask and coplanar gaps;
+  - return-plane continuity and length matching;
+  - RF via-fence pitch, pour stitching, matching-part distance and antenna keep-outs.
+- **Signal integrity.** `si` turns each routed net into field-solved transmission lines, including via stubs,
+  and simulates it in ngspice. It reports overshoot, ringback, delay and settling at every receiver.
+- **Power integrity.** `pdn` computes impedance at the load. Each capacitor's mounted inductance is built from
+  the copper: its fanout path, via pair and cavity spreading. Plane capacitance and the VRM are included, and
+  the result is checked against Z_target.
+- **Thermal.** `thermal` is a layered conduction model of the real copper and via barrels. It gives Tj for
+  each part and a heat map.
+- **EM.** `em` writes an openEMS FDTD model of the RF path: its nets and ground copper, ports where the
+  connector pin or device lead enters each pad (driving the coplanar gaps over a launch cut-out), and the
+  matching parts (capacitors as series ESR-ESL-C, inductors with the ESR of their Q). It
+  saves Touchstone and plots; a `settled` row fails if the end of the run still moves a checked S-parameter.
+  `sparams` applies the same limits to VNA measurements of the built board.
+- **EMC estimate.** `emc` multiplies each net's loop area by the clock's trapezoid harmonics and compares the
+  result with the FCC and CISPR limit lines.
+
+**Validation.** Every solver is tested against an analytic anchor:
+
+| Solver | Reference | Agreement |
+|---|---|---|
+| Z0, 2-D field solver | Cohn stripline, Hammerstad–Jensen microstrip | < 1 % |
+| Thermal | K0 point source on a plate | < 0.1 % |
+| SI | Lattice-diagram overshoot | exact |
+| EMC harmonics | Paul's worked example | 0.05 dB |
+| EM | 2-D solver on a 50 Ω microstrip | Zin within 1.1 %; ε_eff within 1.6 % (two-length, mean 1.1 %); line loss within 1.5 % of the analytic dielectric loss; \|S12 − S21\| < 3e-5 |
+| EM, coplanar launch port | 2-D solver on a CPW over a 1.53 mm ground (an SMA pad over a cut-out) | Z0 from the S-matrix within 0.22 % over 1–3 GHz; S11 < −27 dB to 4 GHz; \|S12 − S21\| < 2e-3 |
+| EM, antenna mode | Balanis patch design; cos² feed law | resonance within 3.2 % (mesh-converged to 0.15 %); feed law within 1 % |
+
+**Still physical.** VNA measurement of RF paths, antenna pattern and efficiency, chamber EMC, and thermal
+validation at EVT.
+
 ## Readiness means evidence
 
 - All **75 research checklist items** are bundled, with **19 early applicability checkpoints**.
@@ -153,6 +220,14 @@ are needed where adversarial tampering or authenticated approvals are in scope.
 No remote publication, supplier contact, purchase, hardware energization, firmware deployment,
 filing or shipment happens without the session's authorization for that action. Local work and
 reviewable packages proceed without repeated permission requests.
+
+Optional failure triage is available with `Jev: shadow` in build/evals. The
+[Jev triage guide](.claude/skills/anvil/references/jev-triage.md) describes the finding packet,
+`TYPESAFE_API_KEY` or hidden `--prompt-key` input, and the standalone
+`python -B scripts/jev_triage.py finding.json` command. It emits advisory JSON and never writes
+designs or release evidence. The network client is separate from the hashed gate engine.
+For a small live diagnostic replay, use
+`python -B evals/jev/pilot.py cases.json new-run-directory --prompt-key`.
 
 ## Migrate from 0.4
 

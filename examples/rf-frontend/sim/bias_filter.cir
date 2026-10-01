@@ -1,0 +1,16 @@
+* rffe bias node (nb): 12 V ripple through the 3 x 220R bias resistors, bypassed by C4 100n + C3 10p;
+* the gain block modelled as its dynamic resistance (rd ~ 10 ohm, datasheet-typical) behind the 22n choke.
+.param rtol=1
+.param ctol=1
+.param rd=10
+Vin in 0 DC 12 AC 1
+Rb in nb {73.33*rtol}
+C4 nb 0 {100n*ctol}
+C3 nb 0 10p
+L1 nb ndev 22n
+Rdev ndev 0 {rd}
+.save v(nb)
+.ac dec 50 1k 100meg
+.meas ac att100k find vdb(nb) at=100e3
+.meas ac att1meg find vdb(nb) at=1e6
+.end

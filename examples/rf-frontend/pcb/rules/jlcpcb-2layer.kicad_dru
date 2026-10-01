@@ -1,0 +1,29 @@
+(version 1)
+
+# JLCPCB 2-layer, 1 oz outer copper — capability snapshot, accessed 2026-08-26.
+# The deck is a snapshot: verify against the fab's current published specs at build time;
+# refreshing it is an explicit, logged event (fab-protocol.md).
+
+(rule "min track width"
+  (condition "A.Type == 'track'")
+  (constraint track_width (min 0.127mm)))
+
+(rule "min copper clearance"
+  (constraint clearance (min 0.127mm)))
+
+(rule "min via size"
+  (condition "A.Type == 'via'")
+  (constraint via_diameter (min 0.45mm))
+  (constraint hole_size (min 0.3mm)))
+
+(rule "min annular ring"
+  (condition "A.Type == 'via'")
+  (constraint annular_width (min 0.075mm)))
+
+(rule "board edge clearance"
+  (constraint edge_clearance (min 0.3mm)))
+
+(rule "min silk text"
+  (condition "A.Type == 'text' && A.Layer == '?.Silkscreen'")
+  (constraint text_height (min 1mm))
+  (constraint text_thickness (min 0.15mm)))

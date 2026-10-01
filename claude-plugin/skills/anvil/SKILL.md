@@ -2,7 +2,7 @@
 name: anvil
 description: "Design, verify, improve, and release electronic hardware products through requirements, architecture, PCB fabrication, firmware, mechanics, EVT, DVT, PVT, market access, support, and retirement. Use for Anvil builds, hardware requirements, design optimization, lifecycle gates, and evidence audits."
 metadata:
-  version: "0.5.0"
+  version: "0.7.0"
 ---
 
 # Anvil
@@ -46,6 +46,10 @@ they are not shell commands or a dependency on Claude Code.
 Infer scope from the project and session. Clarify only missing consequential requirements;
 continue independent work. Do not repeat approvals already granted in the session.
 
+When the user enables `Jev: shadow`, read [Jev triage](references/jev-triage.md) and use
+`scripts/jev_triage.py` for ambiguous failure review in build/evals. It only records advice;
+all actual verification and release decisions remain with the existing tools and reviewers.
+
 ## Evidence and release rules
 
 1. `pass-rate` and `coverage` describe progress. They never authorize fabrication or shipment.
@@ -65,6 +69,45 @@ continue independent work. Do not repeat approvals already granted in the sessio
    manufacturing, firmware compatibility, and field effectivity before releasing a change.
 7. Run `handoff <project> --write <command>` and `validate-handoff.sh <handoff.json>` before
    chaining. Carry blockers forward. A valid blocked handoff is not authorization to release.
+
+## Accuracy: cited rules, wired schematics, proven outputs
+
+- Choose values from [the rulebook](references/rulebook/INDEX.md): ~12,000 cited rules extracted from the
+  whole reference library (IPC, Brooks, Bogatin, Coombs, Archambeault, Williams, Paul, Pozar, Balanis, Bowick,
+  Johnson & Graham, Pressman, Erickson, Horowitz & Hill...).
+  Grep by domain or id; cite `TAG-nnn` ids. [bibliography.json](references/bibliography.json) maps ids to IEEE references.
+- Put every sizing calculation in `design/rules.tsv` (`anvil.py calc <check> k=v` to explore; `rules <dir>` to gate):
+  trace current/temperature, IPC-2221 clearance, fusing, impedance, PDN target, converter ripple, EMC radiation,
+  RF link/match, thermal. A value without a passing cited row is an assumption, not a design.
+- Draw schematics from `sch/circuit.json` with `anvil.py schematic`: KiCad symbols, real orthogonal wires,
+  power symbols, then KiCad reload + fresh netlist == spec + ERC. `schematic-spec` converts an existing
+  label-only drawing. Gate the released drawing with a `golden` row in `sch/connectivity.tsv`.
+- Evidence outputs: `plots` (ngspice corner waveforms + margin chart), `renders` (schematic/PCB SVG/PDF/3D/stats),
+  `fabpack` (Gerber X2, drill, placement, IPC-2581, IPC-D-356, STEP with logged commands), `wiring` (net tables).
+- Keep the loop auditable: `log <project> iteration|decision|research k=v ...` every modify/verify/keep-discard
+  step, decision and source consulted; `report <project>` writes `audit/AUDIT.md`, `audit.json` and an
+  IEEEtran `audit/paper/` skeleton from those ledgers, receipts, BOMs and plots. See [metrics](references/metrics.md).
+
+## Board truth: layout, SI, PDN, thermal, EM, EMC
+
+Every board claim is measured on the copper KiCad reports (zones refilled in memory), never on typed numbers.
+Declare intent tables under `design/`, then iterate place/route/verify like any other metric loop:
+
+| Command | Intent (release role) | What it proves |
+|---|---|---|
+| `board <sch> <template.kicad_pcb> <out>` / `place` / `route` | `placement.tsv` | Footprints + nets from the schematic, placement, Freerouting copy + DRC |
+| `layout <pcb> design` | `nets.tsv` (+`rf.tsv`) | IPC-2152 heating, IPC-2221 spacing, field-solved Z0/Zdiff, return path, length match, RF fence/stitching/keep-out |
+| `si <pcb> design` | `si.tsv` | Routed topology as field-solved lines in ngspice: overshoot, ringback, delay, settling |
+| `pdn <pcb> design` | `pdn.tsv` (+`caps.tsv`) | Z(f) at the load from real cap mounting, cavity, VRM vs Z_target |
+| `thermal <pcb> design` | `thermal.tsv` | Layered copper conduction + convection: Tj per part, heat map |
+| `em <pcb> design` | `em.tsv` | openEMS FDTD S-parameters (Touchstone + plot) of the RF copper, ports and matching parts |
+| `sparams design` | `sparams.tsv` | The same limits on VNA measurements of built boards (G4) |
+| `emc <pcb> design` | `emc.tsv` | Loop x harmonic radiated-emission estimate vs FCC/CISPR lines (steering, not compliance) |
+
+Releasing an intent table (`artifacts.<role>`) makes its `AUTO-*` check mandatory at its gate. Solvers are held to
+analytic anchors in `tests/test_anvil_analysis.py` (Cohn/Hammerstad-Jensen Z0, K0 thermal, lattice overshoot).
+What stays physical: VNA measurement of RF paths, antenna pattern/efficiency, chamber EMC, thermal validation.
+Read [layout](references/layout-protocol.md) for the loop and the model limits each command states.
 
 ## Execution boundaries
 

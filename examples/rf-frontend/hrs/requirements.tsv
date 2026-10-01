@@ -1,0 +1,12 @@
+id	statement	units	conditions	method	gate	owner
+HR-001	RF input and output networks: return loss >= 15 dB and insertion loss <= 0.6 dB from 2.3 to 2.5 GHz (connector landing to gain-block pin)	dB	full-wave model of the released copper, 50 ohm ports	simulation	G3	RF engineering
+HR-002	Every RF line 50 ohm +/-10 % on the fabricator stackup	ohm	field solution of the routed cross-section incl. mask and coplanar gaps	analysis	G3	RF engineering
+HR-003	Gain-block bias current 100 mA +/-10 % from the 12 V input (device voltage 4.4 V typ, datasheet value to confirm)	mA	12 V +/-10 % input, 25 C	analysis	G3	RF engineering
+HR-004	Every resistor at or below 50 % of its rated power (2x derating)	%	worst-case 13.2 V input, 70 C ambient rating	analysis	G3	Reliability
+HR-005	25 MHz clock into a 50 ohm load: overshoot <= 15 %, ringback <= 20 %, settled within 5 ns	%	routed clock net, 1 ns edges	simulation	G3	Digital engineering
+HR-006	+3V3 rail impedance at the oscillator below Z_target (2 % ripple on a 20 mA step) from 1 kHz to 100 MHz	ohm	released capacitor set and planes	analysis	G3	Power engineering
+HR-007	Every dissipating part at least 20 C below its maximum junction/element temperature	C	40 C still air, board horizontal	analysis	G3	Thermal engineering
+HR-008	Clock-harmonic radiated-emission estimate at least 6 dB below CISPR 32 Class B (estimate only; chamber test at EVT)	dB	routed clock loops, 10 m limit line	analysis	G3	EMC engineering
+HR-009	12 V input path: trace temperature rise <= 10 C at 150 mA	C	IPC-2152 external/internal fits	analysis	G3	Power engineering
+HR-010	Schematic connectivity equals the golden circuit description	nets	fresh KiCad netlist export	inspection	G3	Electrical engineering
+HR-011	Assembled board: measured S11 <= -10 dB from 2.3 to 2.5 GHz at both RF ports	dB	VNA, calibrated at the SMA reference planes	test	G4	RF engineering

@@ -1,0 +1,10 @@
+# rffe layout intent (`anvil.py layout pcb/rffe.kicad_pcb design`), measured on the routed copper.
+net	kind	current_a	max_rise_c	voltage_v	z_target	z_tol_pct	pair	zdiff_target	max_length_mm	match_group	match_tol_mm	ref_net	traces
+RF_IN	rf	-	-	-	50	10	-	-	10	-	-	GND	HR-002
+RF_A	rf	-	-	-	50	10	-	-	10	-	-	GND	HR-002
+RF_B	rf	-	-	-	50	10	-	-	12	-	-	GND	HR-002
+RF_OUT	rf	-	-	-	50	10	-	-	30	-	-	GND	HR-002
++12V	power	0.15	10	13.2	-	-	-	-	-	-	-	-	HR-009
+BIAS	power	0.13	10	13.2	-	-	-	-	-	-	-	-	HR-009
++3V3	power	0.02	10	3.3	-	-	-	-	-	-	-	-	HR-006
+CLK_OUT	clock	-	-	-	-	-	-	-	20	-	-	GND	HR-005

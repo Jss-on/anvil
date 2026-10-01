@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "schematic": "rffe.kicad_sch",
+  "paper": "A4",
+  "kicad_major": 10,
+  "parts": 22,
+  "nets": 11,
+  "power_nets": [
+    "+12V",
+    "+3V3",
+    "GND"
+  ],
+  "wires": 54,
+  "junctions": 5,
+  "power_symbols": 29,
+  "labels": 8,
+  "no_connects": 0,
+  "signal_links": 13,
+  "unrouted_links": 0,
+  "unrouted": [],
+  "wired_fraction": 1.0,
+  "crossings": 0,
+  "netlist_match": true,
+  "netlist_problems": [],
+  "erc": {},
+  "erc_errors": 0,
+  "erc_warnings": 0
+}

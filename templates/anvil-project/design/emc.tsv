@@ -1,0 +1,5 @@
+# Radiated-emission estimate for `emc <pcb> design` (emc_intent): board loop x trapezoid harmonics (PAUL-1044/2011) vs the limit line.
+# limit: fcc_b|fcc_a|cispr32_b|cispr32_a; optional margin_db (default 6), ref_net; cable rows: cable_len_m + i_cm_ua (PAUL-2018).
+# An estimate (+/-10 dB) to steer layout; compliance needs the chamber.
+# example: CLK_25M	3.3	25e6	0.5	1500	cispr32_b	HR-060
+net	v_swing	f_clock_hz	duty	rise_ps	limit	traces

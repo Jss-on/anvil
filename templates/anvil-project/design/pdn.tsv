@@ -1,0 +1,5 @@
+# PDN intent for `pdn <pcb> design` (pdn_intent). Z_target = v_nom x ripple_pct / i_step_a (BOGATIN-2110) must hold from f_min_hz
+# (default 1 kHz) to f_max_hz. vrm_r_mohm/vrm_l_nh from the regulator datasheet (output impedance). Optional columns: f_min_hz,
+# pkg_l_nh, die_c_nf. Capacitor ESL/ESR default to ARCH-067 by dielectric/package; override per part in caps.tsv (match, esl_nh, esr_mohm).
+# example: +1V0	GND	U1	1.0	3	2	2e8	2	5	HR-030
+rail	ref_net	load	v_nom	ripple_pct	i_step_a	f_max_hz	vrm_r_mohm	vrm_l_nh	traces

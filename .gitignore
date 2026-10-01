@@ -1,10 +1,17 @@
 # KiCad
 *-backups/
+.history/
 _autosave-*
 *.kicad_prl
 *.lck
 fp-info-cache
 ~*.lck
+
+# LaTeX build byproducts (audit/paper)
+*.aux
+*.bbl
+*.blg
+*.out
 
 # Simulation artifacts
 *.raw
@@ -29,3 +36,7 @@ Thumbs.db
 /build-output/
 /boards/
 /forge/
+
+# Reference library (copyrighted books/standards) is local-only; only extracted rulebooks are tracked.
+references/*.pdf
+references/*.epub

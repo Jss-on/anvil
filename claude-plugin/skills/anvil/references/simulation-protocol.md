@@ -39,6 +39,11 @@ units and sign. Anvil does not infer dimensional correctness from the measure na
 The transcript records each corner, observed value, margin and disposition. Gate recordings
 also bind the assertions, circuits and local model dependencies to the release hashes.
 
+`sim/plots.tsv` (`id, circuit, corners, vectors, x, title, traces`) re-runs each corner with a rawfile and
+plots the named vectors (`v(out),i(l1)`) over `x` into `audit/plots/<id>.png`; `plots <project>` also
+charts every recorded assertion margin. Plot what each requirement claims (startup, ripple, transient,
+Bode) and look at the result before citing it.
+
 Review convergence warnings, model applicability, startup and steady-state windows, sampling,
 operating limits and fault behavior. Simulation is evidence for its modeled claim; it does not
 replace physical EMC, environmental, safety, RF or production qualification tests.

@@ -1,0 +1,6 @@
+# Signal integrity for `si <pcb> design` (si_intent): the routed net as field-solved transmission lines in ngspice.
+# driver: REF.PIN; receivers: comma list (default every other pad on the net); rise_ps 0-100 %; r_drv_ohm from IBIS/datasheet;
+# optional r_series_ohm, r_term_ohm + v_term (parallel termination), ref_net; limits: max_overshoot_pct, max_ringback_pct,
+# max_delay_ns, max_settle_ns (set at least one).
+# example: SPI_CLK	U1.23	800	25	3.3	5	15	25	2	-	HR-041
+net	driver	rise_ps	r_drv_ohm	v_swing	c_rx_pf	max_overshoot_pct	max_ringback_pct	max_delay_ns	max_settle_ns	traces

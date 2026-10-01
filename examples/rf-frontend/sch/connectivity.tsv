@@ -1,0 +1,6 @@
+id	kind	target	args	traces
+W-1	golden	circuit.json	-	HR-010
+W-2	decoupled	X1	GND	HR-006
+W-3	decoupled	U1	GND	HR-006
+W-4	no_floating	U2		HR-010
+W-5	connected	U2.3	C2.1 L1.1	HR-001

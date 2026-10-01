@@ -19,6 +19,20 @@ when used for KiCad edits, build123d/CadQuery/OpenSCAD for those CAD sources, Ja
 and the actual firmware SDK/compiler, HIL runner, slicer/CAM or fixture tooling when used.
 Imported native designs do not need every possible authoring library installed.
 
+KiCad CLI also drives `schematic` (symbol libraries from the KiCad install or `KICAD_SYMBOL_DIR`;
+`sch upgrade --force` reload), `connectivity`/`wiring` netlist export, `renders` and `fabpack`.
+`plots` needs matplotlib in the Python that runs Anvil; the IEEE paper skeleton builds with any LaTeX
+distribution providing IEEEtran (`pdflatex paper && bibtex paper`). Nothing is installed automatically.
+
+Board analyses (`layout`, `si`, `pdn`, `thermal`, `em`, `emc`) need numpy in the Python that runs Anvil and
+read the board through KiCad's bundled Python (`pcbnew`, found beside `kicad-cli`, or `KICAD_PYTHON`):
+geometry, filled zones and the Board Setup stackup come from KiCad itself. `board`/`place`/`route` use the
+same interpreter; `route` also needs Java and the Freerouting jar (`ANVIL_FREEROUTING_JAR`, or
+`%LOCALAPPDATA%/anvil/tools/freerouting-*.jar`). `em` needs openEMS (`OPENEMS` = path to the executable,
+PATH, or `%LOCALAPPDATA%/anvil/tools/openEMS/openEMS/openEMS.exe`; Linux: distribution `openems` package):
+Anvil writes the CSXCAD XML itself and post-processes the probe files with numpy, so the openEMS Python
+bindings are not needed. `si` also needs ngspice. `doctor` lists each of these as FOUND or OPTIONAL.
+
 `doctor.sh` checks core tools by default. `--require-build` also requires KiCad and ngspice;
 `--require-product` adds an available CAD authoring tool. Missing optional tools are reported
 without blocking unrelated work. `DOCTOR: READY` means the requested tooling is available,
