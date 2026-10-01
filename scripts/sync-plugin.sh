@@ -63,8 +63,11 @@ if [[ $CHECK -eq 1 ]]; then
     if [[ ! -f "$dst" ]]; then echo "missing in plugin: $dst" >&2; bad=$((bad + 1))
     elif ! cmp -s "$src" "$dst"; then echo "diverged: $dst != $src" >&2; bad=$((bad + 1)); fi
   done
+  # one list, read from a here-string: `expected | grep -q` under pipefail fails whenever grep's early exit
+  # breaks the pipe (Linux), which reported every plugin file as an orphan
+  wanted="$(expected)"
   while IFS= read -r f; do
-    expected | grep -qxF "$f" || { echo "orphan in plugin (no canonical source): $f" >&2; bad=$((bad + 1)); }
+    grep -qxF "$f" <<< "$wanted" || { echo "orphan in plugin (no canonical source): $f" >&2; bad=$((bad + 1)); }
   done < <(actual)
   for manifest in "${manifests[@]}"; do
     [[ -f "$manifest" ]] || { echo "missing $manifest" >&2; bad=$((bad + 1)); }
@@ -82,9 +85,10 @@ for p in "${pairs[@]}"; do
   cp -f "$src" "$dst"
   n=$((n + 1))
 done
-# prune orphans (stale copies of deleted canonical files)
+# prune orphans (stale copies of deleted canonical files); see the check-mode note on the here-string
+wanted="$(expected)"
 while IFS= read -r f; do
-  if ! expected | grep -qxF "$f"; then
+  if ! grep -qxF "$f" <<< "$wanted"; then
     rm -f "$f"
     echo "pruned orphan: $f" >&2
   fi

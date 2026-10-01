@@ -6,6 +6,7 @@ on:
 jobs:
   software-contracts:
     strategy:
+      fail-fast: false  # a failure on one OS must not hide the other's result
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
