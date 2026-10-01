@@ -17,3 +17,6 @@ VERSION text eol=lf
 *.kicad_pcb text eol=lf
 *.kicad_sch text eol=lf
 *.kicad_dru text eol=lf
+
+# Project evidence binds exact file bytes (receipts, release manifest): store the example byte-exact
+examples/** -text
